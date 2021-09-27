@@ -23,11 +23,13 @@ d'aquérir les connaissances pour :
 
 # Auteurs
 
-Alec Berney (alecberney)
-Quentin Forestier (QuentinForestier)
-Melvyn Herzig (MelvynHerzig)
-Florian Gazetta (fg1989)
-Soulaymane Lamrani (quillasp)
+Nous sommes une équipe de 5 étudiants de la HEIG-VD en informatique logiciel :
+
+- Alec Berney (alecberney)
+- Quentin Forestier (QuentinForestier)
+- Melvyn Herzig (MelvynHerzig)
+- Florian Gazetta (fg1989)
+- Soulaymane Lamrani (quillasp)
 
 # License
 

@@ -22,6 +22,10 @@ https://nicolas-glassey.gitbook.io/amt-backlog/
 
 # Contribuer
 
+Avant de contribuer au projet, veuillez prendre connaissance des points suivants:
+* [GitFlow](https://github.com/Quillasp/AMT-Semester-Project/wiki/Workflow-git)
+* [Conventions de nommage](https://github.com/Quillasp/AMT-Semester-Project/wiki/Conventions-de-nommage)
+
 [En cours d'élaboration]
 
 # Auteurs

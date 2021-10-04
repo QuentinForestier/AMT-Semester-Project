@@ -9,6 +9,9 @@ d'aquérir les connaissances pour :
 - intégrer un template pour faire un site d'e-commerce,
 - se connecter à une base de données.
 
+Le projet est guidé via le gitbook de notre professeur Nicolas Glassey:
+https://nicolas-glassey.gitbook.io/amt-backlog/
+
 # Utilisation
 
 [En cours d'élaboration]

@@ -20,6 +20,32 @@ https://nicolas-glassey.gitbook.io/amt-backlog/
 
 [En cours d'élaboration]
 
+Installer IntellJ avec les paramètres par défaut:
+https://www.jetbrains.com/idea/
+
+Installer PostgreSQL avec les paramètres par défaut:
+https://www.postgresql.org/
+
+Cloner le repository.
+
+Lancer pgAdmin (interface graphique de PostgreSQL).
+Créer une nouvelle Base de données avec le nom "crossport".
+![image](https://user-images.githubusercontent.com/61196626/136581154-1049602a-261b-496f-b4e7-4b10c45b0130.png)
+
+Lancer IntellJ, ouvrez le projet fraichement cloné et allez sous le fichier application.properties.
+
+![image](https://user-images.githubusercontent.com/61196626/136580863-9972b7d7-c1f6-42b4-af5d-eee507b1d311.png)
+
+Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre.
+![image](https://user-images.githubusercontent.com/61196626/136581346-32020bd2-91b6-45fb-ad2b-3d1444851dcc.png)
+
+Exécuter le projet.
+
+![image](https://user-images.githubusercontent.com/61196626/136580523-6dc9aebd-26fa-4706-9b22-603eda280234.png)
+
+Les tables de la base de données devraient être créées.
+
+
 # Contribuer
 
 Avant de contribuer au projet, veuillez prendre connaissance des points suivants:

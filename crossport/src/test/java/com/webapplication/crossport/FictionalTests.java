@@ -2,14 +2,14 @@ package com.webapplication.crossport;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
-class CrossportApplicationTests {
+public class FictionalTests {
 
     @Test
-    void contextLoads() {
+    void firstTest() {
         assertTrue(true);
     }
-
 }

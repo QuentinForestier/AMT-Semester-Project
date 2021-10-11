@@ -49,11 +49,18 @@ Les tables de la base de données devraient être créées.
 
 # Contribuer
 
+[En cours d'élaboration]
+
 Avant de contribuer au projet, veuillez prendre connaissance des points suivants:
 * [GitFlow](https://github.com/Quillasp/AMT-Semester-Project/wiki/Workflow-git)
 * [Conventions de nommage](https://github.com/Quillasp/AMT-Semester-Project/wiki/Conventions-de-nommage)
 
-[En cours d'élaboration]
+Veuillez ensuite installer l'environement de développement complet comme indiqué plus haut dans le document.
+Une fois l'environnement installé, vous pouvez contribuer au projet en:
+1. Réalisant un fork du projet au niveau de la branche main.
+2. Ouvrant une issue sur votre repository fraichement cloné.
+3. Développant votre ajout / fonctionnalité.
+4. Réalisant une pull request une fois que tous les tests fonctionnent.
 
 # Auteurs
 

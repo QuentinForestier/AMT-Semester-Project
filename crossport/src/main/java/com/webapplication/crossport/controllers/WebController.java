@@ -1,4 +1,4 @@
-package com.webapplication.crossport;
+package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Product;
 import com.webapplication.crossport.models.ProductRepository;

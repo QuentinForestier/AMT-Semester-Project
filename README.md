@@ -26,7 +26,7 @@ Lancez pgAdmin (interface graphique de PostgreSQL).
 Créez une nouvelle Base de données avec le nom "crossport".
 ![image](https://user-images.githubusercontent.com/61196626/136580523-6dc9aebd-26fa-4706-9b22-603eda280234.png)
 
-Voici le résultat:
+<br/>Voici le résultat:
 ![image](https://user-images.githubusercontent.com/61196626/136581154-1049602a-261b-496f-b4e7-4b10c45b0130.png)
 
 Lancez IntellJ, ouvrez le dossier "crossport" du projet fraichement clone et allez sous le fichier application.properties.
@@ -47,7 +47,7 @@ L'application est à son début, cette partie pourrait changer rapidement.
 # Utilisation
 
 Une fois la partie "Installation" réalisée, il vous suffit de lancer le logiciel IntellJ, puis d'ouvrir le dossier "crossport" contenu dans le projet que vous venez de clone ou fork:
-// insérer image
+![image](https://user-images.githubusercontent.com/61196626/137506386-579bbb42-76b1-4c77-b055-9d4a11b860fa.png)
 
 Lancer le projet grâce à l'icône start (triangle vert).
 

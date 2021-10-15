@@ -22,18 +22,17 @@ https://www.postgresql.org/
 
 Clonez le repository.
 
-Lancez pgAdmin (interface graphique de PostgreSQL).
-Créez une nouvelle Base de données avec le nom "crossport".
+Lancez pgAdmin (interface graphique de PostgreSQL).<br/>
+Créez une nouvelle Base de données avec le nom "crossport".<br/>
 ![image](https://user-images.githubusercontent.com/61196626/136580523-6dc9aebd-26fa-4706-9b22-603eda280234.png)
 
-<br/>Voici le résultat:
+Voici le résultat:<br/>
 ![image](https://user-images.githubusercontent.com/61196626/136581154-1049602a-261b-496f-b4e7-4b10c45b0130.png)
 
-Lancez IntellJ, ouvrez le dossier "crossport" du projet fraichement clone et allez sous le fichier application.properties.
-
+Lancez IntellJ, ouvrez le dossier "crossport" du projet fraichement clone et allez sous le fichier application.properties.<br/>
 ![image](https://user-images.githubusercontent.com/61196626/136580863-9972b7d7-c1f6-42b4-af5d-eee507b1d311.png)
 
-Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre (lors de l'installation de postgre).
+Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre (lors de l'installation de postgre).<br/>
 ![image](https://user-images.githubusercontent.com/61196626/136581346-32020bd2-91b6-45fb-ad2b-3d1444851dcc.png)
 
 Exécuter le projet.
@@ -46,7 +45,7 @@ L'application est à son début, cette partie pourrait changer rapidement.
 
 # Utilisation
 
-Une fois la partie "Installation" réalisée, il vous suffit de lancer le logiciel IntellJ, puis d'ouvrir le dossier "crossport" contenu dans le projet que vous venez de clone ou fork:
+Une fois la partie "Installation" réalisée, il vous suffit de lancer le logiciel IntellJ, puis d'ouvrir le dossier "crossport" contenu dans le projet que vous venez de clone ou fork:<br/>
 ![image](https://user-images.githubusercontent.com/61196626/137506386-579bbb42-76b1-4c77-b055-9d4a11b860fa.png)
 
 Lancer le projet grâce à l'icône start (triangle vert).

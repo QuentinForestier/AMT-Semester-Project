@@ -12,4 +12,8 @@ class CrossportApplicationTests {
         assertTrue(true);
     }
 
+    @Test
+    void testFail() {
+        assertTrue(false);
+    }
 }

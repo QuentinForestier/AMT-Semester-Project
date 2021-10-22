@@ -25,7 +25,6 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy the JAR file to the remote server
-    needs: build
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8

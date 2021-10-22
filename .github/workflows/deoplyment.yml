@@ -22,11 +22,11 @@ jobs:
     - name: Compile code
       run: mvn compile
 
-deploy:
-  runs-on: ubuntu-latest
-  name: Deploy the JAR file to the remote server
-  needs: build
-  steps:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy the JAR file to the remote server
+    needs: build
+    steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
       uses: actions/setup-java@v1

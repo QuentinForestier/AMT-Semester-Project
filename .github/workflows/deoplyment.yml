@@ -36,7 +36,7 @@ jobs:
     - name: Write DMZ SSH Key 
       run: echo "${{ secrets.AMT_CROSSPORT_DMZ }}" > DMZ_KEY.pem && chmod 400 DMZ_KEY.pem
     - name: Start DMZ tunnel
-      run: ssh -tt -o StrictHostKeyChecking=no -L 8081:${{ secrets.HOST }}:8080 ${{ secrets.SSH_USER_DMZ }}@${{ secrets.HOST_DMZ }} -i DMZ_KEY.pem &
+      run: ssh -tt -o StrictHostKeyChecking=no -L -L 23:${{ secrets.HOST }}:22 -L 8081:${{ secrets.HOST }}:8080 ${{ secrets.SSH_USER_DMZ }}@${{ secrets.HOST_DMZ }} -i DMZ_KEY.pem &
     - name: Write server SSH Key
       run: echo "${{ secrets.AMT_CROSSPORT }}" > KEY.pem && chmod 400 KEY.pem
     - name: Start server tunnel

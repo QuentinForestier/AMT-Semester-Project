@@ -40,4 +40,4 @@ jobs:
     - name: Write server SSH Key
       run: echo "${{ secrets.AMT_CROSSPORT }}" > KEY.pem && chmod 400 KEY.pem
     - name: Start server tunnel
-     run: sudo ssh -o StrictHostKeyChecking=no -T ubuntu@localhost -p 23 -i SSH.pem &
+     run: sudo ssh -o StrictHostKeyChecking=no -T ubuntu@localhost -p 23 -i KEY.pem &

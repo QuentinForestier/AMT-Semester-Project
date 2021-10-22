@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.webapplication</groupId>
-    <artifactId>crossport</artifactId>
+    <artifactId>CrossportApp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>crossport</name>
     <description>crossport</description>
@@ -61,6 +61,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
+        <finalName>${project.artifactId}</finalName>
     </build>
 
 </project>

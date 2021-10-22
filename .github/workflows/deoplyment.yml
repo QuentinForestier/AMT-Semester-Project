@@ -1,0 +1,54 @@
+# This workflow will build a Java project with Maven
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+name: AWS deployment
+
+on:
+  workflow_run:
+    workflows: ["Testing"]
+    branches: [ main ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key of DMZ
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{secrets.AMT_CROSSPORT_DMZ}}
+          name: id_rsa-dmz
+          known_hosts: 'placeholder'
+          config: |
+            Host dmz
+              HostName ${{secrets.HOST_DMZ}}
+              User ${{secrets.SSH_USER_DMZ}}
+              IdentityFile ~/.ssh/id_rsa-dmz
+      - name: Install SSH key of CROSSPORT
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{secrets.AMT_CROSSPORT}}
+          name: id_rsa-target
+          known_hosts: 'SHA256:UhRsC417aZoZ9gzA/2Sxvn6LGBkLWFTKscfybbD0zIY.' # will be appended to existing .ssh/known_hosts
+          config: |                                         # will be appended to existing .ssh/config
+            Host target
+              HostName ${{secrets.HOST}}
+              User ${{secrets.SSH_USER}}
+              StrictHostKeyChecking=no
+              UserKnownHostsFile=/dev/null
+              IdentityFile ~/.ssh/id_rsa-target
+              ProxyCommand ssh -W %h:%p dmz
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H ${{secrets.HOST_DMZ}} >> ~/.ssh/known_hosts
+      - uses: actions/checkout@v2
+      - name: Set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+      - name: Build with Maven
+        run: mvn package --file crossport/pom.xml -D maven.test.skip=true
+      - name: 'Deploy to server'
+        run: scp crossport/target/CrossportApp.war target:/opt/tomcat/webapps/CrossportApp.war

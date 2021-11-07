@@ -40,7 +40,7 @@ app.post('/auth/login', function(req, res){
     answer["token"] = token();
     answer["account"] = answerAccount;
 
-    res.status(201).json(answer);
+    res.status(200).json(answer);
 
 });
 

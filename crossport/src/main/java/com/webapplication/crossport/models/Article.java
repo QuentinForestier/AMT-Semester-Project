@@ -12,10 +12,17 @@ import java.util.Set;
 public class Article {
 
     /**
-     * Primary key, unique description
+     * Primary key, unique identifier
      */
     @Id
-    @Column(name = "description")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Integer id;
+
+    /**
+     * unique description
+     */
+    @Column(name = "description", unique = true)
     private String description;
 
     /**
@@ -49,6 +56,22 @@ public class Article {
     private Set<Category> categories = new HashSet<>();
 
     /* -------------------------- GETTERS AND SETTERS -------------------------------*/
+
+    /**
+     * Gets article id
+     * @return article id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * Sets new article id
+     * @param id New acrticle
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     /**
      * Gets description

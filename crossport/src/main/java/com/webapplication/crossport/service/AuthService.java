@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 /**
  * Class connecting to auth service
@@ -15,12 +14,12 @@ public class AuthService {
     /**
      * Service address
      */
-    private final String ADDRESS = "localhost";
+    public final String ADDRESS = "localhost";
 
     /**
      * Service port
      */
-    private final int PORT = 8081;
+    public final int PORT = 8081;
 
     /**
      * Unique class instance
@@ -43,12 +42,15 @@ public class AuthService {
     }
 
     /**
-     * Logins/registers a user
+     * Logins/registers a user sending a json made of username and password with same tags
+     * @param requestType Type of request (register or login)
      * @param username Name of user
      * @param password Password of user
+     * @param address Server to contact, for testing use only. For production use ADDRESS
+     * @param port Server port, for testing use only. For production use PORT
      * @return Server response/error
      */
-    public String makeRequest(RequestType requestType, String username, String password) {
+    public String makeRequest(RequestType requestType, String address, int port, String username, String password) {
 
         String query = "";
         int expectedResponseCode = 0;
@@ -61,7 +63,7 @@ public class AuthService {
         }
 
         String body = makeInputString(username, password);
-        HttpURLConnection con = makeConnection(query, body.length());
+        HttpURLConnection con = makeConnection(query, address, port, body.length());
 
         sendRequest(con, body);
 
@@ -76,10 +78,12 @@ public class AuthService {
     /**
      * Creates a http connection to post Json body
      * @param query Either REGISTER_QUERY or LOGIN_QUERY
+     * @param address Server to contact, for testing use only. For production use ADDRESS
+     * @param port Server port, for testing use only. For production use PORT
      * @param contentLength Content length
      * @return The connection
      */
-    private HttpURLConnection makeConnection(String query, int contentLength)
+    private HttpURLConnection makeConnection(String query, String address, int port, int contentLength)
     {
         HttpURLConnection con = null;
 

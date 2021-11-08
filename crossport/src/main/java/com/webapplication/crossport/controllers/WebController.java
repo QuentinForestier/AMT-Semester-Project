@@ -23,12 +23,6 @@ public class WebController {
         return "index";
     }
 
-    @GetMapping("/register")
-    public String register(Model model){
-
-
-        return "register";
-    }
 
     @GetMapping("/login")
     public String login(Model model){

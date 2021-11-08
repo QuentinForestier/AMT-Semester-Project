@@ -1,14 +1,11 @@
 package com.webapplication.crossport.controllers;
 
-import com.webapplication.crossport.models.Article;
-import com.webapplication.crossport.models.ArticleRepository;
+import com.webapplication.crossport.models.repositories.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -22,17 +19,4 @@ public class WebController {
 
         return "index";
     }
-
-    @GetMapping("/shop")
-    public String shop(Model model){
-
-        Optional<Article> p = articleRepository.findById(1);
-
-        if(p.isPresent()){
-            model.addAttribute("product", p.get());
-        }
-
-        return "shop";
-    }
-
 }

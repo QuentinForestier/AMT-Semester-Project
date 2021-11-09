@@ -78,8 +78,8 @@ public class AuthService {
     /**
      * Creates a http connection to post Json body
      * @param query Either REGISTER_QUERY or LOGIN_QUERY
-     * @param address Server to contact, for testing use only. For production use ADDRESS
-     * @param port Server port, for testing use only. For production use PORT
+     * @param address Server to contact.
+     * @param port Server port.
      * @param contentLength Content length
      * @return The connection
      */
@@ -90,7 +90,7 @@ public class AuthService {
         try {
 
             // Prepare
-            URL url = new URL("http://" + ADDRESS + ":" + PORT + query);
+            URL url = new URL("http://" + address + ":" + port + query);
             con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json");

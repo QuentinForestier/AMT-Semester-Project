@@ -59,7 +59,7 @@ public class Article {
 
     /**
      * Gets article id
-     * @return Cart id
+     * @return Article id
      */
     public Integer getId() {
         return id;
@@ -67,7 +67,7 @@ public class Article {
 
     /**
      * Sets new article id
-     * @param id New cart
+     * @param id New acrticle
      */
     public void setId(Integer id) {
         this.id = id;

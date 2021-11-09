@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -44,7 +43,6 @@ public class RegistrationController {
             List<String> errors = e.getErrors();
 
             for(String error : errors) {
-                bindingResult.rejectValue("username", "userData.email","An account already exists for this email.");
                 bindingResult.addError(new ObjectError("globalError", error));
             }
 
@@ -53,6 +51,6 @@ public class RegistrationController {
             return "register";
         }
 
-        return "redirect:/";
+        return "redirect:/login";
     }
 }

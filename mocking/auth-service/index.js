@@ -85,7 +85,7 @@ app.post('/accounts/register', function(req, res){
     let newUser = {};
     newUser["id"] = newId;
     newUser["username"] = req.body.username;
-    newUser["role"] = "user";
+    newUser["role"] = "ROLE_USER";
 
     res.status(201).json(newUser);
 

@@ -14,12 +14,12 @@ public class AuthService {
     /**
      * Service address
      */
-    public final String ADDRESS = "localhost";
+    public static final String ADDRESS = "localhost";
 
     /**
      * Service port
      */
-    public final int PORT = 8081;
+    public static final int PORT = 8081;
 
     /**
      * Unique class instance

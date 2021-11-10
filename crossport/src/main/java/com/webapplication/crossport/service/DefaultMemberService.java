@@ -28,7 +28,7 @@ public class DefaultMemberService implements MemberService {
     @Override
     public void register(MemberRegistrationData user) throws RegistrationException {
 
-        JSONObject jsonObject = authenticate(user, AuthService.getInstance().ADDRESS, AuthService.getInstance().PORT);
+        JSONObject jsonObject = authenticate(user);
 
         Member member = new Member();
         member.setId(jsonObject.getInt("id"));
@@ -41,10 +41,8 @@ public class DefaultMemberService implements MemberService {
      * This methode has been created for testing purpose. Make a test class inheriting from DefaultMemberService.
      * Thus, we can test authenticate with custom server address / port on testing time.
      * @param user Serialized received user registration information
-     * @param address Sever authentication address. For production use ADDRESS
-     * @param port Server authentication port. For production use PORT
      */
-    public JSONObject authenticate (MemberRegistrationData user, String address, int port) throws RegistrationException{
+    public JSONObject authenticate (MemberRegistrationData user) throws RegistrationException{
 
         // basic check
         if(!user.getPasswordConfirmation().equals(user.getPassword())){
@@ -60,7 +58,7 @@ public class DefaultMemberService implements MemberService {
         }
 
         // Send to auth
-        String response = AuthService.getInstance().makeRequest(RequestType.REGISTER, address, port, user.getUsername(), user.getPassword());
+        String response = AuthService.getInstance().makeRequest(RequestType.REGISTER, user.getUsername(), user.getPassword());
         JSONObject jsonObject = new JSONObject(response);
 
         // Checking errors
@@ -83,7 +81,6 @@ public class DefaultMemberService implements MemberService {
 
         return jsonObject;
     }
-
 
     /*private void encodePassword( UserEntity userEntity, UserData user){
         userEntity.setPassword(passwordEncoder.encode(user.getPassword()));

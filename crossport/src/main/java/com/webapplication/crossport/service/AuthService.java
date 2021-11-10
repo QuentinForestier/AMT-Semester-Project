@@ -14,12 +14,12 @@ public class AuthService {
     /**
      * Service address
      */
-    public static final String ADDRESS = "localhost";
+    private String address = "localhost";
 
     /**
      * Service port
      */
-    public static final int PORT = 8081;
+    private int port = 8081;
 
     /**
      * Unique class instance
@@ -42,15 +42,23 @@ public class AuthService {
     }
 
     /**
+     * Sets a new address and a new port.
+     * @param address New address.
+     * @param port New port.
+     */
+    public static void setAddressAndPort(String address, int port){
+        getInstance().address = address;
+        getInstance().port = port;
+    }
+
+    /**
      * Logins/registers a user sending a json made of username and password with same tags
      * @param requestType Type of request (register or login)
      * @param username Name of user
      * @param password Password of user
-     * @param address Server to contact, for testing use only. For production use ADDRESS
-     * @param port Server port, for testing use only. For production use PORT
      * @return Server response/error
      */
-    public String makeRequest(RequestType requestType, String address, int port, String username, String password) {
+    public String makeRequest(RequestType requestType, String username, String password) {
 
         String query = "";
         int expectedResponseCode = 0;
@@ -63,7 +71,7 @@ public class AuthService {
         }
 
         String body = makeInputString(username, password);
-        HttpURLConnection con = makeConnection(query, address, port, body.length());
+        HttpURLConnection con = makeConnection(query, body.length());
 
         sendRequest(con, body);
 
@@ -78,12 +86,10 @@ public class AuthService {
     /**
      * Creates a http connection to post Json body
      * @param query Either REGISTER_QUERY or LOGIN_QUERY
-     * @param address Server to contact.
-     * @param port Server port.
      * @param contentLength Content length
      * @return The connection
      */
-    private HttpURLConnection makeConnection(String query, String address, int port, int contentLength)
+    private HttpURLConnection makeConnection(String query, int contentLength)
     {
         HttpURLConnection con = null;
 

@@ -39,11 +39,11 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         final List<GrantedAuthority> grantedAuths = new ArrayList<>();
 
         // Gets user from AuthService
-        String response =  AuthService.getInstance().makeRequest(RequestType.LOGIN, AuthService.ADDRESS, AuthService.PORT, username, password);
+        String response =  AuthService.getInstance().makeRequest(RequestType.LOGIN, username, password);
         JSONObject jsonObject = new JSONObject(response);
 
         // Checking errors
-        if( jsonObject.has("error")) {
+        if( jsonObject.has("error") ) {
             throw new BadCredentialsException(jsonObject.getString("error"));
         }
 

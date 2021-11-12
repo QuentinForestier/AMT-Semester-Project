@@ -20,20 +20,4 @@ public class ArticleService {
     public List<Article> getAllArticles() {
         return articleRepository.findAll();
     }
-
-    public Article getArticleById(Integer id) {
-        Optional<Article> optional = articleRepository.findById(id);
-        Article article = null;
-        if (optional.isPresent()) {
-            article = optional.get();
-        } else {
-            throw new RuntimeException(" Employee not found for id :: " + id);
-        }
-        return article;
-    }
-
-    public Page<Article> findPaginated(int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return this.articleRepository.findAll(pageable);
-    }
 }

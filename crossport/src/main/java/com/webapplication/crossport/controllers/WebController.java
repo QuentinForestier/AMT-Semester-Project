@@ -43,6 +43,7 @@ public class WebController {
         Optional<Article> p = articleRepository.findById(1);
 
 
+
         p.ifPresent(article -> model.addAttribute("article", article));
 
         List<Integer> cartInfo = Cart.getCartInSession(request);

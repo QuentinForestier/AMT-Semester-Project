@@ -35,6 +35,10 @@ Lancez IntellJ, ouvrez le dossier "crossport" du projet fraichement clone et all
 Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre (lors de l'installation de postgre).<br/>
 ![image](https://user-images.githubusercontent.com/61196626/136581346-32020bd2-91b6-45fb-ad2b-3d1444851dcc.png)
 
+Installez Docker pour votre système d'exploitation: https://docs.docker.com/engine/install/ <br>
+Buildez et lancez le mocking du service d'authentification <i>mocking/auth-service</i>.
+Sous windows un script est disponbile, sous linux, inspirez vous des commandes présentes.
+
 Exécuter le projet.
 
 Les tables de la base de données devraient être créées grâce au framework Hibernate.
@@ -55,6 +59,9 @@ localhost:8080
 
 L'application n'est pas encore disponible sur internet et cette partie propose une façon d'accéder / tester l'application d'un façon provisoire.
 
+## Tests
+Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir du mocking du service d'authentification.
+
 # Support
 
 En cas de problème contacter nous grâce à l'adresse email suivante:
@@ -67,6 +74,9 @@ https://www.jetbrains.com/idea/
 
 Installer PostgreSQL avec les paramètres par défaut:
 https://www.postgresql.org/
+
+Installer Docker avec les paramètres par défaut:
+https://docs.docker.com/engine/install/
 
 Cloner le repository.
 

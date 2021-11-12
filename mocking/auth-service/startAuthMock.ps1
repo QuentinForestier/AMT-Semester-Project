@@ -9,7 +9,7 @@ $existImage = docker images -q crossport/amt-mock-auth
 if($null -eq $existImage)
 {
     Write-Output "--- Build image"
-    docker build -t crossport/amt-mock-auth
+    docker build -t crossport/amt-mock-auth .
     
 }
 

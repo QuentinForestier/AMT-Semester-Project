@@ -7,6 +7,7 @@ import javax.persistence.*;
  * @author Herzig Melvyn
  */
 @Entity
+@Table(name = "member")
 public class Member {
 
     /**

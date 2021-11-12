@@ -59,12 +59,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					 <div class="menu">
 						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 						    <ul class="nav" id="nav">
-						    	<li class="current"><a href="shop.html">Shop</a></li>
-						    	<li><a href="team.html">Team</a></li>
-						    	<li><a href="experiance.html">Events</a></li>
-						    	<li><a href="experiance.html">Experiance</a></li>
-						    	<li><a href="/shop">Company</a></li>
-								<li><a href="contact.html">Contact</a></li>								
+								<li><a href="/shop">Shop</a></li>
+								<li><a href="/register">Register</a></li>
+								<li><a href="/login">Login</a></li>
 								<div class="clear"></div>
 							</ul>
 							<script type="text/javascript" src="js/responsive-nav.js"></script>
@@ -118,7 +115,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
       <div class="shop_top">
 		<div class="container">
 			<div class="row shop_box-top">
-				<div th:if="${product != null}" class="col-md-3 shop_box"><a href="single.html">
+				<div th:if="${article != null}" class="col-md-3 shop_box"><a href="single.html">
 					<img src="images/pic5.jpg" class="img-responsive" alt=""/>
 					<span class="new-box">
 						<span class="new-label">New</span>
@@ -127,9 +124,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<span class="sale-label">Sale!</span>
 					</span>
 					<div class="shop_desc">
-						<h3><a href="#"> <span th:text="${product.name}" /> </a></h3>
-						<p> <span th:text="${product.description}" /> </p>
-						<span class="actual"> <span th:text="${product.price}" /> </span><br>
+						<h3><a href="#"> <span th:text="${article.name}" /> </a></h3>
+						<p> <span th:text="${article.description}" /> </p>
+						<span class="actual"> <span th:text="${article.price}" /> </span><br>
 						<ul class="buttons">
 							<li class="cart"><a href="#">Add To Cart</a></li>
 							<li class="shop_btn"><a href="#">Read More</a></li>

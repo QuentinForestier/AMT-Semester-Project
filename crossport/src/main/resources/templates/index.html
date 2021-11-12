@@ -7,7 +7,8 @@ Modified by: Herzig Melvyn
 Modification date: 09/10/2021
 -->
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org",
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 <title>Free Snow Bootstrap Website Template | Home :: w3layouts</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -68,11 +69,9 @@ Modification date: 09/10/2021
 						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 						    <ul class="nav" id="nav">
 						    	<li><a href="/shop">Shop</a></li>
-						    	<li><a href="team.html">Team</a></li>
-						    	<li><a href="experiance.html">Events</a></li>
-						    	<li><a href="experiance.html">Experiance</a></li>
-						    	<li><a href="/shop">Company</a></li>
-								<li><a href="contact.html">Contact</a></li>								
+								<li><a href="/register">Register</a></li>
+								<li><a href="/login" sec:authorize="isAnonymous()">Login</a></li>
+								<li><a href="/logout" sec:authorize="isAuthenticated()">Logout</a></li>
 								<div class="clear"></div>
 							</ul>
 							<script type="text/javascript" src="js/responsive-nav.js"></script>

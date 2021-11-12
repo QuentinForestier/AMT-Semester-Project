@@ -60,7 +60,7 @@ public class Article {
 
     /**
      * Gets article id
-     * @return article id
+     * @return Article id
      */
     public Integer getId() {
         return id;

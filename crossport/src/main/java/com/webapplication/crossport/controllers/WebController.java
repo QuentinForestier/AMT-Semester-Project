@@ -28,15 +28,4 @@ public class WebController {
 
         return "login";
     }
-
-    @GetMapping("/shop")
-    public String shop(Model model){
-
-        Optional<Article> p = articleRepository.findById(1);
-
-        p.ifPresent(article -> model.addAttribute("article", article));
-
-        return "shop";
-    }
-
 }

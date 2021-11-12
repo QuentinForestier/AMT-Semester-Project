@@ -5,7 +5,8 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org",
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 <title>Free Snow Bootstrap Website Template | Register :: w3layouts</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -59,7 +60,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					 <div class="menu">
 						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 						    <ul class="nav" id="nav">
-								<li><a href="/shop">Shop</a></li>
+								<li><a href="/shop" sec:authorize="isAnonymous()">Shop</a></li>
 								<li><a href="/register">Register</a></li>
 								<li><a href="/login">Login</a></li>
 								<div class="clear"></div>

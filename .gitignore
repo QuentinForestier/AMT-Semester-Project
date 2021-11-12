@@ -144,3 +144,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+# application .properties
+./crossport/src/main/resources/application.properties

@@ -1,7 +1,10 @@
 package com.webapplication.crossport.models;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,10 +49,23 @@ public class Cart {
     }
 
     /**
-     * Sets new cartArticles
-     * @param cartArticles New ralted cartArticles
+     * For a given http request, gets the session cart. If none creates and return one.
+     * @param request Received request
+     * @return The session cart.
      */
-    public void setCartArticles(Set<CartArticle> cartArticles) {
-        this.cartArticles = cartArticles;
+    public static List<Integer> getCartInSession(HttpServletRequest request) {
+
+        //CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCart");
+        List<Integer> cartInfo = (List<Integer>) request.getSession().getAttribute("myCart");
+
+        if (cartInfo == null) {
+            cartInfo = new ArrayList<Integer>();
+
+            request.getSession().setAttribute("myCart", cartInfo);
+        }
+
+        return cartInfo;
     }
+
+
 }

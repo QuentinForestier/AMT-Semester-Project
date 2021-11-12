@@ -1,7 +1,7 @@
 package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
-import com.webapplication.crossport.models.ArticleRepository;
+import com.webapplication.crossport.models.repository.ArticleRepository;
 import com.webapplication.crossport.models.Cart;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,8 +41,6 @@ public class WebController {
     public String shop(HttpServletRequest request, Model model){
 
         Optional<Article> p = articleRepository.findById(1);
-
-
 
         p.ifPresent(article -> model.addAttribute("article", article));
 

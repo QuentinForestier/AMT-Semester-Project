@@ -1,7 +1,7 @@
 package com.webapplication.crossport.service;
 
 import com.webapplication.crossport.models.Member;
-import com.webapplication.crossport.models.respository.MemberRepository;
+import com.webapplication.crossport.models.repository.MemberRepository;
 import com.webapplication.crossport.service.exception.RegistrationException;
 import org.json.JSONArray;
 import org.json.JSONObject;

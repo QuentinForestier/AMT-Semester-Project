@@ -57,55 +57,8 @@ Modification date: 09/10/2021
   </script>
 </head>
 <body>
-<div class="header">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="header-left">
-          <div class="logo">
-            <a href="/"><img src="images/logo.png" alt=""/></a>
-          </div>
-          <div class="menu">
-            <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
-            <ul class="nav" id="nav">
-              <li><a href="/shop">Shop</a></li>
-              <li><a href="team.html">Team</a></li>
-              <li><a href="experiance.html">Events</a></li>
-              <li><a href="experiance.html">Experiance</a></li>
-              <li><a href="/shop">Company</a></li>
-              <li><a href="contact.html">Contact</a></li>
-              <div class="clear"></div>
-            </ul>
-            <script type="text/javascript" src="js/responsive-nav.js"></script>
-          </div>
-          <div class="clear"></div>
-        </div>
-        <div class="header_right">
-          <!-- start search-->
-          <div class="search-box">
-            <div id="sb-search" class="sb-search">
-              <form>
-                <input class="sb-search-input" placeholder="Enter your search term..." type="search" name="search" id="search">
-                <input class="sb-search-submit" type="submit" value="">
-                <span class="sb-icon-search"> </span>
-              </form>
-            </div>
-          </div>
-          <!----search-scripts---->
-          <script src="js/classie.js"></script>
-          <script src="js/uisearch.js"></script>
-          <script>
-            new UISearch( document.getElementById( 'sb-search' ) );
-          </script>
-          <!----//search-scripts---->
-
-          <a class="active-icon c1" href="/cart"> </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="main">
+  <div th:insert="navbar.html :: navbar"> </div>
+  <div class="main">
 
   <div class="shopping-cart">
     <div class="check_button"><a href="/clear_cart">Clear cart</a></div>
@@ -117,7 +70,7 @@ Modification date: 09/10/2021
     <!-- Product #1 -->
     <div class="item">
       <div class="buttons">
-        <span class="delete-btn"></span>
+        <span class="delete-btn"><img src="images/delete-icn.svg" alt="X" /></span>
       </div>
 
       <div class="image">
@@ -144,7 +97,7 @@ Modification date: 09/10/2021
     <!-- Product #2 -->
     <div class="item">
       <div class="buttons">
-        <span class="delete-btn"></span>
+        <span class="delete-btn"><img src="images/delete-icn.svg" alt="X" /></span>
       </div>
 
       <div class="image">
@@ -169,8 +122,7 @@ Modification date: 09/10/2021
     </div>
   </div>
 </div>
-
-<div class="footer">
+  <div class="footer">
   <div class="container">
     <div class="row">
       <div class="col-md-3">
@@ -240,7 +192,7 @@ Modification date: 09/10/2021
     </div>
   </div>
 </div>
-<script type="text/javascript">
+  <script type="text/javascript">
   $('.minus-btn').on('click', function(e) {
     e.preventDefault();
     var $this = $(this);

@@ -54,17 +54,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			  <div class="col-md-12">
 				 <div class="header-left">
 					 <div class="logo">
-						<a href="index.html"><img src="images/logo.png" alt=""/></a>
+						<a href="/home"><img src="images/logo.png" alt=""/></a>
 					 </div>
 					 <div class="menu">
 						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 						    <ul class="nav" id="nav">
-						    	<li><a href="shop2.html">Shop</a></li>
-						    	<li><a href="team.html">Team</a></li>
-						    	<li><a href="shop2.html">Events</a></li>
-						    	<li><a href="experiance.html">Experiance</a></li>
-						    	<li><a href="shop2.html">Company</a></li>
-								<li><a href="contact.html">Contact</a></li>								
+								<li><a href="/shop">Shop</a></li>
+								<li><a href="/register">Register</a></li>
+								<li><a href="/login">Login</a></li>
 								<div class="clear"></div>
 							</ul>
 							<script type="text/javascript" src="js/responsive-nav.js"></script>
@@ -120,10 +117,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="col-md-6">
 				 <div class="login-page">
 					<h4 class="title">New Customers</h4>
-					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis</p>
-					<div class="button1">
-					   <a href="register.html"><input type="submit" name="Submit" value="Create an Account"></a>
-					 </div>
+					 <p>Thank you for your interest in Crossport! you have no account yet?</p> <a href="/register"> Get one here.</a>
 					 <div class="clear"></div>
 				  </div>
 				</div>
@@ -132,19 +126,22 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 	           		<h4 class="title">Registered Customers</h4>
 					<div id="loginbox" class="loginbox">
 						<form action="" method="post" name="login" id="login-form">
+							<div class="alert alert-danger" th:if="${param.error}">
+								Invalid username or password.
+							</div>
 						  <fieldset class="input">
 						    <p id="login-form-username">
 						      <label for="modlgn_username">Email</label>
-						      <input id="modlgn_username" type="text" name="email" class="inputbox" size="18" autocomplete="off">
+						      <input id="modlgn_username" type="text" name="username" class="inputbox" size="18" autocomplete="off">
 						    </p>
 						    <p id="login-form-password">
 						      <label for="modlgn_passwd">Password</label>
 						      <input id="modlgn_passwd" type="password" name="password" class="inputbox" size="18" autocomplete="off">
 						    </p>
 						    <div class="remember">
-							    <p id="login-form-remember">
+							    <!--<p id="login-form-remember">
 							      <label for="modlgn_remember"><a href="#">Forget Your Password ? </a></label>
-							   </p>
+							    </p>-->
 							    <input type="submit" name="Submit" class="button" value="Login"><div class="clear"></div>
 							 </div>
 						  </fieldset>

@@ -9,6 +9,7 @@ import java.util.Set;
  * @author Herzig Melvyn
  */
 @Entity
+@Table(name = "article")
 public class Article {
 
     /**
@@ -59,7 +60,7 @@ public class Article {
 
     /**
      * Gets article id
-     * @return article id
+     * @return Article id
      */
     public Integer getId() {
         return id;

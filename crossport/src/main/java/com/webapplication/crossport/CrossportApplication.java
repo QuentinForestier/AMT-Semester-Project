@@ -7,10 +7,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class CrossportApplication extends SpringBootServletInitializer
 {
-
-    public static void main(String[] args)
-    {
+    public static void main(String[] args){
         SpringApplication.run(CrossportApplication.class, args);
     }
-
 }

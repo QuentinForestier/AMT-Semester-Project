@@ -7,6 +7,7 @@ import javax.persistence.*;
  * @author Herzig Melvyn
  */
 @Entity
+@Table(name = "member")
 public class Member {
 
     /**
@@ -20,14 +21,12 @@ public class Member {
     /**
      * User name
      */
-    @Column(name = "name")
-    private String name;
+    private String username;
 
     /**
      * Role, if false common user else admin
      */
-    @Column(name = "isAdmin")
-    private boolean isAdmin;
+    private String role;
 
     /**
      * User's cart
@@ -57,32 +56,32 @@ public class Member {
      * Gets user name
      * @return User name
      */
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     /**
      * Sets user name
      * @param name New name
      */
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String name) {
+        this.username = name;
     }
 
     /**
-     * Gets isAdmin
+     * Gets role
      * @return True if user is administrator
      */
-    public boolean isAdmin() {
-        return isAdmin;
+    public String getRole() {
+        return role;
     }
 
     /**
-     * Sets isAdmin
-     * @param admin New role
+     * Sets role
+     * @param role New role
      */
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setRole(String role) {
+        role = role;
     }
 
 

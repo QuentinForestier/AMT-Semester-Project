@@ -5,7 +5,7 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Free Snow Bootstrap Website Template | Register :: w3layouts</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -59,12 +59,9 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					 <div class="menu">
 						  <a class="toggleMenu" href="#"><img src="images/nav.png" alt="" /></a>
 						    <ul class="nav" id="nav">
-						    	<li><a href="shop2.html">Shop</a></li>
-						    	<li><a href="team.html">Team</a></li>
-						    	<li><a href="shop2.html">Events</a></li>
-						    	<li><a href="experiance.html">Experiance</a></li>
-						    	<li><a href="shop2.html">Company</a></li>
-								<li><a href="contact.html">Contact</a></li>								
+								<li><a href="/shop">Shop</a></li>
+								<li><a href="/register">Register</a></li>
+								<li><a href="/login">Login</a></li>
 								<div class="clear"></div>
 							</ul>
 							<script type="text/javascript" src="js/responsive-nav.js"></script>
@@ -117,42 +114,32 @@ License URL: http://creativecommons.org/licenses/by/3.0/
      <div class="main">
       <div class="shop_top">
 	     <div class="container">
-						<form> 
+						<form action="#" th:action="@{/register}" th:object="${memberRegistrationData}" method="post">
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+								<p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+							</div>
 								<div class="register-top-grid">
 										<h3>PERSONAL INFORMATION</h3>
 										<div>
-											<span>First Name<label>*</label></span>
-											<input type="text"> 
+											<span>username<label>*</label></span>
+											<input type="text" th:field="*{username}" th:errorclass="is-invalid">
 										</div>
-										<div>
-											<span>Last Name<label>*</label></span>
-											<input type="text"> 
-										</div>
-										<div>
-											<span>Email Address<label>*</label></span>
-											<input type="text"> 
-										</div>
-										<div class="clear"> </div>
-											<a class="news-letter" href="#">
-												<label class="checkbox"><input type="checkbox" name="checkbox" checked=""><i> </i>Sign Up for Newsletter</label>
-											</a>
-										<div class="clear"> </div>
 								</div>
 								<div class="clear"> </div>
 								<div class="register-bottom-grid">
 										<h3>LOGIN INFORMATION</h3>
 										<div>
 											<span>Password<label>*</label></span>
-											<input type="text">
+											<input type="password"  th:field="*{password}" th:errorclass="is-invalid">
 										</div>
 										<div>
 											<span>Confirm Password<label>*</label></span>
-											<input type="text">
+											<input type="password" th:field="*{passwordConfirmation}" th:errorclass="is-invalid">
 										</div>
 										<div class="clear"> </div>
 								</div>
 								<div class="clear"> </div>
-								<input type="submit" value="submit">
+								<input name="Submit" type="submit" value="submit" class="button">
 						</form>
 					</div>
 		   </div>

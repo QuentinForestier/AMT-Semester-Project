@@ -9,6 +9,7 @@ import java.util.Set;
  * @author Herzig Melvyn
  */
 @Entity
+@Table(name = "cart")
 public class Cart {
 
     /**

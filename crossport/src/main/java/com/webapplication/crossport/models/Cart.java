@@ -1,5 +1,7 @@
 package com.webapplication.crossport.models;
 
+import com.webapplication.crossport.service.exception.CartException;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -65,6 +67,16 @@ public class Cart {
         }
 
         return cartInfo;
+    }
+
+    /**
+     * Adds and articleId
+     * @param quantity Quantity in carty for the given article
+     * @param articleId Given article
+     * @throws CartException
+     */
+    public void addToCart(int quantity,int articleId) throws CartException {
+
     }
 
 

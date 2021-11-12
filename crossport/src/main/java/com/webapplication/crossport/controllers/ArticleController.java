@@ -12,20 +12,28 @@ import java.util.List;
 
 @Controller
 public class ArticleController {
+    static final int PAGE_SIZE = 5;
+
     @Autowired
     ArticleService articleService;
 
     @GetMapping("/shop")
-    public String viewAllArticles(Model model)
+    public String viewAllPaginatedArticles(Model model)
     {
         return findPaginated(1, model);
     }
 
+    @GetMapping("/shop/all")
+    public String viewAllArticles(Model model)
+    {
+        model.addAttribute("listArticles", articleService.getAllArticles());
+        return "shop";
+    }
+
+    // TODO: régler problème CSS sur les pages 2 à x
     @GetMapping("/shop/page/{pageNo}")
     public String findPaginated(@PathVariable(value = "pageNo") int pageNo, Model model) {
-        int pageSize = 1;
-
-        Page<Article> page = articleService.findPaginated(pageNo, pageSize);
+        Page<Article> page = articleService.findPaginated(pageNo, PAGE_SIZE);
         List<Article> listArticles = page.getContent();
 
         model.addAttribute("currentPage", pageNo);

@@ -2,6 +2,10 @@ package com.webapplication.crossport;
 
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,8 +32,46 @@ public class ArticleServiceTests {
     }
 
     @Test
-    void firstTest() {
-        // This is a simple test case, executed once.
+    void ArticleService_CheckGetAllArticles_Success() {
+        // TODO
+        // Given
+
+        // When
+
+        // Then
+        assertTrue(true);
+    }
+
+    @Test
+    void ArticleService_CheckGetAllArticles_Fail() {
+        // TODO
+        // Given
+
+        // When
+
+        // Then
+        assertTrue(true);
+    }
+
+    @Test
+    void ArticleService_CheckFindArticlePage_Success() {
+        // TODO
+        // Given
+
+        // When
+
+        // Then
+        assertTrue(true);
+    }
+
+    @Test
+    void ArticleService_CheckFindArticlePage_Fail() {
+        // TODO
+        // Given
+
+        // When
+
+        // Then
         assertTrue(true);
     }
 }

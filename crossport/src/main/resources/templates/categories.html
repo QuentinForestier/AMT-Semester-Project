@@ -122,20 +122,23 @@ Modification date: 08/11/2021
     <div class="main">
         <div class="container">
             <h2>Categories</h2>
-            <table class="table table-striped table-responsive">
-                <thead>
-                    <tr>
-                        <th>
-                            Category name
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="category : ${listCategories}">
-                        <td th:text="${category.getName()}"></td>
-                    </tr>
-                </tbody>
-            </table>
+            <div th:switch="${#lists.size(listCategories)}">
+                <span th:case="'0'">No categories yet. Create one below.</span>
+                <table th:case="*" class="table table-striped table-responsive">
+                    <thead>
+                        <tr>
+                            <th>Category name</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="category : ${listCategories}">
+                            <td th:text="${category.name}"></td>
+                            <td> <a th:href="@{/deleteCategory/{id}(id=${category.id})}" class="btn-danger">Delete</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="container">
             <h2>Save category</h2>

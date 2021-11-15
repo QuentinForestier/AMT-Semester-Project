@@ -5,7 +5,8 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org",
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
 <title>Free Snow Bootstrap Website Template | Checkout :: w3layouts</title>
 <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -50,7 +51,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <body>
 	<div th:insert="navbar.html :: navbar"> </div>
 	<div class="main">
-      <div class="shop_top">
+    <div class="shop_top">
 		<div class="container">
 			<div class="col-md-6">
 				 <div class="login-page">

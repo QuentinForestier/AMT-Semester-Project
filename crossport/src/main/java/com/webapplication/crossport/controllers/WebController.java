@@ -37,30 +37,4 @@ public class WebController {
         return "login";
     }
 
-    @GetMapping("/shop")
-    public String shop(HttpServletRequest request, Model model){
-
-        Optional<Article> p = articleRepository.findById(1);
-
-        p.ifPresent(article -> model.addAttribute("article", article));
-
-        List<Integer> cartInfo = Cart.getCartInSession(request);
-        for (int i : cartInfo) {
-            System.out.println(i);
-        }
-
-        if(p.isPresent()){
-            model.addAttribute("product", p.get());
-        }
-
-        return "shop";
-    }
-
-    @GetMapping("/cart")
-    public String cart(HttpServletRequest request, Model model){
-
-
-        return "cart";
-    }
-
 }

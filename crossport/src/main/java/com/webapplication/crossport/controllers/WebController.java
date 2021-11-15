@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class WebController {
@@ -24,10 +23,6 @@ public class WebController {
     public String greeting(HttpServletRequest request, @RequestParam(name="name", required=false, defaultValue="visitor") String name, Model model) {
         model.addAttribute("name", name);
 
-        List<Integer> cartInfo = Cart.getCartInSession(request);
-        cartInfo.add(1);
-        cartInfo.add(2);
-
         return "index";
     }
 
@@ -36,5 +31,4 @@ public class WebController {
 
         return "login";
     }
-
 }

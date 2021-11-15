@@ -1,13 +1,8 @@
 package com.webapplication.crossport.models;
 
-import com.webapplication.crossport.service.exception.CartException;
-
 import javax.persistence.*;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * Entity model for JPA. Represents a user cart.
@@ -52,30 +47,35 @@ public class Cart {
 
     /**
      * For a given http request, gets the session cart. If none creates and return one.
-     * @param request Received request
+     * @param session Context session
      * @return The session cart.
      */
-    public static List<Integer> getCartInSession(HttpServletRequest request) {
+    public static Cart getCartInSession(HttpSession session) {
 
         //CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCart");
-        List<Integer> cartInfo = (List<Integer>) request.getSession().getAttribute("myCart");
+        Cart cart = (Cart) session.getAttribute("myCart");
 
-        if (cartInfo == null) {
-            cartInfo = new ArrayList<Integer>();
+        if (cart == null) {
+            cart = new Cart();
 
-            request.getSession().setAttribute("myCart", cartInfo);
+            session.setAttribute("myCart", cart);
         }
 
-        return cartInfo;
+        return cart;
     }
 
     /**
      * Adds and articleId
      * @param quantity Quantity in carty for the given article
-     * @param articleId Given article
-     * @throws CartException
+     * @param article Article to add
      */
-    public void addToCart(int quantity,int articleId) throws CartException {
+    public void addToCart(int quantity, Article article) {
+
+        Optional<CartArticle> cartArticle = cartArticles.stream().filter(ca -> ca.getArticle().getId() == article.getId()).findFirst();
+
+        if(cartArticle.isPresent()) {
+            
+        }
 
     }
 

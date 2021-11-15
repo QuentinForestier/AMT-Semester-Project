@@ -4,6 +4,7 @@ import com.webapplication.crossport.service.exception.CartException;
 
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,21 +53,20 @@ public class Cart {
 
     /**
      * For a given http request, gets the session cart. If none creates and return one.
-     * @param request Received request
+     * @param session Context session
      * @return The session cart.
      */
-    public static List<Integer> getCartInSession(HttpServletRequest request) {
+    public static Cart getCartInSession(HttpSession session) {
 
-        //CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCart");
-        List<Integer> cartInfo = (List<Integer>) request.getSession().getAttribute("myCart");
+        Cart cart = (Cart) session.getAttribute("myCart");
 
-        if (cartInfo == null) {
-            cartInfo = new ArrayList<Integer>();
+        if (cart == null) {
+            cart = new Cart();
 
-            request.getSession().setAttribute("myCart", cartInfo);
+            session.setAttribute("myCart", cart);
         }
 
-        return cartInfo;
+        return cart;
     }
 
     /**

@@ -1,8 +1,8 @@
 package com.webapplication.crossport.models;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.servlet.http.HttpSession;
+import java.util.*;
 
 /**
  * Entity model for JPA. Represents a user cart.
@@ -46,10 +46,38 @@ public class Cart {
     }
 
     /**
-     * Sets new cartArticles
-     * @param cartArticles New ralted cartArticles
+     * For a given http request, gets the session cart. If none creates and return one.
+     * @param session Context session
+     * @return The session cart.
      */
-    public void setCartArticles(Set<CartArticle> cartArticles) {
-        this.cartArticles = cartArticles;
+    public static Cart getCartInSession(HttpSession session) {
+
+        //CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCart");
+        Cart cart = (Cart) session.getAttribute("myCart");
+
+        if (cart == null) {
+            cart = new Cart();
+
+            session.setAttribute("myCart", cart);
+        }
+
+        return cart;
     }
+
+    /**
+     * Adds and articleId
+     * @param quantity Quantity in carty for the given article
+     * @param article Article to add
+     */
+    public void addToCart(int quantity, Article article) {
+
+        Optional<CartArticle> cartArticle = cartArticles.stream().filter(ca -> ca.getArticle().getId() == article.getId()).findFirst();
+
+        if(cartArticle.isPresent()) {
+            
+        }
+
+    }
+
+
 }

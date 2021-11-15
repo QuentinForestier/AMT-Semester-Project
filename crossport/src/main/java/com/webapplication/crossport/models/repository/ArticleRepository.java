@@ -1,4 +1,4 @@
-package com.webapplication.crossport.models.respository;
+package com.webapplication.crossport.models.repository;
 
 import com.webapplication.crossport.models.Article;
 import org.springframework.data.repository.CrudRepository;

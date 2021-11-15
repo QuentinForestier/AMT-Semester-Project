@@ -23,10 +23,6 @@ public class Member {
      */
     private String username;
 
-    /**
-     * Role, if false common user else admin
-     */
-    private String role;
 
     /**
      * User's cart
@@ -67,22 +63,5 @@ public class Member {
     public void setUsername(String name) {
         this.username = name;
     }
-
-    /**
-     * Gets role
-     * @return True if user is administrator
-     */
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Sets role
-     * @param role New role
-     */
-    public void setRole(String role) {
-        role = role;
-    }
-
 
 }

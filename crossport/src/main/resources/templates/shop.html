@@ -64,7 +64,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<p th:text="${article.description}"></p>
 						<span class="actual"></span><br>
 						<ul class="buttons">
-							<li class="cart"><a th:href="@{/cart(id=${article.id})}">Add To Cart</a></li>
+							<li class="cart"><a th:href="@{/addArticle(id=${article.id})}">Add To Cart</a></li>
 							<li class="shop_btn"><a th:href="@{/article(id=${article.id})}">Read More</a></li>
 							<div class="clear"> </div>
 					    </ul>

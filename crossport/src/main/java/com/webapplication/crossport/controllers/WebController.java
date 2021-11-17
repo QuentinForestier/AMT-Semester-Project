@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 public class WebController {
 
     @GetMapping(value={"/", "/home", "/index.html"})
-    public String greeting(HttpServletRequest request, @RequestParam(name="name", required=false, defaultValue="visitor") String name, Model model) {
+    public String home(HttpServletRequest request, @RequestParam(name="name", required=false, defaultValue="visitor") String name, Model model) {
         model.addAttribute("name", name);
 
         return "index";

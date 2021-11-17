@@ -25,14 +25,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="center" th:if="${#lists.isEmpty(listArticles)}">
 					-- No article found --
 				</div>
-				<div th:each="article:${listArticles}" class="col-md-3 shop_box"><a href="single.html">
+				<div th:each="article:${listArticles}" class="col-md-3 shop_box"><a th:href="@{/article(id=${article.id})}">
 					<img th:src="@{${article.imgPath}}" class="img-responsive" alt=""/>
 					<div class="shop_desc">
 						<h3><a th:href="@{/article(id=${article.id})}"><span th:text="${article.name}"></span></a></h3>
 						<p th:text="${article.description}"></p>
 						<span class="actual"></span><br>
 						<ul class="buttons">
-							<li class="cart"><a th:href="@{/cart(id=${article.id})}">Add To Cart</a></li>
+							<li class="cart"><a th:href="@{/addArticle(id=${article.id})}">Add To Cart</a></li>
 							<li class="shop_btn"><a th:href="@{/article(id=${article.id})}">Read More</a></li>
 							<div class="clear"> </div>
 					    </ul>

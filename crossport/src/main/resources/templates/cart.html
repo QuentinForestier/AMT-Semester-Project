@@ -36,35 +36,11 @@ Modification date: 09/10/2021
       Cart
     </div>
 
-    <!-- Product #1 -->
-    <div class="item">
-      <div class="buttons">
-        <span class="delete-btn"><img src="images/delete-icn.svg" alt="X" /></span>
-      </div>
-
-      <div class="image">
-        <img src="images/pic6.jpg" alt="" />
-      </div>
-
-      <div class="description">
-        <span>Common Projects 1 2 3 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 34 5</span>
-      </div>
-
-      <div class="quantity">
-        <button class="minus-btn" type="button" name="button">
-          <img src="images/minus.svg" alt="" />
-        </button>
-        <input type="text" name="name" value="1">
-        <button class="plus-btn" type="button" name="button">
-          <img src="images/plus.svg" alt="" />
-        </button>
-      </div>
-
-      <div class="total-price">$549</div>
+    <!-- Article -->
+    <div class="center" th:if="${#lists.isEmpty(cart.getCartArticles())}">
+      -- Empty cart --
     </div>
-
-    <!-- Product #2 -->
-    <div class="item">
+    <div class="item" th:each="cartArticle:${cart.getCartArticles()}">
       <div class="buttons">
         <span class="delete-btn"><img src="images/delete-icn.svg" alt="X" /></span>
       </div>
@@ -74,20 +50,20 @@ Modification date: 09/10/2021
       </div>
 
       <div class="description">
-        <span>Maison Margiela wv9v aowf v 9awvf  a9wfv 9avf 9v vaw9f </span>
+        <span th:text="${cartArticle.getArticle().getName()}"></span>
       </div>
 
       <div class="quantity">
         <button class="minus-btn" type="button" name="button">
           <img src="images/minus.svg" alt="" />
         </button>
-        <input type="text" name="name" value="1">
+        <input type="text" name="name" th:value="${cartArticle.getQuantity()}">
         <button class="plus-btn" type="button" name="button">
           <img src="images/plus.svg" alt="" />
         </button>
       </div>
 
-      <div class="total-price">$870</div>
+      <div class="total-price"><span th:text="${cartArticle.getArticle().getPrice()}"></span></div>
     </div>
   </div>
 </div>

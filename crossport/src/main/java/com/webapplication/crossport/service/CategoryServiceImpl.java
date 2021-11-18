@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webapplication.crossport.models.Category;
-import com.webapplication.crossport.models.respository.CategoryRepository;
+import com.webapplication.crossport.models.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 @Service

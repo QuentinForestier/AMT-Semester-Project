@@ -22,6 +22,20 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <div class="shop_top">
 		<div class="container">
 			<div class="row">
+				<div class="center" th:if="${#lists.isEmpty(listCategories)}">
+					-- No category found --
+				</div>
+				<div class="center">
+					<form action="/shop" method="get">
+						<select name="idCategory">
+							<option th:value=null>All</option>
+							<option th:each="category:${listCategories}"
+									th:value="${category.id}"
+									th:text="${category.name}"></option>
+						</select>
+						<button class="btn_form" type="submit">Filter</button>
+					</form><br/><br/>
+				</div>
 				<div class="center" th:if="${#lists.isEmpty(listArticles)}">
 					-- No article found --
 				</div>
@@ -29,7 +43,6 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<img th:src="@{${article.imgPath}}" class="img-responsive" alt=""/>
 					<div class="shop_desc">
 						<h3><a th:href="@{/article(id=${article.id})}"><span th:text="${article.name}"></span></a></h3>
-						<p th:text="${article.description}"></p>
 						<span class="actual"></span><br>
 						<ul class="buttons">
 							<li class="cart"><a th:href="@{/addArticle(id=${article.id})}">Add To Cart</a></li>

@@ -1,4 +1,4 @@
-package com.webapplication.crossport.models.respository;
+package com.webapplication.crossport.models.repository;
 
 import com.webapplication.crossport.models.Category;
 import org.springframework.data.jpa.repository.JpaRepository;

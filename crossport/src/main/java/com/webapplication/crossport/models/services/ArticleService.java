@@ -1,6 +1,7 @@
 package com.webapplication.crossport.models.services;
 
 import com.webapplication.crossport.models.Article;
+import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,11 @@ public class ArticleService {
     private ArticleRepository articleRepository;
 
     public List<Article> getAllArticles() {
-        return (List<Article>) articleRepository.findAll();
+        return articleRepository.findAll();
+    }
+
+    public List<Article> getCategoryArticles(Category category) {
+        return articleRepository.findArticlesByCategoriesContaining(category);
     }
 
     public Article getArticleById(Integer id) {

@@ -1,11 +1,12 @@
 package com.webapplication.crossport.models.repository;
 
 import com.webapplication.crossport.models.Article;
-import org.springframework.data.repository.CrudRepository;
+import com.webapplication.crossport.models.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
-// This will be AUTO IMPLEMENTED by Spring into a Bean called userRepository
-// CRUD refers Create, Read, Update, Delete
 @Repository
-public interface ArticleRepository extends CrudRepository<Article, Integer> {
+public interface ArticleRepository extends JpaRepository<Article, Integer> {
+    List<Article> findArticlesByCategoriesContaining(Category category);
 }

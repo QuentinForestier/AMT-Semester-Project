@@ -65,6 +65,14 @@ public class CartArticle {
     }
 
     /**
+     * Gets the related article
+     * @return Related article
+     */
+    public Article getArticle() {
+        return article;
+    }
+
+    /**
      * Sets a new related article
      * @param article New article
      */

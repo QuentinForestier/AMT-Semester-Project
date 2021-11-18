@@ -28,10 +28,24 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="center">
 					<form action="/shop" method="get">
 						<select name="idCategory">
-							<option th:value=null>All</option>
+							<option th:value=null
+									th:if="${idCategorySelected} == null"
+									selected>All
+							</option>
+							<option th:value=null
+									th:unless="${idCategorySelected} == null">All
+							</option>
 							<option th:each="category:${listCategories}"
 									th:value="${category.id}"
-									th:text="${category.name}"></option>
+									th:text="${category.name}"
+									th:if="${category.id} == ${idCategorySelected}"
+									selected>
+							</option>
+							<option th:each="category:${listCategories}"
+									th:value="${category.id}"
+									th:text="${category.name}"
+									th:unless="${category.id} == ${idCategorySelected}">
+							</option>
 						</select>
 						<button class="btn_form" type="submit">Filter</button>
 					</form><br/><br/>

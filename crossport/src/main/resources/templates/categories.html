@@ -47,6 +47,8 @@ Modification date: 08/11/2021
             $("#flagSwitcher").click(function() {
                 $(".dropdown img.flag").toggleClass("flagvisibility");
             });
+
+            var myCategory;
         });
     </script>
 </head>
@@ -143,6 +145,9 @@ Modification date: 08/11/2021
         <div class="container">
             <h2>Save category</h2>
             <form action="#" th:action="@{/saveCategory}" th:object="${category}" method="post">
+                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                    <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                </div>
                 <input type="text" th:field="*{name}" placeholder="Category name" class="form-control col-md-4">
                 <button type="submit" class="btn btn-info">Save category</button>
             </form>

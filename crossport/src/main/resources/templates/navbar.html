@@ -76,6 +76,7 @@ Modification date: 09/10/2021
                             <li><a href="/shop">Shop</a></li>
                             <li><a href="/register" sec:authorize="isAnonymous()">Register</a></li>
                             <li><a href="/login" sec:authorize="isAnonymous()">Login</a></li>
+                            <li sec:authorize="hasRole('ROLE_ADMIN')"><a href="/categories">Categories</a></li>
                             <li><a href="/logout" sec:authorize="isAuthenticated()">Logout</a></li>
                             <div class="clear"></div>
                         </ul>

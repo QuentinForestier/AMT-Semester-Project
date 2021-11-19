@@ -79,7 +79,6 @@ public class CategoryController {
         Category cat = categoryService.getCategoryById(id);
 
         if (cat.getArticles().isEmpty() || confirm) {
-            System.out.println("CONFIRMATION VALUEEEEEEEEEE : " + confirm);
             categoryService.deleteCategory(id);
         } else {
             // error = true;

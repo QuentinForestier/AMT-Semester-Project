@@ -1,5 +1,6 @@
 package com.webapplication.crossport.service;
 
+import com.webapplication.crossport.models.Cart;
 import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.models.repository.MemberRepository;
 import com.webapplication.crossport.service.exception.RegistrationException;
@@ -34,6 +35,7 @@ public class DefaultMemberService implements MemberService {
         member.setId(jsonObject.getInt("id"));
         member.setUsername(jsonObject.getString("username"));
         member.setRole(jsonObject.getString("role"));
+        member.setCart(new Cart());
         memberRepository.save(member);
     }
 

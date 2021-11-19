@@ -12,11 +12,13 @@ import java.util.Set;
 
 /**
  * Entity model for JPA. Represents a user cart.
+ *
  * @author Herzig Melvyn
  */
 @Entity
 @Table(name = "cart")
-public class Cart {
+public class Cart
+{
 
     /**
      * Primary key, unique identifier
@@ -33,49 +35,70 @@ public class Cart {
     @JoinColumn(name = "fk_cart_article_id")
     private Set<CartArticle> cartArticles = new HashSet<>();
 
-    /* -------------------------- GETTERS AND SETTERS -------------------------------*/
+    /* -------------------------- GETTERS AND SETTERS
+    -------------------------------*/
 
     /**
      * Gets cart id
+     *
      * @return Cart id
      */
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
     /**
      * Sets new cart id
+     *
      * @param id New cart
      */
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
+    public Set<CartArticle> getCartArticles()
+    {
+        return cartArticles;
+    }
+
     /**
-     * For a given http request, gets the session cart. If none creates and return one.
+     * For a given http request, gets the session cart. If none creates and
+     * return one.
+     *
      * @param session Context session
      * @return The session cart.
      */
-    public static Cart getCartInSession(HttpSession session) {
+    public static Cart getCartInSession(HttpSession session)
+    {
+        Member member = (Member) session.getAttribute("member");
 
-        Cart cart = (Cart) session.getAttribute("myCart");
-
-        if (cart == null) {
-            cart = new Cart();
-
-            session.setAttribute("myCart", cart);
+        if (member == null)
+        {
+            if(session.getAttribute("tempCart") == null){
+                session.setAttribute("tempCart", new Cart());
+            }
+            return (Cart)session.getAttribute("tempCart");
         }
 
-        return cart;
+        if (member.getCart() == null)
+        {
+            member.setCart(new Cart());
+        }
+
+        return member.getCart();
     }
 
     /**
      * Adds and articleId
-     * @param quantity Quantity in carty for the given article
+     *
+     * @param quantity  Quantity in carty for the given article
      * @param articleId Given article
      * @throws CartException
      */
-    public void addToCart(int quantity,int articleId) throws CartException {
+    public void addToCart(int quantity, int articleId) throws CartException
+    {
 
     }
 

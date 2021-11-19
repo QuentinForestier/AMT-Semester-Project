@@ -3,7 +3,7 @@ package com.webapplication.crossport.controllers;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.services.ArticleService;
-import com.webapplication.crossport.service.CategoryServiceImpl;
+import com.webapplication.crossport.models.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ public class ArticleController {
     private ArticleService articleService;
 
     @Autowired
-    private CategoryServiceImpl categoryService;
+    private CategoryService categoryService;
 
     @GetMapping("/shop")
     public String viewShop(@RequestParam(value = "idCategory", required = false) Integer idCategory,

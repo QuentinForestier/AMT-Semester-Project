@@ -22,7 +22,7 @@ public class CartController {
     private ArticleService articleService;
 
     @GetMapping("/addArticle")
-    public String addArticle(HttpServletRequest request, @RequestParam(value = "id") Integer id,  @RequestParam(value = "quantity", defaultValue = "1") Integer quantity, Model model) {
+    public String addArticle(HttpServletRequest request, @RequestParam(value = "id") Integer id,  @RequestParam(value = "quantity", defaultValue = "1") Integer quantity) {
 
         Cart cart = Cart.getCartInSession(request.getSession());
 

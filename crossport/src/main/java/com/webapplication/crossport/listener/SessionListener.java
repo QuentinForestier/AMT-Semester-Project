@@ -1,7 +1,6 @@
 package com.webapplication.crossport.listener;
 
 import com.webapplication.crossport.models.Cart;
-import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,7 @@ public class SessionListener implements HttpSessionListener
     public void sessionCreated(HttpSessionEvent event)
     {
         HttpSession session = event.getSession();
-        session.setMaxInactiveInterval(30);
+        session.setMaxInactiveInterval(3*60);
 
         System.out.println("New session created  : " + session.getId());
     }

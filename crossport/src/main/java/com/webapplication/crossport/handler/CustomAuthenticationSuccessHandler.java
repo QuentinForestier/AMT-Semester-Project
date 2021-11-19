@@ -5,7 +5,6 @@ import com.webapplication.crossport.models.CartArticle;
 import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.models.repository.CartRepository;
 import com.webapplication.crossport.models.repository.MemberRepository;
-import com.webapplication.crossport.service.exception.CartException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -37,12 +36,13 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException, ServletException
     {
 
-        int memberId = (int)session.getAttribute("memberId");
+        int memberId = (int) session.getAttribute("memberId");
         Member member = getMember(memberId);
-        if(member == null) member = new Member();
+        if (member == null) member = new Member();
         syncCart(member);
         session.setAttribute("member", member);
 
+        httpServletResponse.sendRedirect("/home");
     }
 
     private Member getMember(int id)
@@ -57,15 +57,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Cart cartMember = member.getCart();
         for (CartArticle ca : cartInSession.getCartArticles())
         {
-            try
-            {
-                cartMember.addToCart(ca.getQuantity(),
-                        ca.getArticle().getId());
-            }
-            catch (CartException e)
-            {
-                e.printStackTrace();
-            }
+            cartMember.addToCart(ca.getQuantity(), ca.getArticle());
+
         }
 
 

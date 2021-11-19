@@ -9,224 +9,118 @@ Modification date: 09/10/2021
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Free Snow Bootstrap Website Template | Home :: w3layouts</title>
-  <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
-  <link href="css/style.css" rel='stylesheet' type='text/css' />
-  <link href="css/cart.css" rel='stylesheet' type='text/css' />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
-  <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-  <script src="js/jquery.min.js"></script>
-  <!--<script src="js/jquery.easydropdown.js"></script>-->
-  <!--start slider -->
-  <link rel="stylesheet" href="css/fwslider.css" media="all">
-  <script src="js/jquery-ui.min.js"></script>
-  <script src="js/fwslider.js"></script>
-  <!--end slider -->
-  <script type="text/javascript">
-    $(document).ready(function() {
-      $(".dropdown img.flag").addClass("flagvisibility");
+    <title>Free Snow Bootstrap Website Template | Home :: w3layouts</title>
+    <link href="css/bootstrap.css" rel='stylesheet' type='text/css'/>
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="css/cart.css" rel='stylesheet' type='text/css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
 
-      $(".dropdown dt a").click(function() {
-        $(".dropdown dd ul").toggle();
-      });
-
-      $(".dropdown dd ul li a").click(function() {
-        var text = $(this).html();
-        $(".dropdown dt a span").html(text);
-        $(".dropdown dd ul").hide();
-        $("#result").html("Selected value is: " + getSelectedValue("sample"));
-      });
-
-      function getSelectedValue(id) {
-        return $("#" + id).find("dt a span.value").html();
-      }
-
-      $(document).bind('click', function(e) {
-        var $clicked = $(e.target);
-        if (! $clicked.parents().hasClass("dropdown"))
-          $(".dropdown dd ul").hide();
-      });
-
-
-      $("#flagSwitcher").click(function() {
-        $(".dropdown img.flag").toggleClass("flagvisibility");
-      });
-    });
-  </script>
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <script src="js/jquery.min.js"></script>
+    <!--<script src="js/jquery.easydropdown.js"></script>-->
+    <!--start slider -->
+    <link rel="stylesheet" href="css/fwslider.css" media="all">
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/fwslider.js"></script>
+    <!--end slider -->
 </head>
 <body>
-  <div th:insert="navbar.html :: navbar"> </div>
-  <div class="main">
+<div th:insert="navbar.html :: navbar"></div>
+<div class="main">
 
-  <div class="shopping-cart">
-    <div class="check_button"><a href="/clear_cart">Clear cart</a></div>
-    <!-- Title -->
-    <div class="title">
-      Cart
+    <div class="shopping-cart">
+        <div class="check_button"><a href="/clearCart">Clear cart</a></div>
+        <!-- Title -->
+        <div class="title">
+            Cart
+        </div>
+
+        <!-- Article -->
+        <div class="center" th:if="${#lists.isEmpty(cart.getCartArticles())}">
+            -- Empty cart --
+        </div>
+        <div class="item" th:each="cartArticle:${cart.getCartArticles()}">
+            <div class="buttons">
+                <a th:href="@{/removeArticle(id=${cartArticle.getArticle().getId()})}">
+                    <span class="delete-btn"><img src="images/delete-icn.svg" alt="X"/></span>
+                </a>
+            </div>
+
+            <div class="image">
+                <img src="images/pic6.jpg" alt=""/>
+            </div>
+
+            <div class="description">
+                <span th:text="${cartArticle.getArticle().getName()}"></span>
+            </div>
+
+            <div class="quantity">
+                <button class="minus-btn" type="button" name="button">
+                    <img src="images/minus.svg" alt=""/>
+                </button>
+                <input type="text" th:id="${cartArticle.getArticle().getId()}" name="name"
+                       th:value="${cartArticle.getQuantity()}">
+                <button class="plus-btn" type="button" name="button">
+                    <img src="images/plus.svg" alt=""/>
+                </button>
+            </div>
+
+            <div class="total-price"><span th:text="${cartArticle.getArticle().getPrice()}"></span></div>
+        </div>
     </div>
-
-    <!-- Product #1 -->
-    <div class="item">
-      <div class="buttons">
-        <span class="delete-btn"><img src="images/delete-icn.svg" alt="X" /></span>
-      </div>
-
-      <div class="image">
-        <img src="images/pic6.jpg" alt="" />
-      </div>
-
-      <div class="description">
-        <span>Common Projects 1 2 3 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 34 5</span>
-      </div>
-
-      <div class="quantity">
-        <button class="minus-btn" type="button" name="button">
-          <img src="images/minus.svg" alt="" />
-        </button>
-        <input type="text" name="name" value="1">
-        <button class="plus-btn" type="button" name="button">
-          <img src="images/plus.svg" alt="" />
-        </button>
-      </div>
-
-      <div class="total-price">$549</div>
-    </div>
-
-    <!-- Product #2 -->
-    <div class="item">
-      <div class="buttons">
-        <span class="delete-btn"><img src="images/delete-icn.svg" alt="X" /></span>
-      </div>
-
-      <div class="image">
-        <img src="images/pic6.jpg" alt=""/>
-      </div>
-
-      <div class="description">
-        <span>Maison Margiela wv9v aowf v 9awvf  a9wfv 9avf 9v vaw9f </span>
-      </div>
-
-      <div class="quantity">
-        <button class="minus-btn" type="button" name="button">
-          <img src="images/minus.svg" alt="" />
-        </button>
-        <input type="text" name="name" value="1">
-        <button class="plus-btn" type="button" name="button">
-          <img src="images/plus.svg" alt="" />
-        </button>
-      </div>
-
-      <div class="total-price">$870</div>
-    </div>
-  </div>
 </div>
-  <div class="footer">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-3">
-        <ul class="footer_box">
-          <h4>Products</h4>
-          <li><a href="#">Mens</a></li>
-          <li><a href="#">Womens</a></li>
-          <li><a href="#">Youth</a></li>
-        </ul>
-      </div>
-      <div class="col-md-3">
-        <ul class="footer_box">
-          <h4>About</h4>
-          <li><a href="#">Careers and internships</a></li>
-          <li><a href="#">Sponserships</a></li>
-          <li><a href="#">team</a></li>
-          <li><a href="#">Catalog Request/Download</a></li>
-        </ul>
-      </div>
-      <div class="col-md-3">
-        <ul class="footer_box">
-          <h4>Customer Support</h4>
-          <li><a href="#">Contact Us</a></li>
-          <li><a href="#">Shipping and Order Tracking</a></li>
-          <li><a href="#">Easy Returns</a></li>
-          <li><a href="#">Warranty</a></li>
-          <li><a href="#">Replacement Binding Parts</a></li>
-        </ul>
-      </div>
-      <div class="col-md-3">
-        <ul class="footer_box">
-          <h4>Newsletter</h4>
-          <div class="footer_search">
-            <form>
-              <input type="text" value="Enter your email" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Enter your email';}">
-              <input type="submit" value="Go">
-            </form>
-          </div>
-          <ul class="social">
-            <li class="facebook"><a href="#"><span> </span></a></li>
-            <li class="twitter"><a href="#"><span> </span></a></li>
-            <li class="instagram"><a href="#"><span> </span></a></li>
-            <li class="pinterest"><a href="#"><span> </span></a></li>
-            <li class="youtube"><a href="#"><span> </span></a></li>
-          </ul>
+<div th:insert="footer.html :: footer"></div>
+<script type="text/javascript">
 
-        </ul>
-      </div>
-    </div>
-    <div class="row footer_bottom">
-      <div class="copy">
-        <p>© 2014 Template by <a href="http://w3layouts.com" target="_blank">w3layouts</a></p>
-      </div>
-      <dl id="sample" class="dropdown">
-        <dt><a href="#"><span>Change Region</span></a></dt>
-        <dd>
-          <ul>
-            <li><a href="#">Australia<img class="flag" src="images/as.png" alt="" /><span class="value">AS</span></a></li>
-            <li><a href="#">Sri Lanka<img class="flag" src="images/srl.png" alt="" /><span class="value">SL</span></a></li>
-            <li><a href="#">Newziland<img class="flag" src="images/nz.png" alt="" /><span class="value">NZ</span></a></li>
-            <li><a href="#">Pakistan<img class="flag" src="images/pk.png" alt="" /><span class="value">Pk</span></a></li>
-            <li><a href="#">United Kingdom<img class="flag" src="images/uk.png" alt="" /><span class="value">UK</span></a></li>
-            <li><a href="#">United States<img class="flag" src="images/us.png" alt="" /><span class="value">US</span></a></li>
-          </ul>
-        </dd>
-      </dl>
-    </div>
-  </div>
-</div>
-  <script type="text/javascript">
-  $('.minus-btn').on('click', function(e) {
-    e.preventDefault();
-    var $this = $(this);
-    var $input = $this.closest('div').find('input');
-    var value = parseInt($input.val());
 
-    if (value > 1) {
-      value = value - 1;
-    } else {
-      value = 0;
+    $('.minus-btn').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $input = $this.closest('div').find('input');
+        var id = parseInt($input.get(0).id);
+        var value = parseInt($input.val());
+
+
+        if (value > 1) {
+            value = value - 1;
+        } else {
+            value = 0;
+        }
+
+        updateQuantity(id, value);
+
+    });
+
+    $('.plus-btn').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $input = $this.closest('div').find('input');
+        var id = parseInt($input.get(0).id);
+        var value = parseInt($input.val());
+
+        if (value < 100) {
+            value = value + 1;
+        } else {
+            value = 100;
+        }
+
+        updateQuantity(id, value);
+    });
+
+    $('.like-btn').on('click', function () {
+        $(this).toggleClass('is-active');
+    });
+
+    function updateQuantity(id, quantity) {
+        window.location.href = "/updateQuantity/" + id + "/" + quantity;
     }
-
-    $input.val(value);
-
-  });
-
-  $('.plus-btn').on('click', function(e) {
-    e.preventDefault();
-    var $this = $(this);
-    var $input = $this.closest('div').find('input');
-    var value = parseInt($input.val());
-
-    if (value < 100) {
-      value = value + 1;
-    } else {
-      value =100;
-    }
-
-    $input.val(value);
-  });
-
-  $('.like-btn').on('click', function() {
-    $(this).toggleClass('is-active');
-  });
 </script>
 </body>
 </html>

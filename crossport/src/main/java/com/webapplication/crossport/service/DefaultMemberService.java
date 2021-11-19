@@ -34,8 +34,8 @@ public class DefaultMemberService implements MemberService {
         Member member = new Member();
         member.setId(jsonObject.getInt("id"));
         member.setUsername(jsonObject.getString("username"));
-        member.setRole(jsonObject.getString("role"));
         member.setCart(new Cart());
+
         memberRepository.save(member);
     }
 

@@ -1,17 +1,18 @@
 package com.webapplication.crossport.controllers;
 
+import com.webapplication.crossport.models.services.CategoryService;
+import com.webapplication.crossport.service.CategoryData;
+import com.webapplication.crossport.service.MemberRegistrationData;
+import com.webapplication.crossport.service.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import com.webapplication.crossport.models.Category;
-import com.webapplication.crossport.service.CategoryService;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
@@ -24,53 +25,60 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-
     @GetMapping("/categories")
     public String listCategories(Model model) {
-        model.addAttribute("listCategories", categoryService.getAllCategories());
 
-        if(!model.containsAttribute("category")) {
-            model.addAttribute("category", new Category());
-        }
+        model.addAttribute("listCategories", categoryService.getAllCategories());
+        model.addAttribute("categoryData", new CategoryData());
 
         return "categories";
     }
 
-    @PostMapping("/saveCategory")
-    public String saveCategory(@ModelAttribute("category") Category category,
-                               final BindingResult bindingResult,
-                               RedirectAttributes attr,
-                               HttpSession session) {
-        List<Category> cat = categoryService.getAllCategories()
-                        .stream()
-                        .filter(c -> c.getName().equals(category.getName()))
-                        .collect(Collectors.toList());
+    @PostMapping("/categories")
+    public String saveCategory(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
 
-        if (cat.isEmpty()) {
-            categoryService.saveCategory(category);
-        } else {
-            bindingResult.addError(new ObjectError("Category error",
-                    "This category already exists"));
-            attr.addFlashAttribute("org.springframework.validation.BindingResult.createCategory", bindingResult);
-            attr.addFlashAttribute("createCategory", category);
-            return "redirect:/categories";
+        if(bindingResult.hasErrors()){
+            model.addAttribute("categoryForm", categoryData);
+            return "categories";
         }
 
-        return "redirect:/categories";
+
+        // Checking if already exists
+        Category sameCategory = categoryService.getFirstByName(categoryData.getCategoryName());
+
+        if (sameCategory != null){ // It already exists
+            bindingResult.addError(new ObjectError("globalError", "Same category already exists."));
+            model.addAttribute("categoryForm", categoryData);
+        }
+        else { // No category with the same name
+            Category category = new Category();
+            category.setName(categoryData.getCategoryName());
+            categoryService.saveCategory(category);
+        }
+
+        model.addAttribute("listCategories", categoryService.getAllCategories());
+        return "categories";
     }
 
 
+    @GetMapping("/deleteCategory")
+    public String deleteCategory(@RequestParam(value = "id") Integer id, RedirectAttributes redir) {
 
-    @GetMapping("/deleteCategory/{id}")
-    public String deleteCategory(@PathVariable(value = "id") Integer id, final BindingResult bindingResult) {
-        if (this.categoryService.getCategoryById(id).getArticles().isEmpty()) {
-            this.categoryService.deleteCategory(id);
+        boolean error = false;
+
+        Category cat = categoryService.getCategoryById(id);
+
+        if (cat.getArticles().isEmpty()) {
+            categoryService.deleteCategory(id);
         } else {
-            bindingResult.addError(new ObjectError("Category error",
-                    "You cannot delete this category as it has article bound."));
+            error = true;
+            String delError = "You cannot delete this category as it has article bound.";
+            redir.addFlashAttribute("delError", delError);
         }
+        redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
+        redir.addFlashAttribute("categoryData", new CategoryData());
 
-        return "redirect:/categories";
+        return error ? "redirect:/categories?error=" + cat.getName() : "redirect:/categories";
     }
 
 }

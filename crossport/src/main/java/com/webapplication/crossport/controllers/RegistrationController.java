@@ -32,7 +32,7 @@ public class RegistrationController {
     public String userRegistration(final @Valid MemberRegistrationData memberRegistrationData, final BindingResult bindingResult, final Model model){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("registrationForm", memberRegistrationData);
+            model.addAttribute("memberRegistrationData", memberRegistrationData);
             return "register";
         }
 
@@ -47,7 +47,7 @@ public class RegistrationController {
             }
 
             // Refill
-            model.addAttribute("registrationForm", memberRegistrationData);
+            model.addAttribute("memberRegistrationData", memberRegistrationData);
             return "register";
         }
 

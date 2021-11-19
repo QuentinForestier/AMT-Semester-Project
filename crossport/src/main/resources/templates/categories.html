@@ -21,35 +21,51 @@ Modification date: 08/11/2021
 <body>
     <div th:insert="navbar.html :: navbar"> </div>
     <div class="main">
-        <div class="container">
-            <h2>Categories</h2>
-            <div th:switch="${#lists.size(listCategories)}">
-                <span th:case="'0'">No categories yet. Create one below.</span>
-                <table th:case="*" class="table table-striped table-responsive">
-                    <thead>
+        <div class="shop_top">
+            <div class="container">
+                <h2>Categories</h2>
+                <div class="alert alert-danger" th:if="${param.error}">
+                    Category <span th:text="${param.error}"></span> is still related with articles
+                </div>
+                <div th:switch="${#lists.size(listCategories)}">
+                    <span th:case="'0'">No categories yet. Create one below.</span>
+                    <table th:case="*" class="table table-striped table-responsive">
+                        <thead>
                         <tr>
                             <th>Category name</th>
                             <th>Actions</th>
                         </tr>
-                    </thead>
-                    <tbody>
+                        </thead>
+                        <tbody>
                         <tr th:each="category : ${listCategories}">
                             <td th:text="${category.name}"></td>
-                            <td> <a th:href="@{/deleteCategory/{id}(id=${category.id})}" class="btn-danger">Delete</a></td>
+                            <td> <a th:href="@{/deleteCategory(id=${category.id})}" class="btn-danger">Delete</a></td>
                         </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="container">
-            <h2>Save category</h2>
-            <form action="#" th:action="@{/saveCategory}" th:object="${category}" method="post">
-                <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                    <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                        </tbody>
+                    </table>
                 </div>
-                <input type="text" th:field="*{name}" placeholder="Category name" class="form-control col-md-4">
-                <button type="submit" class="btn btn-info">Save category</button>
-            </form>
+                <div class="clear"> </div>
+                <div class="register-bottom-grid">
+                    <h2>Save category</h2>
+                    <div id="loginbox" class="loginbox" style="width: 100%">
+                        <form th:action="@{/categories}" th:object="${categoryData}" method="post">
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                            </div>
+                            <fieldset class="input">
+                                <p id="login-form-password">
+                                    <label for="catName">Category name</label>
+                                    <input  id="catName" type="text" th:field="*{categoryName}" th:errorclass="is-invalid" class="form-control col-md-4">
+                                </p>
+                                <div class="remember" >
+                                    <input type="submit" name="Submit" class="button" value="Save category"><div class="clear"></div>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+                <div class="clear"> </div>
+            </div>
         </div>
     </div>
     <div th:insert="footer.html :: footer"> </div>

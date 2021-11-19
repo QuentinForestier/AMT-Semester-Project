@@ -9,8 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class ArticleController {
@@ -23,14 +22,22 @@ public class ArticleController {
     @GetMapping("/shop")
     public String viewShop(@RequestParam(value = "idCategory", required = false) Integer idCategory,
                            Model model) {
-        if (idCategory == null) {
-            model.addAttribute("idCategorySelected", null);
-            model.addAttribute("listArticles", articleService.getAllArticles());
-        } else {
-            Category category = categoryService.getCategoryById(idCategory);
-            model.addAttribute("idCategorySelected", category.getId());
-            model.addAttribute("listArticles", articleService.getCategoryArticles(category));
+        List<Article> articles;
+        Category selectedCategory = null;
+        try  {
+            if (idCategory == null) {
+                articles = articleService.getAllArticles();
+            } else {
+                selectedCategory = categoryService.getCategoryById(idCategory);
+                articles = articleService.getCategoryArticles(selectedCategory);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "shop?error";
         }
+
+        model.addAttribute("categorySelected", selectedCategory);
+        model.addAttribute("listArticles", articles);
         model.addAttribute("listCategories", categoryService.getAllCategories());
         return "shop";
     }
@@ -38,7 +45,14 @@ public class ArticleController {
     @GetMapping("/article")
     public String viewAnArticle(@RequestParam(value = "id") Integer id,
                                 Model model) {
-        Article article = articleService.getArticleById(id);
+        Article article;
+        try {
+            article = articleService.getArticleById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "article?error";
+        }
+
         model.addAttribute("article", article);
         return "article";
     }

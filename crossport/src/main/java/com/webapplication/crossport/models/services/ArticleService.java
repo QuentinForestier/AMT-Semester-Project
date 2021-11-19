@@ -5,6 +5,7 @@ import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.repository.ArticleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,11 +15,19 @@ public class ArticleService {
     private ArticleRepository articleRepository;
 
     public List<Article> getAllArticles() {
-        return articleRepository.findAll();
+        try {
+            return articleRepository.findAll();
+        } catch (Exception e) {
+            return new LinkedList<Article>();
+        }
     }
 
     public List<Article> getCategoryArticles(Category category) {
-        return articleRepository.findArticlesByCategoriesContaining(category);
+        try {
+            return articleRepository.findArticlesByCategoriesContaining(category);
+        } catch (Exception e) {
+            return new LinkedList<Article>();
+        }
     }
 
     public Article getArticleById(Integer id) {

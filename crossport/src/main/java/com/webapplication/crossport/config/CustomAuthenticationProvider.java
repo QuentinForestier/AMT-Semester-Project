@@ -1,7 +1,5 @@
 package com.webapplication.crossport.config;
 
-import com.webapplication.crossport.models.Member;
-import com.webapplication.crossport.models.repository.MemberRepository;
 import com.webapplication.crossport.service.AuthService;
 import com.webapplication.crossport.service.RequestType;
 import org.json.JSONObject;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Custom authentication profider to dialogate with AuthService
@@ -28,67 +25,59 @@ import java.util.Optional;
  * @author Herzig Melvyn
  */
 @Component
-public class CustomAuthenticationProvider implements AuthenticationProvider
-{
-    @Autowired
-    private HttpSession session;
+public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    /**
-     * Contacts external auth service and tries to login user
-     *
-     * @param authentication Autentication credentials (username and password)
-     * @return The autentication informations if the user authenticate
-     * successfully.
-     * @throws AuthenticationException If authentication fails.
-     */
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException
-    {
-        // Gets login infos
-        String username = authentication.getName();
-        String password = authentication.getCredentials().toString();
+	@Autowired
+	private HttpSession session;
 
-        // Stores user role
-        final List<GrantedAuthority> grantedAuths = new ArrayList<>();
+	/**
+	 * Contacts external auth service and tries to login user
+	 *
+	 * @param authentication Autentication credentials (username and password)
+	 * @return The autentication informations if the user authenticate successfully.
+	 * @throws AuthenticationException If authentication fails.
+	 */
+	@Override
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+		// Gets login infos
+		String username = authentication.getName();
+		String password = authentication.getCredentials().toString();
 
-        // Gets user from AuthService
-        String response =
-                AuthService.getInstance().makeRequest(RequestType.LOGIN,
-                        username, password);
-        JSONObject jsonObject = new JSONObject(response);
+		// Stores user role
+		final List<GrantedAuthority> grantedAuths = new ArrayList<>();
 
-        // Checking errors
-        if (jsonObject.has("error"))
-        {
-            throw new BadCredentialsException(jsonObject.getString("error"));
-        }
+		// Gets user from AuthService
+		String response = AuthService.getInstance().makeRequest(RequestType.LOGIN, username, password);
+		JSONObject jsonObject = new JSONObject(response);
 
+		// Checking errors
+		if (jsonObject.has("error")) {
+			throw new BadCredentialsException(jsonObject.getString("error"));
+		}
 
-        session.setAttribute("memberId",
-                jsonObject.getJSONObject("account").getInt("id"));
+		// This if is for testing purpose since we fail to mock session
+		if(session != null ) {
+			session.setAttribute("memberId", jsonObject.getJSONObject("account").getInt("id"));
+		}
 
-        grantedAuths.add(new SimpleGrantedAuthority(jsonObject
-                .getJSONObject("account").getString("role")));
-        UserDetails principal = new User(username, password, grantedAuths);
-        Authentication auth =
-                new UsernamePasswordAuthenticationToken(principal, password,
-                        grantedAuths);
+		grantedAuths.add(new SimpleGrantedAuthority(jsonObject.getJSONObject("account").getString("role")));
+		UserDetails principal = new User(username, password, grantedAuths);
+		Authentication auth = new UsernamePasswordAuthenticationToken(principal, password, grantedAuths);
 
-        return auth;
-    }
+		return auth;
+	}
 
-    /**
-     * Checks the if authentication object is supported
-     *
-     * @param authentication Authentication object
-     * @return Return true if authentication is supported
-     */
-    @Override
-    public boolean supports(Class<?> authentication)
-    {
+	/**
+	 * Checks the if authentication object is supported
+	 *
+	 * @param authentication Authentication object
+	 * @return Return true if authentication is supported
+	 */
+	@Override
+	public boolean supports(Class<?> authentication) {
 
-        return authentication.equals(UsernamePasswordAuthenticationToken.class);
-    }
+		return authentication.equals(UsernamePasswordAuthenticationToken.class);
+	}
 
 
 }

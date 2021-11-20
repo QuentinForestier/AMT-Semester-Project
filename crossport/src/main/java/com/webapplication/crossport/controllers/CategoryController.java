@@ -15,10 +15,7 @@ import com.webapplication.crossport.models.Category;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class CategoryController {

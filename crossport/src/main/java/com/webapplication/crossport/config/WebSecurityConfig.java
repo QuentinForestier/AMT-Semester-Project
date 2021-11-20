@@ -29,8 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     @Bean
     public CustomAuthenticationProvider authProvider()
     {
-        CustomAuthenticationProvider authProvider =
-                new CustomAuthenticationProvider();
+        CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         return authProvider;
     }
 

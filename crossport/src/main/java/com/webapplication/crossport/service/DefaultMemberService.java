@@ -83,8 +83,4 @@ public class DefaultMemberService implements MemberService {
 
         return jsonObject;
     }
-
-    /*private void encodePassword( UserEntity userEntity, UserData user){
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-    }*/
 }

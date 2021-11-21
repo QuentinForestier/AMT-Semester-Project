@@ -50,8 +50,10 @@ jobs:
           distribution: 'adopt'
       - name: Delete authentication.properties
         run: rm /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties
+      - name: Create authentication.properties
+        run: touch /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties
       - name: Set authentication.properties for production
-        run: echo ${{secrets.AUTH_PROP}} > /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties   
+        run: echo "${{secrets.AUTH_PROP}}" > /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties   
       - name: Build with Maven
         run: mvn package --file crossport/pom.xml -D maven.test.skip=true
       - name: 'Deploy to server'

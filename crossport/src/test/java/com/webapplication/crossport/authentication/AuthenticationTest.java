@@ -82,24 +82,6 @@ public class AuthenticationTest extends DefaultMemberService{
     }
 
     /**
-     * With a non existing user, authentication should fail if password is not strong enough (less than 8 chars)
-     */
-    @Test
-    void Register_nonExistingUserPasswordNotEnoughSecured_Fail() {
-
-        Assertions.assertFalse(tryRegister("melvyn2", "small", "small"));
-    }
-
-    /**
-     * With a non existing user, authentication should fail if password is contains non alphanumeric chars
-     */
-    @Test
-    void Register_nonExistingUserPasswordInvalidChar_Fail() {
-
-        Assertions.assertFalse(tryRegister("melvyn2", "a spaced password", "a spaced password"));
-    }
-
-    /**
      * Tries to login with unknow credentials
      */
     @Test

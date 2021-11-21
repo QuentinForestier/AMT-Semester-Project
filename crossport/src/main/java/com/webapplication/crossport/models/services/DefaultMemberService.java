@@ -56,14 +56,6 @@ public class DefaultMemberService implements MemberService
             throw  new RegistrationException("Password and confirmation are not equal");
         }
 
-        if(user.getPassword().length() < 8) {
-            throw  new RegistrationException("Password must be at least 8 characters long.");
-        }
-
-        if(!user.getPassword().matches("^[a-zA-Z0-9]*$")) {
-            throw  new RegistrationException("Password must contain only alphanumeric characters");
-        }
-
         // Send to auth
         String response = AuthService.getInstance().makeRequest(RequestType.REGISTER, user.getUsername(), user.getPassword());
         JSONObject jsonObject = new JSONObject(response);

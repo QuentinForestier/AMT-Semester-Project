@@ -30,7 +30,7 @@ public class SessionListener implements HttpSessionListener
     public void sessionDestroyed(HttpSessionEvent event)
     {
         HttpSession session = event.getSession();
-        saveState(session);
+        //saveState(session);
 
         System.out.println("Session destroyed  : " + session.getId());
     }

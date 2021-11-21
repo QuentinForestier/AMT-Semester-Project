@@ -101,7 +101,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="col-md-3">
 				  <div class="box-info-product">
 					<p class="price2" th:text="${article.price} + ' CHF / pce'"></p>
-					  <form action="/cart/addArticle" method="get">
+					  <form action="/addArticle" method="get">
 						  <input type="number" name="id" th:value="${article.id}" hidden/>
 						  <span>Quantity:</span>
 						  <input type="number" id="quantity" name="quantity" value="1" min="1"/>

@@ -1,5 +1,6 @@
-package com.webapplication.crossport.service;
+package com.webapplication.crossport.models.services;
 
+import com.webapplication.crossport.service.MemberRegistrationData;
 import com.webapplication.crossport.service.exception.RegistrationException;
 
 /**

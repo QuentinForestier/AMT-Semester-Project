@@ -18,8 +18,7 @@ public class CategoryService {
 
 
     public List<Category> getAllCategories() {
-        List<Category> result = categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
-        return result;
+        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
     public void saveCategory(Category category) {

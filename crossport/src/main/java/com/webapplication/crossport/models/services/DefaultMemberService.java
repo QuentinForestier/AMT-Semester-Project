@@ -1,8 +1,12 @@
-package com.webapplication.crossport.service;
+package com.webapplication.crossport.models.services;
 
 import com.webapplication.crossport.models.Cart;
 import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.models.repository.MemberRepository;
+import com.webapplication.crossport.models.services.MemberService;
+import com.webapplication.crossport.service.AuthService;
+import com.webapplication.crossport.service.MemberRegistrationData;
+import com.webapplication.crossport.service.RequestType;
 import com.webapplication.crossport.service.exception.RegistrationException;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -13,7 +17,8 @@ import org.springframework.stereotype.Service;
  * Service that handles user information during registration process
  */
 @Service("memberService")
-public class DefaultMemberService implements MemberService {
+public class DefaultMemberService implements MemberService
+{
 
     /**
      * Repository to save user

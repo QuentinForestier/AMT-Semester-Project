@@ -2,7 +2,7 @@ package com.webapplication.crossport.authentication;
 
 import com.webapplication.crossport.config.CustomAuthenticationProvider;
 import com.webapplication.crossport.service.AuthService;
-import com.webapplication.crossport.service.DefaultMemberService;
+import com.webapplication.crossport.models.services.DefaultMemberService;
 import com.webapplication.crossport.service.MemberRegistrationData;
 import com.webapplication.crossport.service.exception.RegistrationException;
 import org.junit.jupiter.api.*;

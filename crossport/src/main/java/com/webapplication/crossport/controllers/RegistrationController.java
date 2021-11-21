@@ -1,7 +1,7 @@
 package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.service.MemberRegistrationData;
-import com.webapplication.crossport.service.MemberService;
+import com.webapplication.crossport.models.services.MemberService;
 import com.webapplication.crossport.service.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

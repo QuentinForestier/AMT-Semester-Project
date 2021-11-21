@@ -32,12 +32,13 @@ Modification date: 08/11/2021
                         <thead>
                         <tr>
                             <th>Article name</th>
+                            <th><a th:href="@{/deleteCategory/{id}(id=${category.id}, confirm = 'true')}" class="btn btn-danger">Delete category</a></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="article : ${category.getArticles()}">
                             <td th:text="${article.name}"></td>
-                            <td> <a th:href="@{/deleteCategory/{id}(id=${category.id}, confirm = 'true')}" class="btn btn-danger">Delete</a></td>
+                            <td> </td>
                         </tr>
                         </tbody>
                     </table>

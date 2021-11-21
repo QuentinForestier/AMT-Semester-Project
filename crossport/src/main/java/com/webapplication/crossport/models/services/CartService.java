@@ -1,4 +1,4 @@
-package com.webapplication.crossport.service;
+package com.webapplication.crossport.models.services;
 
 import com.webapplication.crossport.models.Cart;
 import com.webapplication.crossport.models.repository.CartRepository;

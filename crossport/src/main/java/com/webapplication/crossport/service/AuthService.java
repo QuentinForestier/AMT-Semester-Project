@@ -1,9 +1,5 @@
 package com.webapplication.crossport.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -49,7 +45,8 @@ public class AuthService {
         }
 
         address = appProps.getProperty("address");
-        port = Integer.parseInt(appProps.getProperty("port"));
+        String temp = appProps.getProperty("port");
+        port = Integer.parseInt(temp);
     }
 
     /**

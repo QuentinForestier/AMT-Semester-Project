@@ -58,7 +58,7 @@ Une fois la partie "Installation" réalisée, il vous suffit de lancer le logici
 Lancer le projet grâce à l'icône start (triangle vert).
 
 Finalement, il vous suffit de lancer votre navigateur préféré et accéder à l'application grâce à l'adresse suivante:
-localhost:8080
+localhost:80
 
 L'application n'est pas encore disponible sur internet et cette partie propose une façon d'accéder / tester l'application d'un façon provisoire.
 

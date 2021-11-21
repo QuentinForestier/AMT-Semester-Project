@@ -7,7 +7,7 @@ Modified by: Lamrani Soulaymane
 Modification date: 08/11/2021
 -->
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org",>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Free Snow Bootstrap Website Template | Shop :: w3layouts</title>
     <link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
@@ -20,7 +20,6 @@ Modification date: 08/11/2021
 </head>
 <body>
     <div th:insert="navbar.html :: navbar"> </div>
-
     <div class="main">
         <div class="shop_top">
             <div class="container">
@@ -40,7 +39,10 @@ Modification date: 08/11/2021
                         <tbody>
                         <tr th:each="category : ${listCategories}">
                             <td th:text="${category.name}"></td>
-                            <td> <a th:href="@{/deleteCategory(id=${category.id})}" class="btn-danger">Delete</a></td>
+                            <td>
+                                <a th:href="@{/category/{id}(id=${category.id})}" class="btn btn-info">Info</a>
+                                <a th:href="@{/deleteCategory/{id}(id=${category.id})}" class="btn btn-danger">Delete</a>
+                            </td>
                         </tr>
                         </tbody>
                     </table>

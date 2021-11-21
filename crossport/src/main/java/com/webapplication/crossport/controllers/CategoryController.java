@@ -1,9 +1,8 @@
 package com.webapplication.crossport.controllers;
 
+import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
-import com.webapplication.crossport.service.MemberRegistrationData;
-import com.webapplication.crossport.service.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -58,25 +57,36 @@ public class CategoryController {
         return "categories";
     }
 
+    @GetMapping("/category/{id}")
+    public String getCategoryId(@PathVariable(value = "id") Integer id, Model model) {
+        Category category = categoryService.getCategoryById(id);
 
-    @GetMapping("/deleteCategory")
-    public String deleteCategory(@RequestParam(value = "id") Integer id, RedirectAttributes redir) {
+        model.addAttribute("category", category);
+        return "category";
+    }
 
-        boolean error = false;
+
+    @GetMapping("/deleteCategory/{id}")
+    public String deleteCategory(@PathVariable(value = "id") Integer id, @RequestParam(value = "confirm", defaultValue = "false") boolean confirm, RedirectAttributes redir) {
+
+        // boolean error = false;
 
         Category cat = categoryService.getCategoryById(id);
 
-        if (cat.getArticles().isEmpty()) {
+        if (cat.getArticles().isEmpty() || confirm) {
             categoryService.deleteCategory(id);
         } else {
-            error = true;
-            String delError = "You cannot delete this category as it has article bound.";
+            // error = true;
+            String delError = "You cannot delete this category as it has articles bound.";
             redir.addFlashAttribute("delError", delError);
+
+            return "redirect:/category/" + id;
         }
         redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
         redir.addFlashAttribute("categoryData", new CategoryData());
 
-        return error ? "redirect:/categories?error=" + cat.getName() : "redirect:/categories";
+        // return error ? "redirect:/categories?error=" + cat.getName() : "redirect:/categories";
+        return "redirect:/categories";
     }
 
 }

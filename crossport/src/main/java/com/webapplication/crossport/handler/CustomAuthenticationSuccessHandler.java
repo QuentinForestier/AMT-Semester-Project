@@ -61,6 +61,6 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         }
 
-
+        cartRepository.save(cartMember);
     }
 }

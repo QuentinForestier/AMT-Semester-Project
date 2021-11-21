@@ -1,16 +1,25 @@
 package com.webapplication.crossport.models;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.servlet.http.HttpSession;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Entity model for JPA. Represents a user cart.
+ *
  * @author Herzig Melvyn
  */
 @Entity
 @Table(name = "cart")
-public class Cart {
+public class Cart
+{
 
     /**
      * Primary key, unique identifier
@@ -23,67 +32,87 @@ public class Cart {
     /**
      * Related cart articles
      */
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "fk_cart_article_id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch =
+            FetchType.EAGER)
+    @JoinColumn(name = "fk_cart_id")
     private Set<CartArticle> cartArticles = new HashSet<>();
 
-    /* -------------------------- GETTERS AND SETTERS -------------------------------*/
+    /* -------------------------- GETTERS AND SETTERS
+    -------------------------------*/
 
     /**
      * Gets cart id
+     *
      * @return Cart id
      */
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
 
     /**
      * Sets new cart id
+     *
      * @param id New cart
      */
-    public void setId(Integer id) {
+    public void setId(Integer id)
+    {
         this.id = id;
     }
 
-    /**
-     * Gets the articles in the cart
-     * @return Set of cart articles
-     */
-    public Set<CartArticle> getCartArticles() {
+    public Set<CartArticle> getCartArticles()
+    {
         return cartArticles;
     }
 
     /**
-     * For a given http request, gets the session cart. If none creates and return one.
+     * <<<<<<< HEAD
+     * For a given http request, gets the session cart. If none creates and
+     * return one.
+     *
      * @param session Context session
      * @return The session cart.
      */
-    public static Cart getCartInSession(HttpSession session) {
+    public static Cart getCartInSession(HttpSession session)
+    {
+        Member member = (Member) session.getAttribute("member");
 
-        //CartInfo cartInfo = (CartInfo) request.getSession().getAttribute("myCart");
-        Cart cart = (Cart) session.getAttribute("myCart");
-
-        if (cart == null) {
-            cart = new Cart();
-
-            session.setAttribute("myCart", cart);
+        if (member == null)
+        {
+            if (session.getAttribute("tempCart") == null)
+            {
+                session.setAttribute("tempCart", new Cart());
+            }
+            return (Cart) session.getAttribute("tempCart");
         }
 
-        return cart;
+        if (member.getCart() == null)
+        {
+            member.setCart(new Cart());
+        }
+
+        return member.getCart();
     }
 
+
     /**
-     * Adds a cartArticle. If article already exists in cart, quantity is updated. If quantity is 0, article is removed.
+     * Adds a cartArticle. If article already exists in cart, quantity is
+     * updated. If quantity is 0, article is removed.
+     *
      * @param quantity Quantity in carty for the given article
-     * @param article Article to add
+     * @param article  Article to add
      */
-    public void addToCart(int quantity, Article article) {
+    public void addToCart(int quantity, Article article)
+    {
 
-        Optional<CartArticle> cartArticle = cartArticles.stream().filter(ca -> Objects.equals(ca.getArticle().getId(), article.getId())).findFirst();
+        Optional<CartArticle> cartArticle =
+                cartArticles.stream().filter(ca -> Objects.equals(ca.getArticle().getId(), article.getId())).findFirst();
 
-        if(cartArticle.isPresent()) {
+        if (cartArticle.isPresent())
+        {
 
-            if(quantity < 1) {
+            if (quantity < 1)
+            {
                 cartArticles.remove(cartArticle.get());
             }
             else
@@ -93,7 +122,8 @@ public class Cart {
         }
         else
         {
-            if(quantity >= 1) {
+            if (quantity >= 1)
+            {
                 CartArticle newCartArticle = new CartArticle();
                 newCartArticle.setArticle(article);
                 newCartArticle.setQuantity(quantity);
@@ -102,5 +132,16 @@ public class Cart {
         }
     }
 
+    public void clear()
+    {
+        this.cartArticles.clear();
+    }
 
+    public void removeArticle(Article article)
+    {
+        this.cartArticles =
+                this.cartArticles.stream()
+                        .filter(ca -> !ca.getArticle().getId().equals(article.getId()))
+                        .collect(Collectors.toSet());
+    }
 }

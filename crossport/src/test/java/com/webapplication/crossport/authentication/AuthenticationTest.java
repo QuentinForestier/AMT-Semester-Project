@@ -6,21 +6,20 @@ import com.webapplication.crossport.service.DefaultMemberService;
 import com.webapplication.crossport.service.MemberRegistrationData;
 import com.webapplication.crossport.service.exception.RegistrationException;
 import org.junit.jupiter.api.*;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.images.builder.ImageFromDockerfile;
+
 import java.nio.file.Paths;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests for authentication. This test class checks multiple users inputs for registration and login.
  * For registration: checks if DefaultMemberService behave correctly depending on authentication server response.
- * For login:
+ * For login: checks if authenticate method of customAuthenticationProvider works
  * @author Herzig Melvyn
  */
 public class AuthenticationTest extends DefaultMemberService{
@@ -67,7 +66,7 @@ public class AuthenticationTest extends DefaultMemberService{
      * With an existing user, authentication should fail
      */
     @Test
-    void Register_existingUser_Fail() {
+    void testRegister_existingUser_Fail() {
 
         tryRegister("melvyn2", "agreatpassword", "agreatpassword");
         Assertions.assertFalse(tryRegister("melvyn2", "agreatpassword", "agreatpassword"));
@@ -122,7 +121,7 @@ public class AuthenticationTest extends DefaultMemberService{
     @Test
     void Login_AdminAccount_Success(){
 
-        Authentication auth = null;
+        org.springframework.security.core.Authentication auth = null;
 
         try {
             auth = cap.authenticate(makeAuthentication("admin", "admin"));

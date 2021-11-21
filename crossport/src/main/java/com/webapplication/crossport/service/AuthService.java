@@ -39,6 +39,8 @@ public class AuthService {
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         String appConfigPath = rootPath + "authentication.properties";
 
+        appConfigPath = appConfigPath.replace("%20", " ");
+
         Properties appProps = new Properties();
         try {
             appProps.load(new FileInputStream(appConfigPath));

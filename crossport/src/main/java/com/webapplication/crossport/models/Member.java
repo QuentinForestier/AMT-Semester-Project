@@ -4,17 +4,18 @@ import javax.persistence.*;
 
 /**
  * Entity model for JPA. Represents a web connected user
+ *
  * @author Herzig Melvyn
  */
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member
+{
 
     /**
      * Primary key, unique identifier
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Integer id;
 
@@ -27,41 +28,68 @@ public class Member {
     /**
      * User's cart
      */
-    @OneToOne
+    @OneToOne(cascade={CascadeType.ALL})
     @JoinColumn(name = "fk_cart_id")
     private Cart cart;
 
-    /* -------------------------- GETTERS AND SETTERS -------------------------------*/
+
+    // Constructor
+
+    public Member(){
+        cart = new Cart();
+    }
+
+    /* -------------------------- GETTERS AND SETTERS
+    -------------------------------*/
 
     /**
      * Gets id
+     *
      * @return User id
      */
-    public Integer getId() {
+    public Integer getId()
+    {
         return id;
     }
+
     /**
      * Sets id
+     *
      * @return User id
      */
-    public void setId(int id) {
+    public void setId(int id)
+    {
         this.id = id;
     }
 
     /**
      * Gets user name
+     *
      * @return User name
      */
-    public String getUsername() {
+    public String getUsername()
+    {
         return username;
     }
 
     /**
      * Sets user name
+     *
      * @param name New name
      */
-    public void setUsername(String name) {
+    public void setUsername(String name)
+    {
         this.username = name;
+    }
+
+    public Cart getCart()
+    {
+        return this.cart;
+    }
+
+    public void setCart(Cart newCart)
+    {
+        this.cart = newCart;
     }
 
 }

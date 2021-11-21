@@ -79,4 +79,5 @@ public class CartArticle {
     public void setArticle(Article article) {
         this.article = article;
     }
+
 }

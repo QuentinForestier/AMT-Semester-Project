@@ -1,5 +1,6 @@
 package com.webapplication.crossport.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -7,37 +8,46 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  * This class aims to configure Spring security config
+ *
  * @author Herzig Melvyn
  */
 @Configuration
 @EnableWebSecurity
 @ComponentScan("com.webapplication.crossport.config")
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter
+{
+
+    @Autowired
+    AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
-    public CustomAuthenticationProvider authProvider() {
+    public CustomAuthenticationProvider authProvider()
+    {
         CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         return authProvider;
     }
 
     /**
      * Defines our own web configuration
+     *
      * @param http The httpSecurity to modify
      * @throws Exception if an error occurs
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception
+    {
         http
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home",
-                        "/register", "/shop", "/article**",
-                        "/css/**", "/images/**", "/js/**",
-                        "/addArticle**", "/cart").permitAll()
+                .antMatchers("/", "/home", "/register", "/shop", "/article**", "/css/**", "/images/**", "/js/**", "/addArticle**", "/removeArticle**", "/clearCart", "/cart", "/updateQuantity/**").permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/categories")
@@ -47,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 .loginPage("/login")
                 .permitAll()
+                .successHandler(authenticationSuccessHandler)
                 .and()
                 .logout()
                 .invalidateHttpSession(true)
@@ -57,12 +68,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Used by the default implementation of authenticationManager() to attempt to obtain an AuthenticationManager.
+     * Used by the default implementation of authenticationManager() to
+     * attempt to obtain an AuthenticationManager.
+     *
      * @param auth AuthenticationManagerBuilder to use
      * @throws Exception If something goes wrong
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception
+    {
         auth.authenticationProvider(authProvider());
     }
 }

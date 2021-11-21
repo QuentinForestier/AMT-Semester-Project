@@ -1,5 +1,6 @@
 package com.webapplication.crossport.service;
 
+import com.webapplication.crossport.models.Cart;
 import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.models.repository.MemberRepository;
 import com.webapplication.crossport.service.exception.RegistrationException;
@@ -33,6 +34,8 @@ public class DefaultMemberService implements MemberService {
         Member member = new Member();
         member.setId(jsonObject.getInt("id"));
         member.setUsername(jsonObject.getString("username"));
+        member.setCart(new Cart());
+
         memberRepository.save(member);
     }
 
@@ -80,8 +83,4 @@ public class DefaultMemberService implements MemberService {
 
         return jsonObject;
     }
-
-    /*private void encodePassword( UserEntity userEntity, UserData user){
-        userEntity.setPassword(passwordEncoder.encode(user.getPassword()));
-    }*/
 }

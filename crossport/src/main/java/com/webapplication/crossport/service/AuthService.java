@@ -24,7 +24,7 @@ public class AuthService {
     /**
      * Service port
      */
-    private int port = 8081;
+    private int port;
 
     /**
      * Unique class instance
@@ -49,6 +49,7 @@ public class AuthService {
         }
 
         address = appProps.getProperty("address");
+        port = Integer.parseInt(appProps.getProperty("port"));
     }
 
     /**

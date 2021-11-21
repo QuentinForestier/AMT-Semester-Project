@@ -1,6 +1,5 @@
 package com.webapplication.crossport.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/register", "/shop", "/article**", "/css/**", "/images/**", "/js/**", "/addArticle**", "/cart").permitAll()
+                .antMatchers("/", "/home",
+                        "/register", "/shop", "/article**",
+                        "/css/**", "/images/**", "/js/**",
+                        "/addArticle**", "/cart").permitAll()
                 .and()
                 .authorizeRequests()
                 .antMatchers("/categories")

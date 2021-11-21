@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.repository.CategoryRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +18,8 @@ public class CategoryService {
 
 
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        List<Category> result = categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return result;
     }
 
     public void saveCategory(Category category) {

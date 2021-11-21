@@ -19,7 +19,6 @@ public class WebController {
 
     @GetMapping("/login")
     public String login(Model model){
-
         return "login";
     }
 }

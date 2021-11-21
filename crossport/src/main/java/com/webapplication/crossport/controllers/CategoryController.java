@@ -3,8 +3,6 @@ package com.webapplication.crossport.controllers;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
-import com.webapplication.crossport.service.MemberRegistrationData;
-import com.webapplication.crossport.service.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +14,8 @@ import com.webapplication.crossport.models.Category;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Controller
 public class CategoryController {

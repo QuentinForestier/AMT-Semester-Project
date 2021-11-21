@@ -48,12 +48,10 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Go to authentication.properties
-        run: cd crossport/src/main/resources
       - name: Delete authentication.properties
-        run: rm authentication.properties
+        run: rm /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties
       - name: Set authentication.properties for production
-        run: echo ${{secrets.AUTH_PROP}} > authentication.properties        
+        run: echo ${{secrets.AUTH_PROP}} > /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties   
       - name: Build with Maven
         run: mvn package --file crossport/pom.xml -D maven.test.skip=true
       - name: 'Deploy to server'

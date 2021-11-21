@@ -2,6 +2,7 @@ package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
+import com.webapplication.crossport.models.repository.CategoryRepository;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,7 @@ public class ArticleController {
     private CategoryService categoryService;
 
     @GetMapping("/shop")
-    public String viewShop(@RequestParam(value = "idCategory", required = false) Integer idCategory,
-                           Model model) {
+    public String viewShop(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
         List<Article> articles;
         Category selectedCategory = null;
         try  {
@@ -36,15 +36,21 @@ public class ArticleController {
             return "shop?error";
         }
 
+        List<Category> categories = categoryService.getAllCategories();
+        if (selectedCategory != null) {
+            categories.remove(selectedCategory);
+            categories.add(0, selectedCategory);
+        }
+
+
         model.addAttribute("categorySelected", selectedCategory);
         model.addAttribute("listArticles", articles);
-        model.addAttribute("listCategories", categoryService.getAllCategories());
+        model.addAttribute("listCategories", categories);
         return "shop";
     }
 
     @GetMapping("/article")
-    public String viewAnArticle(@RequestParam(value = "id") Integer id,
-                                Model model) {
+    public String viewAnArticle(@RequestParam(value = "id") Integer id, Model model) {
         Article article;
         try {
             article = articleService.getArticleById(id);

@@ -33,15 +33,10 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<label th:for="idCategory">Choose a category: </label>
 						<select name="idCategory">
 							<option th:value=null>All</option>
-							<option th:if="${categorySelected != null}"
-									th:value="${categorySelected.id}"
-									th:text="${categorySelected.name}"
-									selected>
-							</option>
 							<option th:each="category:${listCategories}"
 									th:value="${category.id}"
 									th:text="${category.name}"
-									th:if="${categorySelected != null && categorySelected.id != category.id}">
+									th:selected="${categorySelected != null && categorySelected.id == category.id}">
 							</option>
 						</select>
 						<button class="btn_form" type="submit">Filter</button>

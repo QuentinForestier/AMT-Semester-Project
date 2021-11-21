@@ -1,0 +1,126 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+Modified by: Herzig Melvyn
+Modification date: 09/10/2021
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Free Snow Bootstrap Website Template | Home :: w3layouts</title>
+    <link href="css/bootstrap.css" rel='stylesheet' type='text/css'/>
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <link href="css/cart.css" rel='stylesheet' type='text/css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script type="application/x-javascript"> addEventListener("load", function () {
+        setTimeout(hideURLbar, 0);
+    }, false);
+
+    function hideURLbar() {
+        window.scrollTo(0, 1);
+    } </script>
+    <script src="js/jquery.min.js"></script>
+    <!--<script src="js/jquery.easydropdown.js"></script>-->
+    <!--start slider -->
+    <link rel="stylesheet" href="css/fwslider.css" media="all">
+    <script src="js/jquery-ui.min.js"></script>
+    <script src="js/fwslider.js"></script>
+    <!--end slider -->
+</head>
+<body>
+<div th:insert="navbar.html :: navbar"></div>
+<div class="main">
+
+    <div class="shopping-cart">
+        <div class="check_button"><a href="/clearCart">Clear cart</a></div>
+        <!-- Title -->
+        <div class="title">
+            Cart
+        </div>
+
+        <!-- Article -->
+        <div class="center" th:if="${#lists.isEmpty(cart.getCartArticles())}">
+            -- Empty cart --
+        </div>
+        <div class="item" th:each="cartArticle:${cart.getCartArticles()}">
+            <div class="buttons">
+                <a th:href="@{/removeArticle(id=${cartArticle.getArticle().getId()})}">
+                    <span class="delete-btn"><img src="images/delete-icn.svg" alt="X"/></span>
+                </a>
+            </div>
+
+            <div class="image">
+                <img src="images/pic6.jpg" alt=""/>
+            </div>
+
+            <div class="description">
+                <span th:text="${cartArticle.getArticle().getName()}"></span>
+            </div>
+
+            <div class="quantity">
+                <button class="minus-btn" type="button" name="button">
+                    <img src="images/minus.svg" alt=""/>
+                </button>
+                <input type="text" th:id="${cartArticle.getArticle().getId()}" name="name"
+                       th:value="${cartArticle.getQuantity()}">
+                <button class="plus-btn" type="button" name="button">
+                    <img src="images/plus.svg" alt=""/>
+                </button>
+            </div>
+
+            <div class="total-price"><span th:text="${cartArticle.getArticle().getPrice()}"></span></div>
+        </div>
+    </div>
+</div>
+<div th:insert="footer.html :: footer"></div>
+<script type="text/javascript">
+
+
+    $('.minus-btn').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $input = $this.closest('div').find('input');
+        var id = parseInt($input.get(0).id);
+        var value = parseInt($input.val());
+
+
+        if (value > 1) {
+            value = value - 1;
+        } else {
+            value = 0;
+        }
+
+        updateQuantity(id, value);
+
+    });
+
+    $('.plus-btn').on('click', function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        var $input = $this.closest('div').find('input');
+        var id = parseInt($input.get(0).id);
+        var value = parseInt($input.val());
+
+        if (value < 100) {
+            value = value + 1;
+        } else {
+            value = 100;
+        }
+
+        updateQuantity(id, value);
+    });
+
+    $('.like-btn').on('click', function () {
+        $(this).toggleClass('is-active');
+    });
+
+    function updateQuantity(id, quantity) {
+        window.location.href = "/updateQuantity/" + id + "/" + quantity;
+    }
+</script>
+</body>
+</html>

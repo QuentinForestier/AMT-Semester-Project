@@ -70,6 +70,11 @@ body a{
 .nav ul {
     list-style: none;
 }
+
+.center {
+	text-align: center;
+}
+
 @media screen and (max-width:800px) {
 	.active {
         display: block;
@@ -641,7 +646,7 @@ i.close1{
    -moz-box-shadow: 0 0 1px #000;
    box-shadow: 0 0 1px #000;
 }
-.view a.info: hover {
+.view a.info:hover {
    -webkit-box-shadow: 0 0 5px #000;
    -moz-box-shadow: 0 0 5px #000;
    box-shadow: 0 0 5px #000;
@@ -1229,6 +1234,21 @@ p.m_8{
 	outline: none;
 	border:1px solid #DFE0E2;
 }
+
+input[type="password"] {
+	padding: 10px;
+	width:95%;
+	font-size: 0.85em;
+	font-family: 'Open Sans', sans-serif;
+	margin: 10px 0;
+	border: none;
+	color: #888;
+	background:#FFFFFF;
+	float: left;
+	outline: none;
+	border:1px solid #DFE0E2;
+}
+
 .to input[type="text"]:hover, .text input[type="text"], .text textarea:hover{
 	border-color:#E25050;
 }
@@ -1648,7 +1668,6 @@ fieldset.input input[type="submit"]:hover {
 }
 #login-form label a {
 	color: #777;
-	color:0.85em;
 }
 #login-form label a:hover {
 	color:#00BFF0;
@@ -2018,9 +2037,10 @@ h4.m_11 {
 	 width:50px !important;
 	 height:50px !important;
   }
-  .register-top-grid(
-  	margin-bottom:20px;
-  )
+
+  .register-top-grid {
+	  margin-bottom: 20px;
+  }
   .nav {
 	top: 66px;
 	right: 8px;

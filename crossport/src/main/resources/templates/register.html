@@ -1,0 +1,56 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Free Snow Bootstrap Website Template | Register :: w3layouts</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script src="js/jquery.min.js"></script>
+ </head>
+<body>
+	<div th:insert="navbar.html :: navbar"> </div>
+     <div class="main">
+      <div class="shop_top">
+	     <div class="container">
+						<form action="#" th:action="@{/register}" th:object="${memberRegistrationData}" method="post">
+							<div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+								<p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+							</div>
+								<div class="register-top-grid">
+										<h3>PERSONAL INFORMATION</h3>
+										<div>
+											<span>username<label>*</label></span>
+											<input type="text" th:field="*{username}" th:errorclass="is-invalid">
+										</div>
+								</div>
+								<div class="clear"> </div>
+								<div class="register-bottom-grid">
+										<h3>LOGIN INFORMATION</h3>
+										<div>
+											<span>Password<label>*</label></span>
+											<input type="password"  th:field="*{password}" th:errorclass="is-invalid">
+										</div>
+										<div>
+											<span>Confirm Password<label>*</label></span>
+											<input type="password" th:field="*{passwordConfirmation}" th:errorclass="is-invalid">
+										</div>
+										<div class="clear"> </div>
+								</div>
+								<div class="clear"> </div>
+								<input name="Submit" type="submit" value="submit" class="button">
+						</form>
+					</div>
+		   </div>
+	  </div>
+	<div th:insert="footer.html :: footer"> </div>
+</body>	
+</html>

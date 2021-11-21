@@ -1,0 +1,65 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Free Snow Bootstrap Website Template | Checkout :: w3layouts</title>
+<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
+<link href="css/style.css" rel='stylesheet' type='text/css' />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+<script src="js/jquery.min.js"></script>
+ </head>
+<body>
+	<div th:insert="navbar.html :: navbar"> </div>
+	<div class="main">
+    <div class="shop_top">
+		<div class="container">
+			<div class="col-md-6">
+				 <div class="login-page">
+					<h4 class="title">New Customers</h4>
+					 <p>Thank you for your interest in Crossport! you have no account yet?</p> <a href="/register"> Get one here.</a>
+					 <div class="clear"></div>
+				  </div>
+				</div>
+				<div class="col-md-6">
+				 <div class="login-title">
+	           		<h4 class="title">Registered Customers</h4>
+					<div id="loginbox" class="loginbox">
+						<form action="" method="post" name="login" id="login-form">
+							<div class="alert alert-danger" th:if="${param.error}">
+								Invalid username or password.
+							</div>
+						  <fieldset class="input">
+						    <p id="login-form-username">
+						      <label for="modlgn_username">Username</label>
+						      <input id="modlgn_username" type="text" name="username" class="inputbox" size="18" autocomplete="off">
+						    </p>
+						    <p id="login-form-password">
+						      <label for="modlgn_passwd">Password</label>
+						      <input id="modlgn_passwd" type="password" name="password" class="inputbox" size="18" autocomplete="off">
+						    </p>
+						    <div class="remember">
+							    <!--<p id="login-form-remember">
+							      <label for="modlgn_remember"><a href="#">Forget Your Password ? </a></label>
+							    </p>-->
+							    <input type="submit" name="Submit" class="button" value="Login"><div class="clear"></div>
+							 </div>
+						  </fieldset>
+						 </form>
+					</div>
+			      </div>
+				 <div class="clear"></div>
+			  </div>
+			</div>
+		  </div>
+	  </div>
+	<div th:insert="footer.html :: footer"> </div>
+</body>	
+</html>

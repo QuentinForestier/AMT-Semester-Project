@@ -1,6 +1,6 @@
 # AMT - Projet de semestre
 
-## Description 
+## Description
 
 Le but de ce projet de semestre de la HEIG-VD est de permettre aux étudiants
 d'aquérir les connaissances pour :
@@ -20,6 +20,9 @@ https://www.jetbrains.com/idea/
 Installez PostgreSQL avec les paramètres par défaut:
 https://www.postgresql.org/
 
+Installer Docker avec les paramètres par défaut:
+https://docs.docker.com/engine/install/
+
 Clonez le repository.
 
 Lancez pgAdmin (interface graphique de PostgreSQL).<br/>
@@ -34,6 +37,10 @@ Lancez IntellJ, ouvrez le dossier "crossport" du projet fraichement clone et all
 
 Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre (lors de l'installation de postgre).<br/>
 ![image](https://user-images.githubusercontent.com/61196626/136581346-32020bd2-91b6-45fb-ad2b-3d1444851dcc.png)
+
+Installez Docker pour votre système d'exploitation: https://docs.docker.com/engine/install/ <br>
+Buildez et lancez le mocking du service d'authentification <i>mocking/auth-service</i>.
+Sous windows un script est disponbile, sous linux, inspirez vous des commandes présentes.
 
 Exécuter le projet.
 
@@ -51,9 +58,12 @@ Une fois la partie "Installation" réalisée, il vous suffit de lancer le logici
 Lancer le projet grâce à l'icône start (triangle vert).
 
 Finalement, il vous suffit de lancer votre navigateur préféré et accéder à l'application grâce à l'adresse suivante:
-localhost:8080
+localhost:80
 
 L'application n'est pas encore disponible sur internet et cette partie propose une façon d'accéder / tester l'application d'un façon provisoire.
+
+## Tests
+Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir du mocking du service d'authentification.
 
 # Support
 
@@ -62,43 +72,18 @@ alec.berney@heig-vd.ch
 
 Si votre demande fait allusion à une nouvelle fonctionnalité, une erreur dans le code, un bug ou tout autre demande relative au code, il est toujours possible de contribuer au projet ou ouvrir une nouvelle issue.
 
-Installer IntellJ avec les paramètres par défaut:
-https://www.jetbrains.com/idea/
-
-Installer PostgreSQL avec les paramètres par défaut:
-https://www.postgresql.org/
-
-Cloner le repository.
-
-Lancer pgAdmin (interface graphique de PostgreSQL).
-Créer une nouvelle Base de données avec le nom "crossport".
-![image](https://user-images.githubusercontent.com/61196626/136580523-6dc9aebd-26fa-4706-9b22-603eda280234.png)
-
-Voici le résultat:
-![image](https://user-images.githubusercontent.com/61196626/136581154-1049602a-261b-496f-b4e7-4b10c45b0130.png)
-
-Lancer IntellJ, ouvrez le projet fraichement cloné et allez sous le fichier application.properties.
-
-![image](https://user-images.githubusercontent.com/61196626/136580863-9972b7d7-c1f6-42b4-af5d-eee507b1d311.png)
-
-Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre.
-![image](https://user-images.githubusercontent.com/61196626/136581346-32020bd2-91b6-45fb-ad2b-3d1444851dcc.png)
-
-Exécuter le projet.
-
-Les tables de la base de données devraient être créées.
-
-
 # Contribuer
 
 [En cours d'élaboration]
 
 Avant de contribuer au projet, veuillez prendre connaissance des points suivants:
+
 * [GitFlow](https://github.com/Quillasp/AMT-Semester-Project/wiki/Workflow-git)
 * [Conventions de nommage](https://github.com/Quillasp/AMT-Semester-Project/wiki/Conventions-de-nommage)
 
 Veuillez ensuite installer l'environement de développement complet comme indiqué plus haut dans le document.
 Une fois l'environnement installé, vous pouvez contribuer au projet en:
+
 1. Réalisant un fork du projet au niveau de la branche main.
 2. Ouvrant une issue sur votre repository fraichement cloné.
 3. Développant votre ajout / fonctionnalité.

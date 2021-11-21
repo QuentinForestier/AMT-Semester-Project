@@ -3,12 +3,12 @@
     "id": 0,
     "username": "admin",
     "password": "admin",
-    "role": "ROLE_ADMIN"
+    "role": "admin"
   },
   {
     "id": 1,
     "username": "toto",
     "password": "toto",
-    "role": "ROLE_USER"
+    "role": "user"
   }
 ]

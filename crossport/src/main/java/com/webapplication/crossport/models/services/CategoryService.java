@@ -39,13 +39,11 @@ public class CategoryService {
     }
 
     public void deleteCategory(Integer id) {
-        Category category = categoryRepository.getById(id);
-
+        Category category = getCategoryById(id);
         for (Article article : category.getArticles()) {
             article.removeCategory(category);
         }
-
-        categoryRepository.deleteById(id);
+        this.categoryRepository.deleteById(id);
     }
 
     public Category getFirstByName(String name) {

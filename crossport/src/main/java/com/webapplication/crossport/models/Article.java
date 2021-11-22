@@ -142,7 +142,6 @@ public class Article {
         this.price = price;
     }
 
-
     /**
      * Gets image path
      * @return Image path

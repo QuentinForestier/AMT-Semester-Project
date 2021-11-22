@@ -32,13 +32,13 @@ Modification date: 08/11/2021
                         <thead>
                         <tr>
                             <th>Article name</th>
-                            <th th:if="${delError}"><a th:href="@{/deleteCategory/{id}(id=${category.id}, confirm = 'true')}" class="btn btn-danger">Delete category</a></th>
+                            <th th:if="${delError}"><a class="btn btn-danger" th:href="@{/deleteCategory/{id}(id=${category.id}, confirm = 'true')}">Delete category</a></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="article : ${category.getArticles()}">
                             <td th:text="${article.name}"></td>
-                            <td> </td>
+                            <td th:if="${delError}"><a th:href="@{/deleteCategoryFromArticle/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${category.id}, confirm = 'true')}" class="btn btn-danger">Remove category from Article</a></td>
                         </tr>
                         </tbody>
                     </table>

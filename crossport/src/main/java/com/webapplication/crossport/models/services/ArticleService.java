@@ -40,4 +40,9 @@ public class ArticleService {
         }
         return article;
     }
+
+    public void deleteACategory(Integer idArticle, Category category) {
+        Article article = getArticleById(idArticle);
+        article.removeCategory(category);
+    }
 }

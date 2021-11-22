@@ -1,6 +1,7 @@
 package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
+import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ArticleService articleService;
 
     @GetMapping("/categories")
     public String listCategories(Model model) {
@@ -67,26 +71,51 @@ public class CategoryController {
 
 
     @GetMapping("/deleteCategory/{id}")
-    public String deleteCategory(@PathVariable(value = "id") Integer id, @RequestParam(value = "confirm", defaultValue = "false") boolean confirm, RedirectAttributes redir) {
-
-        // boolean error = false;
-
-        Category cat = categoryService.getCategoryById(id);
+    public String deleteCategory(@PathVariable(value = "id") Integer id,
+                                 @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
+                                 RedirectAttributes redir) {
+        Category cat;
+        try {
+            cat = categoryService.getCategoryById(id);
+        } catch (RuntimeException e) {
+            return "redirect:/categories";
+        }
 
         if (cat.getArticles().isEmpty() || confirm) {
             categoryService.deleteCategory(id);
         } else {
-            // error = true;
             String delError = "You cannot delete this category as it has articles bound.";
             redir.addFlashAttribute("delError", delError);
-
             return "redirect:/category/" + id;
         }
         redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
         redir.addFlashAttribute("categoryData", new CategoryData());
-
-        // return error ? "redirect:/categories?error=" + cat.getName() : "redirect:/categories";
         return "redirect:/categories";
+    }
+
+    @GetMapping("/deleteCategoryFromArticle/{idCategory}/{idArticle}")
+    public String deleteCategoryFromArticle(@PathVariable(value = "idCategory") Integer idCategory,
+                                            @PathVariable(value = "idArticle") Integer idArticle,
+                                            @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
+                                            RedirectAttributes redir) {
+        Category category;
+        try {
+            category = categoryService.getCategoryById(idCategory);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to find the category selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/category/" + idCategory;
+        }
+
+        try {
+            articleService.deleteACategory(idArticle, category);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to delete the category from the article selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/category/" + idCategory;
+        }
+
+        return "redirect:/category/" + idCategory;
     }
 
 }

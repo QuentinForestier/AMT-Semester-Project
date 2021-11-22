@@ -50,19 +50,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         // WebController
                         "/",
                         "/home",
+                        "/index.html",
 
                         // RegistrationController
                         "/register",
 
                         // ArticleController
                         "/shop",
-                        "/article**",
+                        "/article",
 
                         // CartController
-                        "/addArticle**",
+                        "/addArticle",
                         "/removeArticle**",
                         "/clearCart",
-                        "/cart**",
+                        "/cart",
                         "/updateQuantity/**",
 
                         // Ressources
@@ -74,7 +75,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         // CategoryController
-                        "/categories")
+                        "/categories",
+                        "/category/**",
+                        "/deleteCategory/**")
                 .hasRole("ADMIN")
                 .anyRequest()
                 .authenticated()

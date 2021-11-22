@@ -71,12 +71,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/images/**",
                         "/js/**")
                 .permitAll()
-                .antMatchers(// CategoryController
-                              "/categorie/**").hasRole("ADMIN")
-                .antMatchers( // LoginController
-                              "/login", 
-                              // RegisterController
-                              "/register").anonymous()
+                .and()
+                .authorizeRequests()
+                .antMatchers(
+                        // CategoryController
+                        "/categorie/**",
+
+                        //ArticleController
+                        "/manageArticles",
+                        "/makeUnavailable**",
+                        "/editArticle")
+                .hasRole("ADMIN")
+                .antMatchers(
+                        // LoginController
+                        "/login",
+                        // RegisterController
+                        "/register").anonymous()
+                .anyRequest()
+                .authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -100,8 +113,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @throws Exception If something goes wrong
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider()).eraseCredentials(false);
     }
 }

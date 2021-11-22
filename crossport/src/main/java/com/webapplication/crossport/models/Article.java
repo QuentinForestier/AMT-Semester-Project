@@ -6,6 +6,7 @@ import java.util.Set;
 
 /**
  * Entity model for JPA. Represents an article
+ *
  * @author Herzig Melvyn
  */
 @Entity
@@ -60,6 +61,7 @@ public class Article {
 
     /**
      * Add a category to the article and the article to the category.
+     *
      * @param category Category to add.
      */
     public void addCategory(Category category) {
@@ -69,6 +71,7 @@ public class Article {
 
     /**
      * Remove a category from the article and the article from the category.
+     *
      * @param category Category to remove.
      */
     public void removeCategory(Category category) {
@@ -80,6 +83,7 @@ public class Article {
 
     /**
      * Gets article id
+     *
      * @return Article id
      */
     public Integer getId() {
@@ -88,6 +92,7 @@ public class Article {
 
     /**
      * Sets new article id
+     *
      * @param id New acrticle
      */
     public void setId(Integer id) {
@@ -96,6 +101,7 @@ public class Article {
 
     /**
      * Gets description
+     *
      * @return description
      */
     public String getDescription() {
@@ -104,6 +110,7 @@ public class Article {
 
     /**
      * Sets the description
+     *
      * @param description New description
      */
     public void setDescription(String description) {
@@ -112,6 +119,7 @@ public class Article {
 
     /**
      * Gets article name
+     *
      * @return Article name
      */
     public String getName() {
@@ -126,6 +134,7 @@ public class Article {
 
     /**
      * Sets a new name
+     *
      * @param name New name
      */
     public void setName(String name) {
@@ -134,14 +143,20 @@ public class Article {
 
     /**
      * Gets price
+     *
      * @return Article price
      */
     public double getPrice() {
         return price;
     }
 
+    public Double getNullablePrice() {
+        return price;
+    }
+
     /**
      * Sets a new price
+     *
      * @param price New price
      */
     public void setPrice(Double price) {
@@ -150,6 +165,7 @@ public class Article {
 
     /**
      * Gets image path
+     *
      * @return Image path
      */
     public String getImgPath() {
@@ -158,6 +174,7 @@ public class Article {
 
     /**
      * sets a new image path
+     *
      * @param imgPath New path
      */
     public void setImgPath(String imgPath) {
@@ -166,6 +183,7 @@ public class Article {
 
     /**
      * Gets if article is available
+     *
      * @return True if article is available else false
      */
     public boolean isInStock() {
@@ -174,6 +192,7 @@ public class Article {
 
     /**
      * Changes article availability
+     *
      * @param inStock New availability
      */
     public void setInStock(boolean inStock) {
@@ -182,6 +201,7 @@ public class Article {
 
     /**
      * Sets new related categories
+     *
      * @param categories New categories
      */
     public void setCategories(Set<Category> categories) {

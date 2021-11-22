@@ -1,6 +1,7 @@
 package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
+import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
@@ -10,9 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
-import com.webapplication.crossport.models.Category;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -21,7 +19,6 @@ import java.util.List;
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {
-
     @Autowired
     private CategoryService categoryService;
 
@@ -30,7 +27,6 @@ public class CategoryController {
 
     @GetMapping("")
     public String getAll(Model model) {
-
         model.addAttribute("listCategories", categoryService.getAllCategories());
         model.addAttribute("categoryData", new CategoryData());
 
@@ -39,21 +35,18 @@ public class CategoryController {
 
     @PostMapping("")
     public String add(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
-
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("categoryForm", categoryData);
             return "categories";
         }
 
-
         // Checking if already exists
         Category sameCategory = categoryService.getFirstByName(categoryData.getCategoryName());
 
-        if (sameCategory != null){ // It already exists
+        if (sameCategory != null) { // It already exists
             bindingResult.addError(new ObjectError("globalError", "Same category already exists."));
             model.addAttribute("categoryForm", categoryData);
-        }
-        else { // No category with the same name
+        } else { // No category with the same name
             Category category = new Category();
             category.setName(categoryData.getCategoryName());
             categoryService.saveCategory(category);
@@ -72,7 +65,6 @@ public class CategoryController {
         model.addAttribute("articlesNotInCategory", articlesNotInCategory);
         return "category";
     }
-
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable(value = "id") Integer id,
@@ -105,7 +97,6 @@ public class CategoryController {
     public String removeArticle(@PathVariable(value = "idCategory") Integer idCategory,
                                 @PathVariable(value = "idArticle") Integer idArticle,
                                 RedirectAttributes redir) {
-
         Category category;
         try {
             category = categoryService.getCategoryById(idCategory);
@@ -130,7 +121,6 @@ public class CategoryController {
     public String addArticle(@PathVariable(value = "idCategory") Integer idCategory,
                              @PathVariable(value = "idArticle") Integer idArticle,
                              RedirectAttributes redir) {
-
         Category category;
         try {
             category = categoryService.getCategoryById(idCategory);
@@ -150,5 +140,4 @@ public class CategoryController {
 
         return "redirect:/categories/" + idCategory;
     }
-
 }

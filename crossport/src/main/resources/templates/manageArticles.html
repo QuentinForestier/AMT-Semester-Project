@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>List articles</title>
+    <link href="css/bootstrap.css" rel='stylesheet' type='text/css'/>
+    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script type="application/x-javascript">
+         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
+    </script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+<div th:insert="navbar.html :: navbar"></div>
+<div class="main">
+    <div class="shop_top">
+        <div class="center">
+            <a href="/editArticle" class="btn btn-primary">Add article</a>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div th:each="article:${listArticles}" class="col-md-3 shop_box">
+                    <a th:href="@{/article(id=${article.id})}">
+                        <img th:src="@{${article.imgPath}}" class="img-responsive" alt=""/>
+                        <div class="shop_desc">
+                            <h3>
+                                <a th:href="@{/article(id=${article.id})}"><span th:text="${article.name}"></span></a>
+                            </h3>
+                            <p th:text="${article.description}"></p>
+                            <span class="actual"></span><br>
+                            <ul class="buttons">
+                                <!--
+                                A remttre si on veut supporter la suppression des articles
+                                <li class="cart"><a th:href="">Delete</a>
+                                </li>-->
+                                <li class="shop_btn"><a th:href="@{/editArticle(id=${article.id})}">Edit</a></li>
+                                <div class="clear"></div>
+                            </ul>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

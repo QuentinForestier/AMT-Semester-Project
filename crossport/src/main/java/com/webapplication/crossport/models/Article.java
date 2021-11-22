@@ -56,6 +56,26 @@ public class Article {
     @ManyToMany(mappedBy = "articles", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Set<Category> categories = new HashSet<>();
 
+    /* -------------------------- M to M utilities -------------------------------*/
+
+    /**
+     * Add a category to the article and the article to the category.
+     * @param category Category to add.
+     */
+    public void addCategory(Category category) {
+        this.categories.add(category);
+        category.getArticles().add(this);
+    }
+
+    /**
+     * Remove a category from the article and the article from the category.
+     * @param category Category to remove.
+     */
+    public void removeCategory(Category category) {
+        this.categories.remove(category);
+        category.getArticles().remove(this);
+    }
+
     /* -------------------------- GETTERS AND SETTERS -------------------------------*/
 
     /**

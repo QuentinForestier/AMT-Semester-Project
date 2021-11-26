@@ -53,7 +53,7 @@ public class Article {
     /**
      * Related categories
      */
-    @ManyToMany(mappedBy = "articles", cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "articles", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Set<Category> categories = new HashSet<>();
 
     /* -------------------------- M to M utilities -------------------------------*/

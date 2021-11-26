@@ -2,7 +2,6 @@ package com.webapplication.crossport.models.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import com.webapplication.crossport.models.Article;
 import org.springframework.beans.factory.annotation.Autowired;

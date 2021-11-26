@@ -1,6 +1,5 @@
 package com.webapplication.crossport.controllers;
 
-import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
@@ -96,8 +95,9 @@ public class CategoryController {
     @GetMapping("/deleteCategoryFromArticle/{idCategory}/{idArticle}")
     public String deleteCategoryFromArticle(@PathVariable(value = "idCategory") Integer idCategory,
                                             @PathVariable(value = "idArticle") Integer idArticle,
-                                            @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
                                             RedirectAttributes redir) {
+
+        //redir.addFlashAttribute("delError", delError);
         Category category;
         try {
             category = categoryService.getCategoryById(idCategory);

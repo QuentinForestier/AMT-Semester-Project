@@ -20,15 +20,13 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @ComponentScan("com.webapplication.crossport.config")
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter
-{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Bean
-    public CustomAuthenticationProvider authProvider()
-    {
+    public CustomAuthenticationProvider authProvider() {
         CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         return authProvider;
     }
@@ -40,19 +38,49 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
      * @throws Exception if an error occurs
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/register", "/shop", "/article**", "/css/**", "/images/**", "/js/**", "/addArticle**", "/removeArticle**", "/clearCart", "/cart**", "/updateQuantity/**").permitAll()
+                .antMatchers(
+                        // WebController
+                        "/",
+                        "/home",
+                        "/index.html",
+
+                        // RegistrationController
+                        "/register",
+
+                        // ArticleController
+                        "/shop",
+                        "/article",
+
+                        // CartController
+                        "/addArticle",
+                        "/removeArticle**",
+                        "/clearCart",
+                        "/cart",
+                        "/updateQuantity/**",
+
+                        // Ressources
+                        "/css/**",
+                        "/images/**",
+                        "/js/**")
+                .permitAll()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/categories")
+                .antMatchers(
+                        // CategoryController
+                        "/categories",
+                        "/category/**",
+                        "/deleteCategory/**")
                 .hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .anyRequest()
+                .authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -75,8 +103,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
      * @throws Exception If something goes wrong
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider());
     }
 }

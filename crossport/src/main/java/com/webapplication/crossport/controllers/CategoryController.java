@@ -92,12 +92,11 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @GetMapping("/deleteCategoryFromArticle/{idCategory}/{idArticle}")
-    public String deleteCategoryFromArticle(@PathVariable(value = "idCategory") Integer idCategory,
+    @GetMapping("/removeCategoryFromArticle/{idCategory}/{idArticle}")
+    public String removeCategoryFromArticle(@PathVariable(value = "idCategory") Integer idCategory,
                                             @PathVariable(value = "idArticle") Integer idArticle,
                                             RedirectAttributes redir) {
 
-        //redir.addFlashAttribute("delError", delError);
         Category category;
         try {
             category = categoryService.getCategoryById(idCategory);
@@ -108,7 +107,7 @@ public class CategoryController {
         }
 
         try {
-            articleService.deleteACategory(idArticle, category);
+            articleService.removeCategory(idArticle, category);
         } catch (RuntimeException e) {
             String delError = "An error occured when we tried to delete the category from the article selected";
             redir.addFlashAttribute("delError", delError);

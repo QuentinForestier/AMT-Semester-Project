@@ -17,7 +17,6 @@ public class CategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-
     public List<Category> getAllCategories() {
         return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
@@ -42,7 +41,7 @@ public class CategoryService {
         for (Article article : category.getArticles()) {
             article.removeCategory(category);
         }
-        this.categoryRepository.deleteById(id);
+        this.categoryRepository.delete(category);
     }
 
     public Category getFirstByName(String name) {

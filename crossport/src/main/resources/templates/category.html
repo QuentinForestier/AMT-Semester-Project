@@ -38,7 +38,7 @@ Modification date: 08/11/2021
                         <tbody>
                         <tr th:each="article : ${category.getArticles()}">
                             <td th:text="${article.name}"></td>
-                            <td><a th:href="@{/deleteCategoryFromArticle/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}" class="btn btn-danger">Remove category from Article</a></td>
+                            <td><a th:href="@{/removeCategoryFromArticle/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}" class="btn btn-danger">Remove category from Article</a></td>
                         </tr>
                         </tbody>
                     </table>

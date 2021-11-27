@@ -5,18 +5,16 @@ import com.webapplication.crossport.models.CartArticle;
 import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.models.repository.CartRepository;
 import com.webapplication.crossport.models.repository.MemberRepository;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
@@ -33,7 +31,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException, ServletException
+                                        Authentication authentication) throws IOException
     {
 
         int memberId = (int) session.getAttribute("memberId");
@@ -42,6 +40,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         syncCart(member);
         session.setAttribute("member", member);
 
+        httpServletResponse.addCookie(new Cookie("jwt", authentication.getCredentials().toString()));
         httpServletResponse.sendRedirect("/home");
     }
 

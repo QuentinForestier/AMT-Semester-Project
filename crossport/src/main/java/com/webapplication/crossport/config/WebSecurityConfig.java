@@ -1,5 +1,6 @@
 package com.webapplication.crossport.config;
 
+import com.webapplication.crossport.config.filter.JWTFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
@@ -25,6 +28,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 
     @Autowired
     AuthenticationSuccessHandler authenticationSuccessHandler;
+
+    @Autowired
+    LogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
     public CustomAuthenticationProvider authProvider()
@@ -47,12 +53,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/register", "/shop", "/article**", "/css/**", "/images/**", "/js/**", "/addArticle**", "/removeArticle**", "/clearCart", "/cart**", "/updateQuantity/**").permitAll()
-                .and()
-                .authorizeRequests()
-                .antMatchers("/categories")
-                .hasRole("ADMIN")
-                .anyRequest().authenticated()
+                .antMatchers("/", "/home", "/login", "/register", "/shop", "/article**", "/css/**", "/images/**", "/js/**", "/addArticle**", "/removeArticle**", "/clearCart", "/cart**", "/updateQuantity/**").permitAll()
+                .antMatchers("/categories").hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -63,8 +65,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/home")
-                .permitAll();
+                .logoutSuccessHandler(logoutSuccessHandler)
+                .logoutSuccessUrl("/home");
+
+        http.addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     /**
@@ -77,6 +81,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
-        auth.authenticationProvider(authProvider());
+        auth.authenticationProvider(authProvider()).eraseCredentials(false);
     }
 }

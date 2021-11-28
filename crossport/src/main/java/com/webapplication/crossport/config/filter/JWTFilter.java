@@ -55,8 +55,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 		String jwt = getCookieValue(req, "jwt");
 
-		if(jwt != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-			System.out.println("FILTEEEEEEEEEEEEEEEEEEEEEEEEEEEER");
+		if(jwt != null) {
 			if(JWTUtility.validateToken(jwt, secret)){
 
 				final List<GrantedAuthority> grantedAuths = new ArrayList<>();
@@ -81,6 +80,11 @@ public class JWTFilter extends OncePerRequestFilter {
 	 * @return Cookie content else null
 	 */
 	private String getCookieValue(HttpServletRequest req, String cookieName) {
+
+		if( req.getCookies() == null) {
+			return null;
+		}
+
 		return Arrays.stream(req.getCookies())
 				.filter(c -> c.getName().equals(cookieName))
 				.findFirst()

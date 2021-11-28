@@ -1,3 +1,15 @@
+
+> Votre doc est top. Bravo ! La review était excellente !
+> Concernant la doc, je vous invite à ajouter les version des logiciel que vous utilisez au cas où il y a des problèmes de compatbilité 
+> et surtout la version JAVA (j'imagine java 11 vu votre pom.xml) dans la section "Installation"
+> Enfin, pour la notion of done, je pense que nous pouvons améliorer 3 points importants:
+> * La structure de votre projet (je vous en parlerai en live review dès que possible)
+> * La normalisation du nom de vos routes
+> * Les commentaires dans vos classes JAVA (je vous en parlerai en live review dès que possible)
+>
+> Je vous ai mis des commentaires dans le code et il me semble 1 dans le wiki concernant votre shéma.
+> Bonne lecture
+
 # AMT - Projet de semestre
 
 ## Description

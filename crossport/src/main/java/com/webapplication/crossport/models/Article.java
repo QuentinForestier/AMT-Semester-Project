@@ -10,6 +10,8 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "article")
+// TODO DPO - Si vous souhaitez éviter de devoir créer ou générer les getters et setters,
+//  je vous invite à vous documenter sur la lib 'lombok' https://projectlombok.org/
 public class Article {
 
     /**

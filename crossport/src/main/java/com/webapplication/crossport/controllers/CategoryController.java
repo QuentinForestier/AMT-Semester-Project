@@ -22,6 +22,13 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    // TODO DPO - C'est du détail, mais à moins que vous fassiez une énorme app, un contrôleur n'a en général
+    //  que peu d'endpoint et pour une question de lisibilité le nom de vos méthodes n'ont pas besoin de contenir le nom de l'objet.
+    //  Exemple pour chaque contrôleur:
+    //  * GET -> findOne, findMany, findALl, ..
+    //  * POST -> create
+    //  * PATCH/PUT -> update, merge ou overwrite
+    //  * DELETE -> delete (si vous souhaitez être fancy, vous pouvez mettre destroy ou wipe ^^)
     @GetMapping("/categories")
     public String listCategories(Model model) {
 
@@ -65,7 +72,12 @@ public class CategoryController {
         return "category";
     }
 
-
+    // TODO DPO - Soyez consistent sur le nom de vos endpoints. Dans le contrôleur "Registration", vous avez un exemple
+    //  de comment nommer tous vos endpoint en plaçant @RequestMapping sur la classe.
+    //  Exemple:
+    //  * /categories -> GET, POST, PATCH, PUT et DELETE
+    //  * /categories/{id} -> GET, POST, PATCH, PUT et DELETE
+    //  ...
     @GetMapping("/deleteCategory/{id}")
     public String deleteCategory(@PathVariable(value = "id") Integer id, @RequestParam(value = "confirm", defaultValue = "false") boolean confirm, RedirectAttributes redir) {
 

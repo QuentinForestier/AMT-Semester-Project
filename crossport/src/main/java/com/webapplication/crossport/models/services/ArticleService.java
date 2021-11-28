@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+// TODO DPO - Les services sont en général dans un package séparé au même niveau que les models ou les contrôleurs
 public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;

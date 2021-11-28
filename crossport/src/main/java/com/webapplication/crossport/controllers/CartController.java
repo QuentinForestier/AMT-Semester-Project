@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,9 @@ public class CartController
     @Autowired
     private HttpSession session;
 
+    // TODO DPO - Ralalal RES est si loin déjà.
+    //  Si vous modifiez le panier, il vaut mieux faire un PATCH ou PUT qu'un GET, non ?
+    //  Je vous laisse vérifier les autres endpoints également
     @GetMapping("/addArticle")
     public String addArticle(HttpServletRequest request, @RequestParam(value = "id") Integer id,
                                                          @RequestParam(value = "quantity", defaultValue = "1") Integer quantity)

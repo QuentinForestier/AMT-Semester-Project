@@ -14,6 +14,9 @@ import java.util.List;
 
 @Controller
 public class ArticleController {
+    // TODO DPO - Utilisez Autowired, c'est cool (je le faisais également avant), mais ceci implique un petit arrachage
+    //  de cheveux si vous faites des tests d'intégration comparé à l'utilisation des constructeurs.
+    //  Je vous conseille, à moins que vous soyez au clair là-dessus, d'utiliser les constructeurs.
     @Autowired
     private ArticleService articleService;
 
@@ -49,6 +52,8 @@ public class ArticleController {
         return "shop";
     }
 
+    // TODO DPO - Top vos contrôleurs. Ils sont petits et simples. Nickel. Ce que je peux vous conseiller
+    //  comme amélioration, c'est de nommer vos routes avec un 's' à la fin.
     @GetMapping("/article")
     public String viewAnArticle(@RequestParam(value = "id") Integer id, Model model) {
         Article article;

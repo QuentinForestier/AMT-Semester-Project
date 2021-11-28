@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
+// TODO DPO - Virer les code commentés lors d'un livrable
 @Component
 @WebListener
 public class SessionListener implements HttpSessionListener

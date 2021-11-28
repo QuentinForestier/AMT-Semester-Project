@@ -1,6 +1,5 @@
 package com.webapplication.crossport.controllers;
 
-import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -33,11 +33,15 @@ public class CartController
     private HttpSession session;
 
     @GetMapping("/addArticle")
-    public String addArticle(HttpServletRequest request, @RequestParam(value = "id") Integer id,
-                                                         @RequestParam(value = "quantity", defaultValue = "1") Integer quantity)
+    public String addArticle(HttpServletRequest request,
+                             @RequestParam(value = "id") Integer id,
+                             @RequestParam(value = "quantity",
+                                     defaultValue = "1") Integer quantity)
     {
 
         Cart cart = Cart.getCartInSession(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
 
         try
         {
@@ -52,7 +56,7 @@ public class CartController
 
         //your controller code
         String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
+        return "redirect:" + referer + (referer.contains("added") ? "" : "?added");
     }
 
     @GetMapping("/clearCart")
@@ -72,6 +76,8 @@ public class CartController
                                 HttpServletRequest request)
     {
         Cart cart = Cart.getCartInSession(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
 
         Article article = articleService.getArticleById(id);
 
@@ -89,13 +95,13 @@ public class CartController
                                  HttpServletRequest request)
     {
         Cart cart = Cart.getCartInSession(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
+
         Article article = articleService.getArticleById(id);
 
-        if (quantity == 0)
-        {
-            cart.removeArticle(article);
-        }
-        else
+        cart.removeArticle(article);
+        if (quantity != 0)
         {
             cart.addToCart(quantity, article);
         }
@@ -110,13 +116,19 @@ public class CartController
     public String viewCart(HttpServletRequest request, Model model)
     {
 
-        model.addAttribute("cart", Cart.getCartInSession(request.getSession()));
+        Cart cartInSession = Cart.getCartInSession(request.getSession());
+
+        if (cartInSession.getId() != null)
+            cartInSession = cartService.load(cartInSession.getId());
+
+        model.addAttribute("cart", cartInSession);
 
         return "cart";
     }
 
 
-    private void saveCart(Cart cart){
+    private void saveCart(Cart cart)
+    {
         if (session != null && session.getAttribute("member") != null)
         {
             cartService.save(cart);

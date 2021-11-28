@@ -1,5 +1,10 @@
 package com.webapplication.crossport.models;
 
+import com.webapplication.crossport.models.repository.CartRepository;
+import com.webapplication.crossport.models.services.CartService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -66,7 +71,6 @@ public class Cart
     }
 
     /**
-     * <<<<<<< HEAD
      * For a given http request, gets the session cart. If none creates and
      * return one.
      *
@@ -117,7 +121,7 @@ public class Cart
             }
             else
             {
-                cartArticle.get().setQuantity(quantity);
+                cartArticle.get().addQuantity(quantity);
             }
         }
         else
@@ -143,5 +147,9 @@ public class Cart
                 this.cartArticles.stream()
                         .filter(ca -> !ca.getArticle().getId().equals(article.getId()))
                         .collect(Collectors.toSet());
+    }
+
+    public double getTotalPrice(){
+        return cartArticles.stream().mapToDouble(a -> a.getArticle().getPrice() * a.getQuantity()).sum();
     }
 }

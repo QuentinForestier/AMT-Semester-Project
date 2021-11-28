@@ -72,7 +72,13 @@ Modification date: 09/10/2021
                 </button>
             </div>
 
-            <div class="total-price"><span th:text="${cartArticle.getArticle().getPrice()}"></span></div>
+            <div class="total-price"><span
+                    th:text="${cartArticle.getArticle().getPrice() * cartArticle.getQuantity()}"></span></div>
+        </div>
+        <div class="total-cart" th:if="${!#lists.isEmpty(cart.getCartArticles())}">
+            <div><span>Total du panier</span></div>
+            <div>
+                <span th:text="${cart.getTotalPrice()}"></span></div>
         </div>
     </div>
 </div>

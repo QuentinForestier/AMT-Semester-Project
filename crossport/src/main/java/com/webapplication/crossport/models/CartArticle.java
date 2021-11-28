@@ -7,7 +7,7 @@ import javax.persistence.*;
  * @author Herzig Melvyn
  */
 @Entity
-@Table(name = "cart_article")
+@Table(name = "cart_article", uniqueConstraints = { @UniqueConstraint(columnNames = { "fk_cart_id", "fk_article_id" }) })
 public class CartArticle {
 
     /**
@@ -80,4 +80,13 @@ public class CartArticle {
         this.article = article;
     }
 
+
+    /**
+     * Add desired quantity to existing quantity
+     * @param quantity Quantity to add
+     */
+    public void addQuantity(Integer quantity)
+    {
+        this.quantity += quantity;
+    }
 }

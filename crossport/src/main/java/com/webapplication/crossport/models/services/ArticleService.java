@@ -34,6 +34,14 @@ public class ArticleService {
         }
     }
 
+    public List<Article> getArticlesNotInCategory(Category category) {
+        try {
+            return articleRepository.findArticlesByCategoriesNotContaining(category);
+        } catch (Exception e) {
+            return new LinkedList<Article>();
+        }
+    }
+
     public Article getArticleById(Integer id) {
         Optional<Article> optional = articleRepository.findById(id);
         Article article = null;
@@ -48,6 +56,14 @@ public class ArticleService {
     public void removeCategory(Integer idArticle, Category category) {
         Article article = getArticleById(idArticle);
         article.removeCategory(category);
+        // Important to update BD
+        articleRepository.saveAndFlush(article);
+        categoryRepository.saveAndFlush(category);
+    }
+
+    public void addCategory(Integer idArticle, Category category) {
+        Article article = getArticleById(idArticle);
+        article.addCategory(category);
         // Important to update BD
         articleRepository.saveAndFlush(article);
         categoryRepository.saveAndFlush(category);

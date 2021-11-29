@@ -36,7 +36,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 							<option th:each="category:${listCategories}"
 									th:value="${category.id}"
 									th:text="${category.name}"
-									th:selected="${categorySelected != null && categorySelected.id == category.id}">
+									th:selected="${categorySelected != null && categorySelected.id == category.id}"
+									th:unless="${#lists.isEmpty(category.getArticles())}">
 							</option>
 						</select>
 						<button class="btn_form" type="submit">Filter</button>

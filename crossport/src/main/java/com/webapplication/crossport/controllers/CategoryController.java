@@ -73,9 +73,9 @@ public class CategoryController {
     }
 
 
-    @DeleteMapping("/categories/{id}/{confirm}")
+    @DeleteMapping("/categories/{id}")
     public String delete(@PathVariable(value = "id") Integer id,
-                         @PathVariable(value = "confirm") boolean confirm,
+                         @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
                          RedirectAttributes redir) {
         Category category;
         try {

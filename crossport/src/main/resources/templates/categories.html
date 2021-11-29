@@ -31,21 +31,21 @@ Modification date: 08/11/2021
                     <span th:case="'0'">No categories yet. Create one below.</span>
                     <table th:case="*" class="table table-striped table-responsive">
                         <thead>
-                        <tr>
-                            <th>Category name</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr>
+                                <th>Category name</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="category : ${listCategories}">
-                            <td th:text="${category.name}"></td>
-                            <td>
-                                <a th:href="@{/categories/{id}(id=${category.id})}" class="btn btn-info">Info</a>
-                                <form th:method="DELETE" th:action="@{/categories/{id}/{confirm}(id=${category.id}, confirm = 'false')}">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+                            <tr th:each="category : ${listCategories}">
+                                <td th:text="${category.name}"></td>
+                                <td>
+                                    <form th:method="delete" th:action="@{/categories/{id}(id=${category.id}, confirm = 'false')}">
+                                        <a th:href="@{/categories/{id}(id=${category.id})}" class="btn btn-info">Info</a>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

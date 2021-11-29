@@ -1,5 +1,6 @@
 package com.webapplication.crossport.controllers;
 
+import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
@@ -15,6 +16,7 @@ import com.webapplication.crossport.models.Category;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class CategoryController {
@@ -63,8 +65,10 @@ public class CategoryController {
     @GetMapping("/category/{id}")
     public String getCategoryId(@PathVariable(value = "id") Integer id, Model model) {
         Category category = categoryService.getCategoryById(id);
+        List<Article> articlesNotInCategory = articleService.getArticlesNotInCategory(category);
 
         model.addAttribute("category", category);
+        model.addAttribute("articlesNotInCategory", articlesNotInCategory);
         return "category";
     }
 
@@ -110,6 +114,31 @@ public class CategoryController {
             articleService.removeCategory(idArticle, category);
         } catch (RuntimeException e) {
             String delError = "An error occured when we tried to delete the category from the article selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/category/" + idCategory;
+        }
+
+        return "redirect:/category/" + idCategory;
+    }
+
+    @GetMapping("/addArticleToCategory/{idCategory}/{idArticle}")
+    public String addArticleToCategory(@PathVariable(value = "idCategory") Integer idCategory,
+                                       @PathVariable(value = "idArticle") Integer idArticle,
+                                       RedirectAttributes redir) {
+
+        Category category;
+        try {
+            category = categoryService.getCategoryById(idCategory);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to find the category selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/category/" + idCategory;
+        }
+
+        try {
+            articleService.addCategory(idArticle, category);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to add the category from the article selected";
             redir.addFlashAttribute("delError", delError);
             return "redirect:/category/" + idCategory;
         }

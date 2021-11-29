@@ -14,13 +14,16 @@ https://nicolas-glassey.gitbook.io/amt-backlog/
 
 # Installation
 
-Installez IntellJ avec les paramètres par défaut:
+Installez Java 11:
+https://openjdk.java.net/install/
+
+Installez IntellJ IDEA 2021.2.2 avec les paramètres par défaut:
 https://www.jetbrains.com/idea/
 
-Installez PostgreSQL avec les paramètres par défaut:
+Installez PostgreSQL 14.1 avec les paramètres par défaut:
 https://www.postgresql.org/
 
-Installer Docker avec les paramètres par défaut:
+Installer Docker (sous windows 4.2.0) avec les paramètres par défaut:
 https://docs.docker.com/engine/install/
 > Docker est utile uniquement pour les tests.
 

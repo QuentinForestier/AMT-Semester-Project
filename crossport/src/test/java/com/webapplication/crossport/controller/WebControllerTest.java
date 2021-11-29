@@ -53,7 +53,7 @@ public class WebControllerTest {
 	public void getHomePageFromRedirect_Anonymous_Success() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/home"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/home"));
+				.andExpect(view().name("redirect:/"));
 	}
 
 	@Test
@@ -61,7 +61,7 @@ public class WebControllerTest {
 	public void getHomePageFromRedirect_Registered_Fail() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/home"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/home"));
+				.andExpect(view().name("redirect:/"));
 	}
 
 	@Test
@@ -69,6 +69,6 @@ public class WebControllerTest {
 	public void getHomePagFromRedireceFromRedirect_Admin_Fail() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/home"))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/home"));
+				.andExpect(view().name("redirect:/"));
 	}
 }

@@ -2,7 +2,6 @@ package com.webapplication.crossport.models.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import com.webapplication.crossport.models.Article;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +16,6 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
 
     public List<Category> getAllCategories() {
         return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
@@ -39,13 +37,11 @@ public class CategoryService {
     }
 
     public void deleteCategory(Integer id) {
-        Category category = categoryRepository.getById(id);
-
+        Category category = getCategoryById(id);
         for (Article article : category.getArticles()) {
             article.removeCategory(category);
         }
-
-        categoryRepository.deleteById(id);
+        this.categoryRepository.delete(category);
     }
 
     public Category getFirstByName(String name) {

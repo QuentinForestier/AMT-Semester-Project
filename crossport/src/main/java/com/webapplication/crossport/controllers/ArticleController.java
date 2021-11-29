@@ -2,7 +2,6 @@ package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
-import com.webapplication.crossport.models.repository.CategoryRepository;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -23,8 +23,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @ComponentScan("com.webapplication.crossport.config")
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter
-{
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     AuthenticationSuccessHandler authenticationSuccessHandler;
@@ -33,8 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
     LogoutSuccessHandler logoutSuccessHandler;
 
     @Bean
-    public CustomAuthenticationProvider authProvider()
-    {
+    public CustomAuthenticationProvider authProvider() {
         CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
         return authProvider;
     }
@@ -46,16 +44,44 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
      * @throws Exception if an error occurs
      */
     @Override
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    protected void configure(HttpSecurity http) throws Exception {
         http
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
                 .and()
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .authorizeRequests()
-                .antMatchers("/", "/home", "/shop", "/article**", "/css/**", "/images/**", "/js/**", "/addArticle**", "/removeArticle**", "/clearCart", "/cart**", "/updateQuantity/**").permitAll()
-                .antMatchers("/categories").hasRole("ADMIN")
-                .antMatchers("/login", "/register").anonymous()
+                .antMatchers(
+                        // WebController
+                        "/",
+                        "/home",
+                        "/index.html",
+
+                        // ArticleController
+                        "/shop",
+                        "/article",
+
+                        // CartController
+                        "/addArticle",
+                        "/removeArticle**",
+                        "/clearCart",
+                        "/cart",
+                        "/updateQuantity/**",
+
+                        // Ressources
+                        "/css/**",
+                        "/images/**",
+                        "/js/**")
+                .permitAll()
+                .antMatchers(// CategoryController
+                              "/categories",
+                              "/category/**",
+                              "/deleteCategory/**").hasRole("ADMIN")
+                .antMatchers( // LoginController
+                              "/login", 
+                              // RegisterController
+                              "/register").anonymous()
                 .and()
                 .formLogin()
                 .loginPage("/login")

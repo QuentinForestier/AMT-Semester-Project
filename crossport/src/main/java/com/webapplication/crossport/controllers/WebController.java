@@ -1,9 +1,8 @@
 package com.webapplication.crossport.controllers;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 /**
  * Base controller charged to return home page
@@ -13,10 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WebController
 {
 
-    @GetMapping(value={"/", "/home", "/index.html"})
-    public String home(@RequestParam(name="name", required=false, defaultValue="visitor") String name, Model model) {
-        model.addAttribute("name", name);
+    @GetMapping(value = {"/", "/index.html"})
+    public String redirect() {
+        return "redirect:/home";
+    }
 
+    @GetMapping("/home")
+    public String home() {
         return "index";
     }
 }

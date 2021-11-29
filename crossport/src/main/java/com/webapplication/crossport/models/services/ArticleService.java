@@ -3,6 +3,7 @@ package com.webapplication.crossport.models.services;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.repository.ArticleRepository;
+import com.webapplication.crossport.models.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.LinkedList;
@@ -13,6 +14,9 @@ import java.util.Optional;
 public class ArticleService {
     @Autowired
     private ArticleRepository articleRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     public List<Article> getAllArticles() {
         try {
@@ -39,5 +43,13 @@ public class ArticleService {
             throw new RuntimeException("Article not found for id :: " + id);
         }
         return article;
+    }
+
+    public void removeCategory(Integer idArticle, Category category) {
+        Article article = getArticleById(idArticle);
+        article.removeCategory(category);
+        // Important to update BD
+        articleRepository.saveAndFlush(article);
+        categoryRepository.saveAndFlush(category);
     }
 }

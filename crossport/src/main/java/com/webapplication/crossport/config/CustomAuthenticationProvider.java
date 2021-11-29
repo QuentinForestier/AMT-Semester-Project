@@ -61,7 +61,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 		}
 
 		grantedAuths.add(new SimpleGrantedAuthority("ROLE_" + jsonObject.getJSONObject("account").getString("role").toUpperCase()));
-		Authentication auth = new UsernamePasswordAuthenticationToken(username, password, grantedAuths);
+		Authentication auth = new UsernamePasswordAuthenticationToken(username, jsonObject.getString("token"), grantedAuths);
 
 		return auth;
 	}

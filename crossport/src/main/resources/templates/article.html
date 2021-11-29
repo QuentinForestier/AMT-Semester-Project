@@ -78,8 +78,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
       <div class="shop_top">
 		<div class="container">
 			<div class="row">
-				<div class="alert alert-danger" th:if="${param.error}">
+				<div class="alert alert-danger center" th:if="${param.error}">
 					-- An error occured with article selected --
+				</div>
+				<div class="alert alert-success center" th:if="${param.added}">
+					-- Article added in the cart --
 				</div>
 				<div class="col-md-9 single_left">
 				   <div class="single_image">

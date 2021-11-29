@@ -21,7 +21,6 @@ public class SessionListener implements HttpSessionListener
     public void sessionCreated(HttpSessionEvent event)
     {
         HttpSession session = event.getSession();
-        //session.setMaxInactiveInterval(30);
 
         System.out.println("New session created  : " + session.getId());
     }
@@ -30,14 +29,7 @@ public class SessionListener implements HttpSessionListener
     public void sessionDestroyed(HttpSessionEvent event)
     {
         HttpSession session = event.getSession();
-        //saveState(session);
 
         System.out.println("Session destroyed  : " + session.getId());
-    }
-
-    private void saveState(HttpSession session)
-    {
-        if(cartService != null)
-            cartService.save(Cart.getCartInSession(session));
     }
 }

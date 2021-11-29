@@ -30,6 +30,13 @@ public class CartArticle {
     @JoinColumn(name = "fk_article_id")
     private Article article;
 
+    /**
+     * Related article
+     */
+    @ManyToOne
+    @JoinColumn(name = "fk_cart_id")
+    private Cart cart;
+
     /* -------------------------- GETTERS AND SETTERS -------------------------------*/
 
     /**

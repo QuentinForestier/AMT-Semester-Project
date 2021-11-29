@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
@@ -19,8 +20,13 @@ public class ArticleController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/shop")
-    public String viewShop(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
+    @GetMapping(value = {"/shop"})
+    public String redirect() {
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/articles")
+    public String getCategory(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
         List<Article> articles;
         Category selectedCategory = null;
         try  {
@@ -41,22 +47,22 @@ public class ArticleController {
             categories.add(0, selectedCategory);
         }
 
-
         model.addAttribute("categorySelected", selectedCategory);
         model.addAttribute("listArticles", articles);
         model.addAttribute("listCategories", categories);
         return "shop";
     }
 
-    @GetMapping("/article")
-    public String viewAnArticle(@RequestParam(value = "id") Integer id, Model model) {
-        Article article;
+    @GetMapping("/articles/{id}")
+    public String getById(@PathVariable(value = "id") Integer id, Model model) {
+        /*Article article;
         try {
             article = articleService.getArticleById(id);
         } catch (Exception e) {
             e.printStackTrace();
             return "article?error";
-        }
+        }*/
+        Article article = articleService.getArticleById(id);
 
         model.addAttribute("article", article);
         return "article";

@@ -11,21 +11,20 @@ Modification date: 09/10/2021
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <title>Free Snow Bootstrap Website Template | Home :: w3layouts</title>
-    <link href="css/bootstrap.css" rel='stylesheet' type='text/css'/>
-    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <link th:href="@{~/css/bootstrap.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{~/css/style.css}" rel='stylesheet' type='text/css'/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <script type="application/x-javascript">
          addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
-
     </script>
-    <script src="js/jquery.min.js"></script>
+    <script th:src="@{~/js/jquery.min.js}"></script>
     <!--<script src="js/jquery.easydropdown.js"></script>-->
     <!--start slider -->
-    <link rel="stylesheet" href="css/fwslider.css" media="all">
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/fwslider.js"></script>
+    <link rel="stylesheet" th:href="@{~css/fwslider.css}" media="all">
+    <script th:src="@{~js/jquery-ui.min.js}"></script>
+    <script th:src="@{~js/fwslider.js}"></script>
     <!--end slider -->
     <script type="text/javascript">
         $(document).ready(function() {
@@ -68,7 +67,7 @@ Modification date: 09/10/2021
             <div class="col-md-12">
                 <div class="header-left">
                     <div class="logo">
-                        <a href="/"><img src="images/logo.png" alt=""/></a>
+                        <a href="/"><img th:src="@{~/images/logo.png}" alt="logo"/></a>
                     </div>
                     <div class="menu">
                         <a class="toggleMenu" href="#"><img src="images/nav.png" alt=""/></a>

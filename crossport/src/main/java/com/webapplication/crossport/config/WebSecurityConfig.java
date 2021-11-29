@@ -61,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         // ArticleController
                         "/shop",
                         "/article",
+                        "/articles/**",
 
                         // CartController
                         "/addArticle",

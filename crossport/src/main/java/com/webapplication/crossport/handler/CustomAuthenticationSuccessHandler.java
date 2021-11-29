@@ -37,7 +37,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         int memberId = (int) session.getAttribute("memberId");
         Member member = getMember(memberId);
         if (member == null) member = new Member();
-        syncCart(member);
+        
+        Cart cartInSession = Cart.getContextCart(session);
+        Cart cartMember = member.getCart();
+
+        cartMember.SyncCarts(cartInSession);
+
+        cartRepository.save(cartMember);
+
         session.setAttribute("member", member);
 
         httpServletResponse.addCookie(new Cookie("jwt", authentication.getCredentials().toString()));
@@ -47,19 +54,5 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     private Member getMember(int id)
     {
         return memberRepository.findById(id).orElse(null);
-    }
-
-    private void syncCart(Member member)
-    {
-        Cart cartInSession = Cart.getCartInSession(session);
-
-        Cart cartMember = member.getCart();
-        for (CartArticle ca : cartInSession.getCartArticles())
-        {
-            cartMember.addToCart(ca.getQuantity(), ca.getArticle());
-
-        }
-
-        cartRepository.save(cartMember);
     }
 }

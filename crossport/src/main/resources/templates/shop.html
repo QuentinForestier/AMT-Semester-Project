@@ -26,9 +26,13 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<div class="alert alert-danger" th:if="${param.error}">
 						-- An error occured with category selected --
 					</div>
+					<div class="alert alert-success" th:if="${param.added}">
+						-- Article added in the cart --
+					</div>
 					<div class="center" th:if="${#lists.isEmpty(listCategories)}">
 						-- No category found --
 					</div>
+
 					<form action="/shop" method="get">
 						<label th:for="idCategory">Choose a category: </label>
 						<select name="idCategory">

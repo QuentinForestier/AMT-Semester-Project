@@ -2,7 +2,9 @@ package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Cart;
+import com.webapplication.crossport.models.CartArticle;
 import com.webapplication.crossport.models.services.ArticleService;
+import com.webapplication.crossport.models.services.CartArticleService;
 import com.webapplication.crossport.models.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,20 +32,27 @@ public class CartController
     private CartService cartService;
 
     @Autowired
+    CartArticleService cartArticleService;
+
+    @Autowired
     private HttpSession session;
 
     @GetMapping("/addArticle")
-    public String addArticle(HttpServletRequest request, @RequestParam(value = "id") Integer id,
-                                                         @RequestParam(value = "quantity", defaultValue = "1") Integer quantity)
+    public String addArticle(HttpServletRequest request,
+                             @RequestParam(value = "id") Integer id,
+                             @RequestParam(value = "quantity",
+                                     defaultValue = "1") Integer quantity)
     {
 
-        Cart cart = Cart.getCartInSession(request.getSession());
+        Cart cart = Cart.getContextCart(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
 
         try
         {
             Article article = articleService.getArticleById(id);
-            cart.addToCart(quantity, article);
-            saveCart(cart);
+            CartArticle ca = cart.addToCart(quantity, article);
+            saveCartArticle(ca);
         }
         catch (RuntimeException e)
         {
@@ -52,13 +61,15 @@ public class CartController
 
         //your controller code
         String referer = request.getHeader("Referer");
-        return "redirect:" + referer;
+        String parameter = (referer.contains("added") ? "" :
+                referer.contains("?") ? "&added" : "?added");
+        return "redirect:" + referer + parameter;
     }
 
     @GetMapping("/clearCart")
     public String clearCart(HttpServletRequest request)
     {
-        Cart cart = Cart.getCartInSession(request.getSession());
+        Cart cart = Cart.getContextCart(request.getSession());
         cart.clear();
 
         saveCart(cart);
@@ -71,11 +82,13 @@ public class CartController
     public String removeArticle(@RequestParam(value = "id") Integer id,
                                 HttpServletRequest request)
     {
-        Cart cart = Cart.getCartInSession(request.getSession());
+        Cart cart = Cart.getContextCart(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
 
-        Article article = articleService.getArticleById(id);
+        CartArticle ca = cart.getCartArticleByArticle(articleService.getArticleById(id));
 
-        cart.removeArticle(article);
+        cart.removeArticle(ca);
 
         saveCart(cart);
 
@@ -88,16 +101,20 @@ public class CartController
                                  @PathVariable(value = "quantity") Integer quantity,
                                  HttpServletRequest request)
     {
-        Cart cart = Cart.getCartInSession(request.getSession());
-        Article article = articleService.getArticleById(id);
+        Cart cart = Cart.getContextCart(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
+
+        CartArticle ca = cart.getCartArticleByArticle(articleService.getArticleById(id));
 
         if (quantity == 0)
         {
-            cart.removeArticle(article);
+            cartArticleService.delete(ca);
+            cart.removeArticle(ca);
         }
         else
         {
-            cart.addToCart(quantity, article);
+            ca.setQuantity(quantity);
         }
 
         saveCart(cart);
@@ -110,16 +127,31 @@ public class CartController
     public String viewCart(HttpServletRequest request, Model model)
     {
 
-        model.addAttribute("cart", Cart.getCartInSession(request.getSession()));
+        Cart cartInSession = Cart.getContextCart(request.getSession());
+
+        if (cartInSession.getId() != null)
+            cartInSession = cartService.load(cartInSession.getId());
+
+        model.addAttribute("cart", cartInSession);
 
         return "cart";
     }
 
 
-    private void saveCart(Cart cart){
+    private void saveCartArticle(CartArticle ca)
+    {
+        if (ca != null && session != null && session.getAttribute("member") != null)
+        {
+            cartArticleService.save(ca);
+        }
+    }
+
+    private void saveCart(Cart cart)
+    {
         if (session != null && session.getAttribute("member") != null)
         {
             cartService.save(cart);
         }
     }
+
 }

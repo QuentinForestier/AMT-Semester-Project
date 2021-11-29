@@ -39,8 +39,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         int memberId = (int) session.getAttribute("memberId");
         Member member = getMember(memberId);
         if (member == null) member = new Member();
-
-        // HERE
+        
         Cart cartInSession = Cart.getContextCart(session);
         Cart cartMember = member.getCart();
 

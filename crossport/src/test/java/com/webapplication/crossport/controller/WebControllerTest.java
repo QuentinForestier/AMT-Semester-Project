@@ -26,7 +26,7 @@ public class WebControllerTest {
 
 	@Test
 	@WithAnonymousUser
-	public void getRegister_Anonymous_Success() throws Exception {
+	public void getHomePage_Anonymous_Success() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"));
@@ -34,7 +34,7 @@ public class WebControllerTest {
 
 	@Test
 	@WithMockUser(roles = {"USER"})
-	public void getRegister_Registered_Fail() throws Exception {
+	public void getHomePage_Registered_Fail() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"));
@@ -42,9 +42,33 @@ public class WebControllerTest {
 
 	@Test
 	@WithMockUser(roles = {"ADMIN"})
-	public void getRegister_Admin_Fail() throws Exception {
+	public void getHomePage_Admin_Fail() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"));
+	}
+
+	@Test
+	@WithAnonymousUser
+	public void getHomePageFromRedirect_Anonymous_Success() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get("/home"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/home"));
+	}
+
+	@Test
+	@WithMockUser(roles = {"USER"})
+	public void getHomePageFromRedirect_Registered_Fail() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get("/home"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/home"));
+	}
+
+	@Test
+	@WithMockUser(roles = {"ADMIN"})
+	public void getHomePagFromRedireceFromRedirect_Admin_Fail() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get("/home"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:/home"));
 	}
 }

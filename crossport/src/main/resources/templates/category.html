@@ -25,6 +25,7 @@ Modification date: 08/11/2021
         <div class="shop_top">
             <div class="container">
                 <h2 th:text="Category + ' ' + ${category.name}"></h2>
+                <div class="clear"></div>
                 <h3>Article in Category</h3>
                 <div th:switch="${#lists.size(category.getArticles())}">
                     <span th:case="'0'">No articles yet.</span>
@@ -33,17 +34,26 @@ Modification date: 08/11/2021
                         <thead>
                         <tr>
                             <th>Article name</th>
-                            <th th:if="${delError}"><a class="btn btn-danger" th:href="@{/deleteCategory/{id}(id=${category.id}, confirm = 'true')}">Delete category</a></th>
+                            <th th:if="${delError}">
+                                <form th:method="DELETE" th:action="@{/categories/{id}/{confirm}(id=${category.id}, confirm = 'true')}">
+                                    <button type="submit" class="btn btn-danger">Delete category</button>
+                                </form>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="article : ${category.getArticles()}">
                             <td th:text="${article.name}"></td>
-                            <td><a th:href="@{/removeCategoryFromArticle/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}" class="btn btn-danger">Remove category from Article</a></td>
+                            <td>
+                                <form th:method="DELETE" th:action="@{/categories/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}">
+                                    <button type="submit" class="btn btn-danger">Remove category from Article</button>
+                                </form>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+                <div class="clear"></div>
                 <h3>Article not in Category</h3>
                 <div th:switch="${#lists.size(articlesNotInCategory)}">
                     <span th:case="'0'">All articles are in this category.</span>
@@ -56,12 +66,16 @@ Modification date: 08/11/2021
                         <tbody>
                         <tr th:each="article : ${articlesNotInCategory}">
                             <td th:text="${article.name}"></td>
-                            <td><a th:href="@{/addArticleToCategory/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}" class="btn btn-success">Add Article to Category</a></td>
+                            <td>
+                                <form method="POST" th:action="@{/categories/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}">
+                                    <button type="submit" class="btn btn-success">Add Article to Category</button>
+                                </form>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
-                <div class="clear"> </div>
+                <div class="clear"></div>
             </div>
         </div>
     </div>

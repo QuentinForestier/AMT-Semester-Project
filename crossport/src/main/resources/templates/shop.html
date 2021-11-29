@@ -54,6 +54,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					<img th:src="@{${article.imgPath}}" class="img-responsive" alt=""/>
 					<div class="shop_desc">
 						<h3><a th:href="@{/article(id=${article.id})}"><span th:text="${article.name}"></span></a></h3>
+						<h4><a th:href="@{/article(id=${article.id})}"><span th:text="${article.price}"></span></a></h4>
 						<span class="actual"></span><br>
 						<ul class="buttons">
 							<li class="cart"><a th:href="@{/addArticle(id=${article.id})}">Add To Cart</a></li>

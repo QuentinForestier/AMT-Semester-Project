@@ -40,8 +40,10 @@ Modification date: 08/11/2021
                         <tr th:each="category : ${listCategories}">
                             <td th:text="${category.name}"></td>
                             <td>
-                                <a th:href="@{/category/{id}(id=${category.id})}" class="btn btn-info">Info</a>
-                                <a th:href="@{/deleteCategory/{id}(id=${category.id})}" class="btn btn-danger">Delete</a>
+                                <a th:href="@{/categories/{id}(id=${category.id})}" class="btn btn-info">Info</a>
+                                <form th:method="DELETE" th:action="@{/categories/{id}/{confirm}(id=${category.id}, confirm = 'false')}">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
                             </td>
                         </tr>
                         </tbody>
@@ -61,7 +63,8 @@ Modification date: 08/11/2021
                                     <input  id="catName" type="text" th:field="*{categoryName}" th:errorclass="is-invalid" class="form-control col-md-4">
                                 </p>
                                 <div class="remember" >
-                                    <input type="submit" name="Submit" class="button" value="Save category"><div class="clear"></div>
+                                    <button type="submit" name="Submit" class="button">Save category</button>
+                                    <div class="clear"></div>
                                 </div>
                             </fieldset>
                         </form>

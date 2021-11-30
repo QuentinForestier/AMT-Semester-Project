@@ -7,16 +7,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Free Snow Bootstrap Website Template | Single :: w3layouts</title>
+	<title>Crossport Article</title>
 	<link th:href="@{~/css/bootstrap.css}" rel='stylesheet' type='text/css' />
 	<link th:href="@{~/css/style.css}" rel='stylesheet' type='text/css' />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<script th:src="@{~/js/jquery.min.js}"></script>
 	<script type="application/x-javascript">
 		addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
 	</script>
-	<script th:src="@{~/js/jquery.min.js}"></script>
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$(".dropdown img.flag").addClass("flagvisibility");
@@ -85,21 +85,18 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 					Article added in the cart
 				</div>
 				<div class="col-md-9 single_left">
-				   <div class="single_image">
-					     <ul id="etalage">
-							<li>
-								<a href="optionallink.html">
-									<img class="etalage_thumb_image" th:src="@{${article.imgPath}}"  alt=""/>
-									<img class="etalage_source_image" th:src="@{${article.imgPath}}"  alt=""/>
-								</a>
-							</li>
-						</ul>
-					    </div>
-				        <!-- end product_slider -->
-				        <div class="single_right">
-							<h3 th:text="${article.name}"></h3>
-				        	<p class="m_10" th:text="${article.description}"></p>
-				        </div>
+					<div class="single_image">
+					     <div id="etalage" class="etalage">
+							<div class="etalage_thumb thumb_1 etalage_thumb_active">
+								<img class="etalage_source_image" th:src="@{${article.imgPath}}" alt="" src=""/>
+							</div>
+						</div>
+					</div>
+					<!-- end product_slider -->
+					<div class="single_right">
+						<h3 th:text="${article.name}"></h3>
+						<p class="m_10" th:text="${article.description}"></p>
+					</div>
 				</div>
 				<div class="col-md-3">
 				  <div class="box-info-product">

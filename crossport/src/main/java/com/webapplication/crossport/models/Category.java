@@ -74,7 +74,7 @@ public class Category {
      * Gets the set of articles
      * @return Category articles
      */
-    public Set<Article> getArticles() {return this.articles; }
+    public Set<Article> getArticles() { return this.articles; }
 
     /**
      * Set related articles

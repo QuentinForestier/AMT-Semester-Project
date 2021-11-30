@@ -39,8 +39,9 @@ public class CategoryService {
     public void deleteCategory(Integer id) {
         Category category = getCategoryById(id);
         for (Article article : category.getArticles()) {
-            article.removeCategory(category);
+            article.getCategories().remove(category);
         }
+        category.getArticles().clear();
         this.categoryRepository.delete(category);
     }
 

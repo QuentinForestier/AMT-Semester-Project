@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
@@ -27,8 +28,8 @@ public class CategoryController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("/categories")
-    public String listCategories(Model model) {
+    @GetMapping("")
+    public String getAll(Model model) {
 
         model.addAttribute("listCategories", categoryService.getAllCategories());
         model.addAttribute("categoryData", new CategoryData());
@@ -36,8 +37,8 @@ public class CategoryController {
         return "categories";
     }
 
-    @PostMapping("/categories")
-    public String saveCategory(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
+    @PostMapping("")
+    public String add(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
 
         if(bindingResult.hasErrors()){
             model.addAttribute("categoryForm", categoryData);
@@ -62,8 +63,8 @@ public class CategoryController {
         return "categories";
     }
 
-    @GetMapping("/category/{id}")
-    public String getCategoryId(@PathVariable(value = "id") Integer id, Model model) {
+    @GetMapping("/{id}")
+    public String getById(@PathVariable(value = "id") Integer id, Model model) {
         Category category = categoryService.getCategoryById(id);
         List<Article> articlesNotInCategory = articleService.getArticlesNotInCategory(category);
 
@@ -73,33 +74,37 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/deleteCategory/{id}")
-    public String deleteCategory(@PathVariable(value = "id") Integer id,
-                                 @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
-                                 RedirectAttributes redir) {
-        Category cat;
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable(value = "id") Integer id,
+                         @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
+                         RedirectAttributes redir) {
+        Category category;
         try {
-            cat = categoryService.getCategoryById(id);
+            category = categoryService.getCategoryById(id);
         } catch (RuntimeException e) {
             return "redirect:/categories";
         }
 
-        if (cat.getArticles().isEmpty() || confirm) {
-            categoryService.deleteCategory(id);
+        if (category.getArticles().isEmpty() || confirm) {
+            try {
+                categoryService.deleteCategory(id);
+            } catch (RuntimeException e) {
+                return "redirect:/categories";
+            }
         } else {
             String delError = "You cannot delete this category as it has articles bound.";
             redir.addFlashAttribute("delError", delError);
-            return "redirect:/category/" + id;
+            return "redirect:/categories/" + id;
         }
         redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
         redir.addFlashAttribute("categoryData", new CategoryData());
         return "redirect:/categories";
     }
 
-    @GetMapping("/removeCategoryFromArticle/{idCategory}/{idArticle}")
-    public String removeCategoryFromArticle(@PathVariable(value = "idCategory") Integer idCategory,
-                                            @PathVariable(value = "idArticle") Integer idArticle,
-                                            RedirectAttributes redir) {
+    @DeleteMapping("/{idCategory}/{idArticle}")
+    public String removeArticle(@PathVariable(value = "idCategory") Integer idCategory,
+                                @PathVariable(value = "idArticle") Integer idArticle,
+                                RedirectAttributes redir) {
 
         Category category;
         try {
@@ -107,7 +112,7 @@ public class CategoryController {
         } catch (RuntimeException e) {
             String delError = "An error occured when we tried to find the category selected";
             redir.addFlashAttribute("delError", delError);
-            return "redirect:/category/" + idCategory;
+            return "redirect:/categories/" + idCategory;
         }
 
         try {
@@ -115,16 +120,16 @@ public class CategoryController {
         } catch (RuntimeException e) {
             String delError = "An error occured when we tried to delete the category from the article selected";
             redir.addFlashAttribute("delError", delError);
-            return "redirect:/category/" + idCategory;
+            return "redirect:/categories/" + idCategory;
         }
 
-        return "redirect:/category/" + idCategory;
+        return "redirect:/categories/" + idCategory;
     }
 
-    @GetMapping("/addArticleToCategory/{idCategory}/{idArticle}")
-    public String addArticleToCategory(@PathVariable(value = "idCategory") Integer idCategory,
-                                       @PathVariable(value = "idArticle") Integer idArticle,
-                                       RedirectAttributes redir) {
+    @PostMapping("/{idCategory}/{idArticle}")
+    public String addArticle(@PathVariable(value = "idCategory") Integer idCategory,
+                             @PathVariable(value = "idArticle") Integer idArticle,
+                             RedirectAttributes redir) {
 
         Category category;
         try {
@@ -132,7 +137,7 @@ public class CategoryController {
         } catch (RuntimeException e) {
             String delError = "An error occured when we tried to find the category selected";
             redir.addFlashAttribute("delError", delError);
-            return "redirect:/category/" + idCategory;
+            return "redirect:/categories/" + idCategory;
         }
 
         try {
@@ -140,10 +145,10 @@ public class CategoryController {
         } catch (RuntimeException e) {
             String delError = "An error occured when we tried to add the category from the article selected";
             redir.addFlashAttribute("delError", delError);
-            return "redirect:/category/" + idCategory;
+            return "redirect:/categories/" + idCategory;
         }
 
-        return "redirect:/category/" + idCategory;
+        return "redirect:/categories/" + idCategory;
     }
 
 }

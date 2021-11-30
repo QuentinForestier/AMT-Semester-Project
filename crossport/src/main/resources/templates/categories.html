@@ -31,19 +31,21 @@ Modification date: 08/11/2021
                     <span th:case="'0'">No categories yet. Create one below.</span>
                     <table th:case="*" class="table table-striped table-responsive">
                         <thead>
-                        <tr>
-                            <th>Category name</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr>
+                                <th>Category name</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="category : ${listCategories}">
-                            <td th:text="${category.name}"></td>
-                            <td>
-                                <a th:href="@{/category/{id}(id=${category.id})}" class="btn btn-info">Info</a>
-                                <a th:href="@{/deleteCategory/{id}(id=${category.id})}" class="btn btn-danger">Delete</a>
-                            </td>
-                        </tr>
+                            <tr th:each="category : ${listCategories}">
+                                <td th:text="${category.name}"></td>
+                                <td>
+                                    <form th:method="delete" th:action="@{/categories/{id}(id=${category.id}, confirm = 'false')}">
+                                        <a th:href="@{/categories/{id}(id=${category.id})}" class="btn btn-info">Info</a>
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -61,7 +63,8 @@ Modification date: 08/11/2021
                                     <input  id="catName" type="text" th:field="*{categoryName}" th:errorclass="is-invalid" class="form-control col-md-4">
                                 </p>
                                 <div class="remember" >
-                                    <input type="submit" name="Submit" class="button" value="Save category"><div class="clear"></div>
+                                    <button type="submit" name="Submit" class="button">Save category</button>
+                                    <div class="clear"></div>
                                 </div>
                             </fieldset>
                         </form>

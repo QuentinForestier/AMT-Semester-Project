@@ -59,15 +59,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/index.html",
 
                         // ArticleController
-                        "/shop",
-                        "/article",
+                        "/shop/**",
+                        "/articles/**",
 
                         // CartController
-                        "/addArticle",
-                        "/removeArticle**",
-                        "/clearCart",
-                        "/cart",
-                        "/updateQuantity/**",
+                        "/cart/**",
+
 
                         // Ressources
                         "/css/**",
@@ -75,9 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/js/**")
                 .permitAll()
                 .antMatchers(// CategoryController
-                              "/categories",
-                              "/category/**",
-                              "/deleteCategory/**").hasRole("ADMIN")
+                              "/categorie/**").hasRole("ADMIN")
                 .antMatchers( // LoginController
                               "/login", 
                               // RegisterController

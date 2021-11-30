@@ -9,9 +9,7 @@ import com.webapplication.crossport.models.services.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,9 +20,9 @@ import javax.servlet.http.HttpSession;
  * @author Herzig Melvyn
  */
 @Controller
+@RequestMapping("/cart")
 public class CartController
 {
-
     @Autowired
     private ArticleService articleService;
 
@@ -37,7 +35,20 @@ public class CartController
     @Autowired
     private HttpSession session;
 
-    @GetMapping("/addArticle")
+    @GetMapping("")
+    public String viewCart(HttpServletRequest request, Model model)
+    {
+        Cart cartInSession = Cart.getContextCart(request.getSession());
+
+        if (cartInSession.getId() != null)
+            cartInSession = cartService.load(cartInSession.getId());
+
+        model.addAttribute("cart", cartInSession);
+
+        return "cart";
+    }
+
+    @PostMapping("/article")
     public String addArticle(HttpServletRequest request,
                              @RequestParam(value = "id") Integer id,
                              @RequestParam(value = "quantity",
@@ -66,8 +77,8 @@ public class CartController
         return "redirect:" + referer + parameter;
     }
 
-    @GetMapping("/clearCart")
-    public String clearCart(HttpServletRequest request)
+    @DeleteMapping("")
+    public String clear(HttpServletRequest request)
     {
         Cart cart = Cart.getContextCart(request.getSession());
         cart.clear();
@@ -78,8 +89,8 @@ public class CartController
         return "redirect:" + referer;
     }
 
-    @GetMapping("/removeArticle{id}")
-    public String removeArticle(@RequestParam(value = "id") Integer id,
+    @DeleteMapping("/article/{id}")
+    public String removeArticle(@PathVariable(value = "id") Integer id,
                                 HttpServletRequest request)
     {
         Cart cart = Cart.getContextCart(request.getSession());
@@ -96,7 +107,7 @@ public class CartController
         return "redirect:" + referer;
     }
 
-    @GetMapping("/updateQuantity/{id}/{quantity}")
+    @PutMapping("/article/{id}/{quantity}")
     public String updateQuantity(@PathVariable(value = "id") Integer id,
                                  @PathVariable(value = "quantity") Integer quantity,
                                  HttpServletRequest request)
@@ -122,21 +133,6 @@ public class CartController
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
-
-    @GetMapping("/cart")
-    public String viewCart(HttpServletRequest request, Model model)
-    {
-
-        Cart cartInSession = Cart.getContextCart(request.getSession());
-
-        if (cartInSession.getId() != null)
-            cartInSession = cartService.load(cartInSession.getId());
-
-        model.addAttribute("cart", cartInSession);
-
-        return "cart";
-    }
-
 
     private void saveCartArticle(CartArticle ca)
     {

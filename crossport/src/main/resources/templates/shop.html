@@ -7,14 +7,14 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Free Snow Bootstrap Website Template | Shop :: w3layouts</title>
-<link href="css/bootstrap.css" rel='stylesheet' type='text/css' />
-<link href="css/style.css" rel='stylesheet' type='text/css' />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<script src="js/jquery.min.js"></script>
+	<title>Free Snow Bootstrap Website Template | Shop :: w3layouts</title>
+	<link th:href="@{~/css/bootstrap.css}" rel='stylesheet' type='text/css' />
+	<link th:href="@{~/css/style.css}" rel='stylesheet' type='text/css' />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+	<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
+	<script src="js/jquery.min.js"></script>
 </head>
 <body>
 	<div th:insert="navbar.html :: navbar"> </div>
@@ -24,16 +24,16 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 			<div class="row">
 				<div class="center">
 					<div class="alert alert-danger" th:if="${param.error}">
-						-- An error occured with category selected --
+						An error occured with category selected
 					</div>
 					<div class="alert alert-success" th:if="${param.added}">
-						-- Article added in the cart --
+						Article added in the cart
 					</div>
-					<div class="center" th:if="${#lists.isEmpty(listCategories)}">
-						-- No category found --
+					<div class="alert alert-info" th:if="${#lists.isEmpty(listCategories)}">
+						No category found
 					</div>
 
-					<form action="/shop" method="get">
+					<form method="get" action="/articles">
 						<label th:for="idCategory">Choose a category: </label>
 						<select name="idCategory">
 							<option th:value=null>All</option>
@@ -50,15 +50,21 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 				<div class="center" th:if="${#lists.isEmpty(listArticles)}">
 					-- No article found --
 				</div>
-				<div th:each="article:${listArticles}" class="col-md-3 shop_box"><a th:href="@{/article(id=${article.id})}">
+				<div th:each="article:${listArticles}" class="col-md-3 shop_box"><a th:href="@{/articles/{id}(id=${article.id})}">
 					<img th:src="@{${article.imgPath}}" class="img-responsive" alt=""/>
 					<div class="shop_desc">
-						<h3><a th:href="@{/article(id=${article.id})}"><span th:text="${article.name}"></span></a></h3>
+						<h3><a th:href="@{/articles/{id}(id=${article.id})}"><span th:text="${article.name}"></span></a></h3>
+						<span th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.price} + ' CHF'"></span>
 						<span class="actual"></span><br>
 						<ul class="buttons">
-							<li class="cart"><a th:href="@{/addArticle(id=${article.id})}">Add To Cart</a></li>
-							<li class="shop_btn"><a th:href="@{/article(id=${article.id})}">Read More</a></li>
-							<div class="clear"> </div>
+							<li class="cart" style="cursor: pointer">
+								<form th:method="post" th:action="@{/cart/article}">
+									<input name="id" th:value="${article.id}" hidden/>
+									<a onclick="this.closest('form').submit();"><span>Add To Cart</span></a>
+								</form>
+							</li>
+							<li class="shop_btn"><a th:href="@{/articles/{id}(id=${article.id})}">Read More</a></li>
+							<div class="clear"></div>
 					    </ul>
 				    </div>
 				</a></div>

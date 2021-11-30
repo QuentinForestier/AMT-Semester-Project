@@ -119,6 +119,12 @@ public class Article {
     }
 
     /**
+     * Gets the set of categories
+     * @return Article categories
+     */
+    public Set<Category> getCategories() { return this.categories; }
+
+    /**
      * Sets a new name
      * @param name New name
      */

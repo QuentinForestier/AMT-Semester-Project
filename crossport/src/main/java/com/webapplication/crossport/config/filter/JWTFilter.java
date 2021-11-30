@@ -1,5 +1,6 @@
 package com.webapplication.crossport.config.filter;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -55,23 +56,26 @@ public class JWTFilter extends OncePerRequestFilter {
 
 		String jwt = getCookieValue(req, "jwt");
 
-		if(jwt != null) {
-			if(JWTUtility.validateToken(jwt, secret)){
+		try {
+			if(jwt != null) {
+				if(JWTUtility.validateToken(jwt, secret)){
 
-				final List<GrantedAuthority> grantedAuths = new ArrayList<>();
-				grantedAuths.add(new SimpleGrantedAuthority("ROLE_" + JWTUtility.getRole(jwt, secret).toUpperCase()));
-				Authentication auth = new UsernamePasswordAuthenticationToken(JWTUtility.getUsername(jwt, secret), jwt, grantedAuths);
+					final List<GrantedAuthority> grantedAuths = new ArrayList<>();
+					grantedAuths.add(new SimpleGrantedAuthority("ROLE_" + JWTUtility.getRole(jwt, secret).toUpperCase()));
+					Authentication auth = new UsernamePasswordAuthenticationToken(JWTUtility.getUsername(jwt, secret), jwt, grantedAuths);
 
-				SecurityContextHolder.getContext().setAuthentication(auth);
+					SecurityContextHolder.getContext().setAuthentication(auth);
 
+				}
 			}
-		}
 
+		} catch (ExpiredJwtException e) {
+			// Temporary solution, if token is expired log out user
+			res.sendRedirect("/logout");
+		}
 
 		chain.doFilter(req, res);
 	}
-
-
 
 	/**
 	 * Gets a cookie with a given name from a request

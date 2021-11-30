@@ -19,6 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/categories")
 public class CategoryController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class CategoryController {
     @Autowired
     private ArticleService articleService;
 
-    @GetMapping("/categories")
+    @GetMapping("")
     public String getAll(Model model) {
 
         model.addAttribute("listCategories", categoryService.getAllCategories());
@@ -36,7 +37,7 @@ public class CategoryController {
         return "categories";
     }
 
-    @PostMapping("/categories")
+    @PostMapping("")
     public String add(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
 
         if(bindingResult.hasErrors()){
@@ -62,7 +63,7 @@ public class CategoryController {
         return "categories";
     }
 
-    @GetMapping("/categories/{id}")
+    @GetMapping("/{id}")
     public String getById(@PathVariable(value = "id") Integer id, Model model) {
         Category category = categoryService.getCategoryById(id);
         List<Article> articlesNotInCategory = articleService.getArticlesNotInCategory(category);
@@ -73,7 +74,7 @@ public class CategoryController {
     }
 
 
-    @DeleteMapping("/categories/{id}")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable(value = "id") Integer id,
                          @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
                          RedirectAttributes redir) {
@@ -85,7 +86,11 @@ public class CategoryController {
         }
 
         if (category.getArticles().isEmpty() || confirm) {
-            categoryService.deleteCategory(id);
+            try {
+                categoryService.deleteCategory(id);
+            } catch (RuntimeException e) {
+                return "redirect:/categories";
+            }
         } else {
             String delError = "You cannot delete this category as it has articles bound.";
             redir.addFlashAttribute("delError", delError);
@@ -96,7 +101,7 @@ public class CategoryController {
         return "redirect:/categories";
     }
 
-    @DeleteMapping("/categories/{idCategory}/{idArticle}")
+    @DeleteMapping("/{idCategory}/{idArticle}")
     public String removeArticle(@PathVariable(value = "idCategory") Integer idCategory,
                                 @PathVariable(value = "idArticle") Integer idArticle,
                                 RedirectAttributes redir) {
@@ -121,7 +126,7 @@ public class CategoryController {
         return "redirect:/categories/" + idCategory;
     }
 
-    @PostMapping("/categories/{idCategory}/{idArticle}")
+    @PostMapping("/{idCategory}/{idArticle}")
     public String addArticle(@PathVariable(value = "idCategory") Integer idCategory,
                              @PathVariable(value = "idArticle") Integer idArticle,
                              RedirectAttributes redir) {

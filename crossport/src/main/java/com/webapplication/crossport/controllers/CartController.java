@@ -20,6 +20,7 @@ import javax.servlet.http.HttpSession;
  * @author Herzig Melvyn
  */
 @Controller
+@RequestMapping("/cart")
 public class CartController
 {
     @Autowired
@@ -34,7 +35,20 @@ public class CartController
     @Autowired
     private HttpSession session;
 
-    @PostMapping("/cart/article")
+    @GetMapping("")
+    public String viewCart(HttpServletRequest request, Model model)
+    {
+        Cart cartInSession = Cart.getContextCart(request.getSession());
+
+        if (cartInSession.getId() != null)
+            cartInSession = cartService.load(cartInSession.getId());
+
+        model.addAttribute("cart", cartInSession);
+
+        return "cart";
+    }
+
+    @PostMapping("/article")
     public String addArticle(HttpServletRequest request,
                              @RequestParam(value = "id") Integer id,
                              @RequestParam(value = "quantity",
@@ -63,7 +77,7 @@ public class CartController
         return "redirect:" + referer + parameter;
     }
 
-    @DeleteMapping("/cart")
+    @DeleteMapping("")
     public String clear(HttpServletRequest request)
     {
         Cart cart = Cart.getContextCart(request.getSession());
@@ -75,7 +89,7 @@ public class CartController
         return "redirect:" + referer;
     }
 
-    @DeleteMapping("/cart/article/{id}")
+    @DeleteMapping("/article/{id}")
     public String removeArticle(@PathVariable(value = "id") Integer id,
                                 HttpServletRequest request)
     {
@@ -93,7 +107,7 @@ public class CartController
         return "redirect:" + referer;
     }
 
-    @PutMapping("/cart/article/{id}/{quantity}")
+    @PutMapping("/article/{id}/{quantity}")
     public String updateQuantity(@PathVariable(value = "id") Integer id,
                                  @PathVariable(value = "quantity") Integer quantity,
                                  HttpServletRequest request)
@@ -119,20 +133,6 @@ public class CartController
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
     }
-
-    @GetMapping("/cart")
-    public String viewCart(HttpServletRequest request, Model model)
-    {
-        Cart cartInSession = Cart.getContextCart(request.getSession());
-
-        if (cartInSession.getId() != null)
-            cartInSession = cartService.load(cartInSession.getId());
-
-        model.addAttribute("cart", cartInSession);
-
-        return "cart";
-    }
-
 
     private void saveCartArticle(CartArticle ca)
     {

@@ -9,10 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 @Controller
+@RequestMapping(value={"/articles", "/shop"})
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
@@ -20,12 +22,7 @@ public class ArticleController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping(value = {"/shop"})
-    public String redirect() {
-        return "redirect:/articles";
-    }
-
-    @GetMapping("/articles")
+    @GetMapping("")
     public String getCategory(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
         List<Article> articles;
         Category selectedCategory = null;
@@ -53,16 +50,15 @@ public class ArticleController {
         return "shop";
     }
 
-    @GetMapping("/articles/{id}")
+    @GetMapping("/{id}")
     public String getById(@PathVariable(value = "id") Integer id, Model model) {
-        /*Article article;
+        Article article;
         try {
             article = articleService.getArticleById(id);
         } catch (Exception e) {
             e.printStackTrace();
             return "article?error";
-        }*/
-        Article article = articleService.getArticleById(id);
+        }
 
         model.addAttribute("article", article);
         return "article";

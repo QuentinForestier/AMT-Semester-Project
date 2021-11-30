@@ -34,13 +34,15 @@ Modification date: 09/10/2021
 <body>
 <div th:insert="navbar.html :: navbar"></div>
 <div class="main">
-
     <div class="shopping-cart">
-        <div class="check_button"><a href="/clearCart">Clear cart</a></div>
-        <!-- Title -->
-        <div class="title">
-            Cart
+        <div class="check_button">
+            <form th:method="delete" th:action="@{/cart}">
+                <a onclick="this.closest('form').submit();">Clear cart</a>
+            </form>
         </div>
+        <div class="clear"></div>
+        <!-- Title -->
+        <div class="title">Cart</div>
 
         <!-- Article -->
         <div class="center" th:if="${#lists.isEmpty(cart.getCartArticles())}">
@@ -48,9 +50,9 @@ Modification date: 09/10/2021
         </div>
         <div class="item" th:each="cartArticle:${cart.getCartArticles()}">
             <div class="buttons">
-                <a th:href="@{/removeArticle(id=${cartArticle.getArticle().getId()})}">
-                    <span class="delete-btn"><img src="images/delete-icn.svg" alt="X"/></span>
-                </a>
+                <form th:method="delete" th:action="@{/cart/article/{id}(id=${cartArticle.getArticle().getId()})}">
+                    <span class="delete-btn"><img onclick="this.closest('form').submit();" src="images/delete-icn.svg" alt="X"/></span>
+                </form>
             </div>
 
             <div class="image">
@@ -72,8 +74,9 @@ Modification date: 09/10/2021
                 </button>
             </div>
 
-            <div class="total-price"><span
-                    th:text="${cartArticle.getArticle().getPrice() * cartArticle.getQuantity()}"></span></div>
+            <div class="total-price">
+                <span th:text="${cartArticle.getArticle().getPrice() * cartArticle.getQuantity()}"></span>
+            </div>
         </div>
         <div class="total-cart" th:if="${!#lists.isEmpty(cart.getCartArticles())}">
             <div><span>Total du panier</span></div>
@@ -125,7 +128,10 @@ Modification date: 09/10/2021
     });
 
     function updateQuantity(id, quantity) {
-        window.location.href = "/updateQuantity/" + id + "/" + quantity;
+        fetch("/cart/article/" + id + "/" + quantity, {
+            method: 'PUT'
+        });
+        location.reload();
     }
 </script>
 </body>

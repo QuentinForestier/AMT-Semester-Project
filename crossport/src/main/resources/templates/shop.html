@@ -57,7 +57,12 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 						<span th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.price} + ' CHF'"></span>
 						<span class="actual"></span><br>
 						<ul class="buttons">
-							<li class="cart"><a th:href="@{/addArticle(id=${article.id})}">Add To Cart</a></li>
+							<li class="cart" style="cursor: pointer">
+								<form th:method="post" th:action="@{/cart/article}">
+									<input name="id" th:value="${article.id}" hidden/>
+									<a onclick="this.closest('form').submit();"><span>Add To Cart</span></a>
+								</form>
+							</li>
 							<li class="shop_btn"><a th:href="@{/articles/{id}(id=${article.id})}">Read More</a></li>
 							<div class="clear"></div>
 					    </ul>

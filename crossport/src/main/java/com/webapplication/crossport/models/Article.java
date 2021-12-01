@@ -1,6 +1,7 @@
 package com.webapplication.crossport.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,12 +26,14 @@ public class Article {
      * unique description
      */
     @Column(name = "description", unique = true)
+    @NotNull
     private String description;
 
     /**
      * Name of the article
      */
     @Column(name = "name")
+    @NotNull
     private String name;
 
     /**
@@ -49,6 +52,7 @@ public class Article {
      * Is article available ? If true then yes
      */
     @Column(name = "inStock")
+    @NotNull
     private boolean inStock;
 
     /**

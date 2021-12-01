@@ -45,6 +45,9 @@ Modification date: 08/11/2021
             <h2>Edit article</h2>
             <div id="loginbox" class="loginbox" style="width: 100%">
                 <form action="#" th:action="@{/articles/edit?id={id}(id=${id})}" method="post" th:object="${articleData}">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                    </div>
                     <fieldset class="input">
                         <p id="login-form-password">
                             <label for="articleName">Name</label>

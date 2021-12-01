@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,6 +94,17 @@ public class ArticleController {
 
     @PostMapping("/edit")
     public String postArticle(final @ModelAttribute @Valid ArticleData articleData, final BindingResult bindingResult, final Model model, @RequestParam(value = "id", required = false) Integer id) {
+        if (articleData.getArticlePrice() != null && articleData.getArticlePrice() <= 0) {
+            bindingResult.addError(
+                    new ObjectError("priveError", "The price of the article must be greater than 0"));
+        }
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("id", id);
+            model.addAttribute("articleData", articleData);
+            return "editArticle";
+        }
+
         Article article;
         if (id == null) {
             article = new Article();

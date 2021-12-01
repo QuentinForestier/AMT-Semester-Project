@@ -1,29 +1,29 @@
 package com.webapplication.crossport.service;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 public class ArticleData implements Serializable {
-    @NotEmpty(message = "Article name cannot be empty")
-    String articleName;
-    String articleDesc;
-    Double articlePrice;
-    boolean articleStock;
+    @NotBlank(message = "Article name cannot be empty")
+    private String articleName = "";
+    private String articleDesc = "";
+    private Double articlePrice;
+    private boolean articleStock;
 
     public String getArticleName() {
-        return articleName;
+        return articleName == null ? "" : articleName;
     }
 
     public void setArticleName(String articleName) {
-        this.articleName = articleName;
+        this.articleName = articleName == null ? "" : articleName;
     }
 
     public String getArticleDesc() {
-        return articleDesc;
+        return articleDesc == null ? "" : articleDesc;
     }
 
     public void setArticleDesc(String articleDesc) {
-        this.articleDesc = articleDesc;
+        this.articleDesc = articleDesc == null ? "" : articleDesc;
     }
 
     public Double getArticlePrice() {

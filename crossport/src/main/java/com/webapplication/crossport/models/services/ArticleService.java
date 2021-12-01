@@ -52,6 +52,10 @@ public class ArticleService {
         }
     }
 
+    public Article getArticleByName(String name) {
+        return articleRepository.getArticleByName(name);
+    }
+
     public void removeCategory(Integer idArticle, Category category) {
         Article article = getArticleById(idArticle);
         article.removeCategory(category);

@@ -96,7 +96,12 @@ public class ArticleController {
     public String postArticle(final @ModelAttribute @Valid ArticleData articleData, final BindingResult bindingResult, final Model model, @RequestParam(value = "id", required = false) Integer id) {
         if (articleData.getArticlePrice() != null && articleData.getArticlePrice() <= 0) {
             bindingResult.addError(
-                    new ObjectError("priveError", "The price of the article must be greater than 0"));
+                    new ObjectError("priceError", "The price of the article must be greater than 0"));
+        }
+
+        if (articleService.getArticleByName(articleData.getArticleName()) != null) {
+            bindingResult.addError(
+                    new ObjectError("nameError", "Two article cannot have the same name"));
         }
 
         if (bindingResult.hasErrors()) {

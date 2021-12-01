@@ -25,14 +25,14 @@ public class Article {
     /**
      * unique description
      */
-    @Column(name = "description", unique = true)
+    @Column(name = "description")
     @NotNull
     private String description;
 
     /**
      * Name of the article
      */
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     @NotNull
     private String name;
 
@@ -132,9 +132,12 @@ public class Article {
 
     /**
      * Gets the set of categories
+     *
      * @return Article categories
      */
-    public Set<Category> getCategories() { return this.categories; }
+    public Set<Category> getCategories() {
+        return this.categories;
+    }
 
     /**
      * Sets a new name

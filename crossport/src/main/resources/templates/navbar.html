@@ -56,8 +56,6 @@ Modification date: 09/10/2021
                 $(".dropdown img.flag").toggleClass("flagvisibility");
             });
         });
-
-
     </script>
 </head>
 <body>
@@ -70,7 +68,7 @@ Modification date: 09/10/2021
                         <a href="/"><img th:src="@{~/images/logo.png}" alt="logo"/></a>
                     </div>
                     <div class="menu">
-                        <a class="toggleMenu" href="#"><img src="images/nav.png" alt=""/></a>
+                        <a class="toggleMenu" href="#"><img src="/images/nav.png" alt=""/></a>
                         <ul class="nav" id="nav">
                             <li><a href="/shop">Shop</a></li>
                             <li><a href="/register" sec:authorize="isAnonymous()">Register</a></li>
@@ -79,7 +77,7 @@ Modification date: 09/10/2021
                             <li><a href="/logout" sec:authorize="isAuthenticated()">Logout</a></li>
                             <div class="clear"></div>
                         </ul>
-                        <script type="text/javascript" src="js/responsive-nav.js"></script>
+                        <script type="text/javascript" src="/js/responsive-nav.js"></script>
                     </div>
                     <div class="clear"></div>
                 </div>
@@ -96,14 +94,12 @@ Modification date: 09/10/2021
                         </div>
                     </div>
                     <!----search-scripts---->
-                    <script src="js/classie.js"></script>
-                    <script src="js/uisearch.js"></script>
+                    <script src="/js/classie.js"></script>
+                    <script src="/js/uisearch.js"></script>
                     <script>
                         new UISearch( document.getElementById( 'sb-search' ) );
-
                     </script>
                     <!----//search-scripts---->
-
                     <a class="active-icon c1" href="/cart"> </a>
                 </div>
             </div>

@@ -44,7 +44,8 @@ Modification date: 08/11/2021
         <div class="container">
             <h2>Edit article</h2>
             <div id="loginbox" class="loginbox" style="width: 100%">
-                <form action="#" th:action="@{/articles/edit?id={id}(id=${id})}" method="post" th:object="${articleData}">
+                <form action="#" th:action="@{/articles/edit?id={id}(id=${id})}" method="post"
+                      th:object="${articleData}" enctype="multipart/form-data">
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                         <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
                     </div>
@@ -74,9 +75,9 @@ Modification date: 08/11/2021
                             <br>
 
                             <label>Current Image</label>
-                        <p> Here the current image name if one </p>
-                        <label for="articleImage">New Image</label>
-                        <input type="file" id="articleImage" accept="image/*" placeholder="Image ame currently in use">
+                            <img th:src="@{${articleData.imgPath}}" class="img-responsive" alt=""/>
+                            <label for="articleImage">New Image</label>
+                            <input type="file" id="articleImage" name="image" accept="image/*">
                         </p>
                         <a href="/articles/manage" class="btn btn-primary">Cancel</a>
                         <input type="submit" name="Submit" class="button" value="Save article" style="float: left">

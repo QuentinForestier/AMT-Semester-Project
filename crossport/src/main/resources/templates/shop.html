@@ -55,7 +55,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 </div>
                 <div th:each="article:${listArticles}" class="col-md-3 shop_box"><a
                         th:href="@{/articles/{id}(id=${article.id})}">
-                    <img th:src="@{${article.imgPath}}" class="img-responsive" alt=""/>
+                    <img th:src="@{${article.getImgPath()}}" class="img-responsive" alt=""/>
                     <div class="shop_desc">
                         <h3><a th:href="@{/articles/{id}(id=${article.id})}"><span th:text="${article.name}"></span></a>
                         </h3>

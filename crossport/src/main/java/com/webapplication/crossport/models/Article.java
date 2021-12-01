@@ -1,5 +1,7 @@
 package com.webapplication.crossport.models;
 
+import com.webapplication.crossport.controllers.ArticleController;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -45,8 +47,8 @@ public class Article {
     /**
      * Path of image that represents the article
      */
-    @Column(name = "imgPath")
-    private String imgPath;
+    @Column(name = "imgExtension", length = 10)
+    private String imgExtension;
 
     /**
      * Is article available ? If true then yes
@@ -175,8 +177,8 @@ public class Article {
      *
      * @return Image path
      */
-    public String getImgPath() {
-        return imgPath;
+    public String getImgExtension() {
+        return imgExtension;
     }
 
     /**
@@ -184,8 +186,15 @@ public class Article {
      *
      * @param imgPath New path
      */
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public void setImgExtension(String imgPath) {
+        this.imgExtension = imgPath;
+    }
+
+    public String getImgPath() {
+        if (imgExtension == null)
+            return null;
+
+        return "/" + ArticleController.uploadDir + "/" + id.toString() + imgExtension;
     }
 
     /**

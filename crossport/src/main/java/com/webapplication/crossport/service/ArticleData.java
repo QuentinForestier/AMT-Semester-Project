@@ -8,7 +8,8 @@ public class ArticleData implements Serializable {
     private String articleName = "";
     private String articleDesc = "";
     private Double articlePrice;
-    private boolean articleStock;
+    private boolean articleStock = true;
+    private String imgPath;
 
     public String getArticleName() {
         return articleName == null ? "" : articleName;
@@ -40,5 +41,13 @@ public class ArticleData implements Serializable {
 
     public void setArticleStock(boolean articleStock) {
         this.articleStock = articleStock;
+    }
+
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
     }
 }

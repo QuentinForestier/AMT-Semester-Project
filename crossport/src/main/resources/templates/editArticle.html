@@ -10,15 +10,15 @@ Modification date: 08/11/2021
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Free Snow Bootstrap Website Template | Shop :: w3layouts</title>
-    <link href="css/bootstrap.css" rel='stylesheet' type='text/css'/>
-    <link href="css/style.css" rel='stylesheet' type='text/css'/>
+    <link th:href="@{~/css/bootstrap.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{~/css/style.css}" rel='stylesheet' type='text/css'/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
     <script type="application/x-javascript">
          addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
     </script>
-    <script src="js/jquery.min.js"></script>
+    <script th:src="@{~/js/jquery.min.js}"></script>
     <style>
         label, .button {
             margin-top: 20px;
@@ -44,7 +44,7 @@ Modification date: 08/11/2021
         <div class="container">
             <h2>Edit article</h2>
             <div id="loginbox" class="loginbox" style="width: 100%">
-                <form action="#"  th:action="@{/editArticle?id={id}(id=${id})}" method="post" th:object="${articleData}">
+                <form action="#" th:action="@{/articles/edit?id={id}(id=${id})}" method="post" th:object="${articleData}">
                     <fieldset class="input">
                         <p id="login-form-password">
                             <label for="articleName">Name</label>

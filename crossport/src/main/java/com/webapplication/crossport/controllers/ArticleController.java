@@ -70,13 +70,13 @@ public class ArticleController {
         return "article";
     }
 
-    @GetMapping("/manageArticles")
+    @GetMapping("/manage")
     public String viewArticles(Model model) {
         model.addAttribute("listArticles", articleService.getAllArticles());
         return "manageArticles";
     }
 
-    @GetMapping("/editArticle")
+    @GetMapping("/edit")
     public String editArticle(HttpServletRequest request, Model model, @RequestParam(value = "id", required = false) Integer id) {
         ArticleData ad = new ArticleData();
         if (id != null) {
@@ -91,7 +91,7 @@ public class ArticleController {
         return "editArticle";
     }
 
-    @PostMapping("/editArticle")
+    @PostMapping("/edit")
     public String postArticle(final @ModelAttribute @Valid ArticleData articleData, final BindingResult bindingResult, final Model model, @RequestParam(value = "id", required = false) Integer id) {
         Article article;
         if (id == null) {
@@ -104,6 +104,6 @@ public class ArticleController {
         article.setDescription(articleData.getArticleDesc());
         article.setInStock(articleData.isArticleStock());
         articleService.modifyArticle(article);
-        return "redirect:manageArticles";
+        return "redirect:manage";
     }
 }

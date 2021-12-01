@@ -59,8 +59,8 @@ Lancer le projet grâce à l'icône start (triangle vert).
 > Le projet utilise un micro service comme service d'authentification. Par manque de temps, le service de production est utilisé pour le développement, du moins temporairement. \
 > Le serveur d'authentification est disponible tous les jours entre 7h et 23h.
 > Pour l'utiliser lancer les deux commandes suivantes:
-> 
->`$  ssh -L 23:10.0.1.12:22 CROSSPORT@16.170.194.237 -i "<path>/<to>/<dmz key>.pem"` 
+>
+>`$  ssh -L 23:10.0.1.12:22 CROSSPORT@16.170.194.237 -i "<path>/<to>/<dmz key>.pem"`
 >
 >`$ ssh -L 22192:10.0.1.92:22 -L 8081:10.0.1.92:8080  CROSSPORT@16.170.194.237 -i "<path>/<to>/<dmz key>.pem"`
 

@@ -26,6 +26,9 @@ import java.util.Objects;
 @Controller
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
+
+    public static final String uploadDir = "articles_images";
+
     @Autowired
     private ArticleService articleService;
 
@@ -54,16 +57,6 @@ public class ArticleController {
     }
 
     // Les trois méthodes qui suivent doivent avoir la meme signature
-
-    @PostMapping(value = "/edit", params = "Cancel")
-    public String cancelPostArticle(final @ModelAttribute @Valid ArticleData articleData,
-                                    final BindingResult bindingResult,
-                                    final Model model,
-                                    @RequestParam(value = "id", required = false) Integer id,
-                                    @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
-        return "redirect:manage";
-    }
-
     @PostMapping(value = "/edit", params = "DeleteImage")
     public String deleteImage(final @ModelAttribute @Valid ArticleData articleData,
                               final BindingResult bindingResult,
@@ -184,6 +177,4 @@ public class ArticleController {
         }
         return extension;
     }
-
-    public static final String uploadDir = "ProductsImages";
 }

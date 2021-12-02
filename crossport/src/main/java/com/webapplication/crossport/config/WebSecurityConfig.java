@@ -1,6 +1,7 @@
 package com.webapplication.crossport.config;
 
 import com.webapplication.crossport.config.filter.JWTFilter;
+import com.webapplication.crossport.controllers.ArticleController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -65,18 +66,33 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         // CartController
                         "/cart/**",
 
+                        //Images des produits
+                        "/" + ArticleController.uploadDir + "/**",
 
-                        // Ressources
+                        // Ressources Statiques
                         "/css/**",
                         "/images/**",
                         "/js/**")
                 .permitAll()
-                .antMatchers(// CategoryController
-                              "/categorie/**").hasRole("ADMIN")
-                .antMatchers( // LoginController
-                              "/login", 
-                              // RegisterController
-                              "/register").anonymous()
+                .and()
+                .authorizeRequests()
+                .antMatchers(
+                        // CategoryController
+                        "/categorie/**",
+
+                        //ArticleController
+                        "/manageArticles",
+                        "/makeUnavailable**",
+                        "/editArticle")
+                .hasRole("ADMIN")
+                .antMatchers(
+                        // LoginController
+                        "/login",
+                        // RegisterController
+                        "/register").anonymous()
+                .anyRequest()
+                .authenticated()
+
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -100,8 +116,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * @throws Exception If something goes wrong
      */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception
-    {
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authProvider()).eraseCredentials(false);
     }
 }

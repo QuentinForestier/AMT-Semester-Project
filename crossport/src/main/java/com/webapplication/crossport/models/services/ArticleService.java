@@ -6,6 +6,7 @@ import com.webapplication.crossport.models.repository.ArticleRepository;
 import com.webapplication.crossport.models.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class ArticleService {
         try {
             return articleRepository.findAll();
         } catch (Exception e) {
-            return new LinkedList<Article>();
+            return new LinkedList<>();
         }
     }
 
@@ -30,7 +31,7 @@ public class ArticleService {
         try {
             return articleRepository.findArticlesByCategoriesContaining(category);
         } catch (Exception e) {
-            return new LinkedList<Article>();
+            return new LinkedList<>();
         }
     }
 
@@ -44,13 +45,15 @@ public class ArticleService {
 
     public Article getArticleById(Integer id) {
         Optional<Article> optional = articleRepository.findById(id);
-        Article article = null;
         if (optional.isPresent()) {
-            article = optional.get();
+            return optional.get();
         } else {
             throw new RuntimeException("Article not found for id :: " + id);
         }
-        return article;
+    }
+
+    public Article findFirstByName(String name) {
+        return articleRepository.findFirstByName(name);
     }
 
     public void removeCategory(Integer idArticle, Category category) {
@@ -67,5 +70,9 @@ public class ArticleService {
         // Important to update BD
         articleRepository.saveAndFlush(article);
         categoryRepository.saveAndFlush(category);
+    }
+
+    public void modifyArticle(Article article) {
+        articleRepository.save(article);
     }
 }

@@ -1,11 +1,15 @@
 package com.webapplication.crossport.models;
 
+import com.webapplication.crossport.controllers.ArticleController;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
  * Entity model for JPA. Represents an article
+ *
  * @author Herzig Melvyn
  */
 @Entity
@@ -23,13 +27,15 @@ public class Article {
     /**
      * unique description
      */
-    @Column(name = "description", unique = true)
+    @Column(name = "description")
+    @NotNull
     private String description;
 
     /**
      * Name of the article
      */
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
+    @NotNull
     private String name;
 
     /**
@@ -41,13 +47,14 @@ public class Article {
     /**
      * Path of image that represents the article
      */
-    @Column(name = "imgPath")
-    private String imgPath;
+    @Column(name = "imgExtension", length = 10)
+    private String imgExtension;
 
     /**
      * Is article available ? If true then yes
      */
     @Column(name = "inStock")
+    @NotNull
     private boolean inStock;
 
     /**
@@ -60,6 +67,7 @@ public class Article {
 
     /**
      * Add a category to the article and the article to the category.
+     *
      * @param category Category to add.
      */
     public void addCategory(Category category) {
@@ -69,6 +77,7 @@ public class Article {
 
     /**
      * Remove a category from the article and the article from the category.
+     *
      * @param category Category to remove.
      */
     public void removeCategory(Category category) {
@@ -80,6 +89,7 @@ public class Article {
 
     /**
      * Gets article id
+     *
      * @return Article id
      */
     public Integer getId() {
@@ -88,6 +98,7 @@ public class Article {
 
     /**
      * Sets new article id
+     *
      * @param id New acrticle
      */
     public void setId(Integer id) {
@@ -96,6 +107,7 @@ public class Article {
 
     /**
      * Gets description
+     *
      * @return description
      */
     public String getDescription() {
@@ -104,6 +116,7 @@ public class Article {
 
     /**
      * Sets the description
+     *
      * @param description New description
      */
     public void setDescription(String description) {
@@ -112,6 +125,7 @@ public class Article {
 
     /**
      * Gets article name
+     *
      * @return Article name
      */
     public String getName() {
@@ -120,12 +134,16 @@ public class Article {
 
     /**
      * Gets the set of categories
+     *
      * @return Article categories
      */
-    public Set<Category> getCategories() { return this.categories; }
+    public Set<Category> getCategories() {
+        return this.categories;
+    }
 
     /**
      * Sets a new name
+     *
      * @param name New name
      */
     public void setName(String name) {
@@ -134,14 +152,20 @@ public class Article {
 
     /**
      * Gets price
+     *
      * @return Article price
      */
     public double getPrice() {
         return price;
     }
 
+    public Double getNullablePrice() {
+        return price;
+    }
+
     /**
      * Sets a new price
+     *
      * @param price New price
      */
     public void setPrice(Double price) {
@@ -150,22 +174,32 @@ public class Article {
 
     /**
      * Gets image path
+     *
      * @return Image path
      */
-    public String getImgPath() {
-        return imgPath;
+    public String getImgExtension() {
+        return imgExtension;
     }
 
     /**
      * sets a new image path
+     *
      * @param imgPath New path
      */
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public void setImgExtension(String imgPath) {
+        this.imgExtension = imgPath;
+    }
+
+    public String getImgPath() {
+        if (imgExtension == null)
+            return null;
+
+        return "/" + ArticleController.uploadDir + "/" + id.toString() + imgExtension;
     }
 
     /**
      * Gets if article is available
+     *
      * @return True if article is available else false
      */
     public boolean isInStock() {
@@ -174,6 +208,7 @@ public class Article {
 
     /**
      * Changes article availability
+     *
      * @param inStock New availability
      */
     public void setInStock(boolean inStock) {
@@ -182,6 +217,7 @@ public class Article {
 
     /**
      * Sets new related categories
+     *
      * @param categories New categories
      */
     public void setCategories(Set<Category> categories) {

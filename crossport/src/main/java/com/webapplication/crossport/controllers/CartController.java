@@ -21,8 +21,7 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 @RequestMapping("/cart")
-public class CartController
-{
+public class CartController {
     @Autowired
     private ArticleService articleService;
 
@@ -36,8 +35,7 @@ public class CartController
     private HttpSession session;
 
     @GetMapping("")
-    public String viewCart(HttpServletRequest request, Model model)
-    {
+    public String viewCart(HttpServletRequest request, Model model) {
         Cart cartInSession = Cart.getContextCart(request.getSession());
 
         if (cartInSession.getId() != null)
@@ -52,21 +50,19 @@ public class CartController
     public String addArticle(HttpServletRequest request,
                              @RequestParam(value = "id") Integer id,
                              @RequestParam(value = "quantity",
-                                     defaultValue = "1") Integer quantity)
-    {
+                                     defaultValue = "1") Integer quantity) {
 
         Cart cart = Cart.getContextCart(request.getSession());
         if (cart.getId() != null)
             cart = cartService.load(cart.getId());
 
-        try
-        {
+        try {
             Article article = articleService.getArticleById(id);
-            CartArticle ca = cart.addToCart(quantity, article);
-            saveCartArticle(ca);
-        }
-        catch (RuntimeException e)
-        {
+            if (article.getNullablePrice() != null && article.isInStock()) {
+                CartArticle ca = cart.addToCart(quantity, article);
+                saveCartArticle(ca);
+            }
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
 
@@ -78,8 +74,7 @@ public class CartController
     }
 
     @DeleteMapping("")
-    public String clear(HttpServletRequest request)
-    {
+    public String clear(HttpServletRequest request) {
         Cart cart = Cart.getContextCart(request.getSession());
         cart.clear();
 
@@ -91,8 +86,7 @@ public class CartController
 
     @DeleteMapping("/article/{id}")
     public String removeArticle(@PathVariable(value = "id") Integer id,
-                                HttpServletRequest request)
-    {
+                                HttpServletRequest request) {
         Cart cart = Cart.getContextCart(request.getSession());
         if (cart.getId() != null)
             cart = cartService.load(cart.getId());
@@ -110,21 +104,17 @@ public class CartController
     @PutMapping("/article/{id}/{quantity}")
     public String updateQuantity(@PathVariable(value = "id") Integer id,
                                  @PathVariable(value = "quantity") Integer quantity,
-                                 HttpServletRequest request)
-    {
+                                 HttpServletRequest request) {
         Cart cart = Cart.getContextCart(request.getSession());
         if (cart.getId() != null)
             cart = cartService.load(cart.getId());
 
         CartArticle ca = cart.getCartArticleByArticle(articleService.getArticleById(id));
 
-        if (quantity == 0)
-        {
+        if (quantity == 0) {
             cartArticleService.delete(ca);
             cart.removeArticle(ca);
-        }
-        else
-        {
+        } else {
             ca.setQuantity(quantity);
         }
 
@@ -134,20 +124,15 @@ public class CartController
         return "redirect:" + referer;
     }
 
-    private void saveCartArticle(CartArticle ca)
-    {
-        if (ca != null && session != null && session.getAttribute("member") != null)
-        {
+    private void saveCartArticle(CartArticle ca) {
+        if (ca != null && session != null && session.getAttribute("member") != null) {
             cartArticleService.save(ca);
         }
     }
 
-    private void saveCart(Cart cart)
-    {
-        if (session != null && session.getAttribute("member") != null)
-        {
+    private void saveCart(Cart cart) {
+        if (session != null && session.getAttribute("member") != null) {
             cartService.save(cart);
         }
     }
-
 }

@@ -59,7 +59,8 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     <div class="shop_desc">
                         <h3><a th:href="@{/articles/{id}(id=${article.id})}"><span th:text="${article.name}"></span></a>
                         </h3>
-                        <span th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.price} + ' CHF'"></span>
+                        <span th:href="@{/articles/{id}(id=${article.id})}"
+                              th:text="${article.getNullablePrice()==null} ? 'PREVIEW' : ${article.getNullablePrice()} + ' CHF'"></span>
                         <span class="actual"></span><br>
                         <ul class="buttons">
                             <li class="cart" style="cursor: pointer">

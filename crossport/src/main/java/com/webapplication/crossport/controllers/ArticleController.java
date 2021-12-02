@@ -53,7 +53,36 @@ public class ArticleController {
         return "editArticle";
     }
 
-    @PostMapping("/edit")
+    // Les trois méthodes qui suivent doivent avoir la meme signature
+
+    @PostMapping(value = "/edit", params = "Cancel")
+    public String cancelPostArticle(final @ModelAttribute @Valid ArticleData articleData,
+                                    final BindingResult bindingResult,
+                                    final Model model,
+                                    @RequestParam(value = "id", required = false) Integer id,
+                                    @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+        return "redirect:manage";
+    }
+
+    @PostMapping(value = "/edit", params = "DeleteImage")
+    public String deleteImage(final @ModelAttribute @Valid ArticleData articleData,
+                              final BindingResult bindingResult,
+                              final Model model,
+                              @RequestParam(value = "id", required = false) Integer id,
+                              @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+        if (id != null) {
+            Article article = articleService.getArticleById(id);
+            removeFile(id, article.getImgExtension());
+            article.setImgExtension(null);
+            articleService.modifyArticle(article);
+        }
+
+        model.addAttribute("id", id);
+        model.addAttribute("articleData", articleData);
+        return "editArticle";
+    }
+
+    @PostMapping(value = "/edit", params = "Submit")
     public String postArticle(final @ModelAttribute @Valid ArticleData articleData,
                               final BindingResult bindingResult,
                               final Model model,
@@ -126,6 +155,17 @@ public class ArticleController {
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
 
+        } catch (IOException ioe) {
+            System.err.println(ioe);
+        }
+    }
+
+    private static void removeFile(Integer id, String extension) {
+        Path uploadPath = Paths.get(uploadDir);
+        String fileName = id.toString() + extension;
+        Path filePath = uploadPath.resolve(fileName);
+        try {
+            Files.delete(filePath);
         } catch (IOException ioe) {
             System.err.println(ioe);
         }

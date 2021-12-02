@@ -63,7 +63,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                               th:text="${article.getNullablePrice()==null} ? 'PREVIEW' : ${article.getNullablePrice()} + ' CHF'"></span>
                         <span class="actual"></span><br>
                         <ul class="buttons">
-                            <li class="cart" style="cursor: pointer">
+                            <li class="cart" style="cursor: pointer" th:if="${article.getNullablePrice()!=null}">
                                 <form th:method="post" th:action="@{/cart/article}">
                                     <input name="id" th:value="${article.id}" hidden/>
                                     <a onclick="this.closest('form').submit();"><span>Add To Cart</span></a>

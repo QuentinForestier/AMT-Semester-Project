@@ -55,11 +55,13 @@ public class CartController {
         Cart cart = Cart.getContextCart(request.getSession());
         if (cart.getId() != null)
             cart = cartService.load(cart.getId());
-        
+
         try {
             Article article = articleService.getArticleById(id);
-            CartArticle ca = cart.addToCart(quantity, article);
-            saveCartArticle(ca);
+            if (article.getNullablePrice() != null) {
+                CartArticle ca = cart.addToCart(quantity, article);
+                saveCartArticle(ca);
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
         }

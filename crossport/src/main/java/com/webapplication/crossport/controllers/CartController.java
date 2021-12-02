@@ -58,7 +58,7 @@ public class CartController {
 
         try {
             Article article = articleService.getArticleById(id);
-            if (article.getNullablePrice() != null) {
+            if (article.getNullablePrice() != null && article.isInStock()) {
                 CartArticle ca = cart.addToCart(quantity, article);
                 saveCartArticle(ca);
             }

@@ -75,11 +75,10 @@ Modification date: 08/11/2021
                             <br>
 
                             <label>Current Image</label>
-                            <img th:src="@{${articleData.imgPath}}" class="img-responsive" alt=""/>
+                            <img th:src="@{${articleData.imgPath}}" class="img-responsive shop_img" alt=""/>
                             <label for="articleImage">New Image</label>
                             <input type="file" id="articleImage" name="image" accept="image/*">
                         </p>
-                        <a href="/articles/manage" class="btn btn-primary">Cancel</a>
                         <input type="submit" name="Submit" class="button" value="Save article" style="float: left">
                     </fieldset>
                 </form>

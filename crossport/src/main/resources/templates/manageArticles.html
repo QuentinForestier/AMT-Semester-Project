@@ -16,14 +16,21 @@
 <div th:insert="navbar.html :: navbar"></div>
 <div class="main">
     <div class="shop_top">
-        <div class="center">
-            <a href="/articles/edit" class="btn btn-primary">Add article</a>
-        </div>
         <div class="container">
+            <div class="row">
+                <div class="center">
+                    <a href="/articles/edit" class="btn im_a_button" style="background-color: #0b0b0b"> Add article</a>
+                </div>
+                <br/><br/>
+            </div>
             <div class="row">
                 <div th:each="article:${listArticles}" class="col-md-3 shop_box">
                     <a th:href="@{/articles/{id}(id=${article.id})}">
-                        <img th:src="@{${article.getImgPath()}}" class="img-responsive" alt=""/>
+                        <img th:if="${article.getImgPath() == null }" src="../images/pic6.jpg" class="img-responsive shop_img" alt=""/>
+                        <img th:if="${article.getImgPath() != null }" th:src="@{${article.getImgPath()}}" class="img-responsive shop_img" alt=""/>
+                        <span th:if="${!article.isInStock()}" class="sale-box">
+						    <span class="sale-label">Sold out</span>
+					    </span>
                         <div class="shop_desc">
                             <h3>
                                 <a th:href="@{/articles/{id}(id=${article.id})}"><span th:text="${article.name}"></span></a>

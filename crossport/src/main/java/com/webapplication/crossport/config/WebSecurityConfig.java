@@ -61,7 +61,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                         // ArticleController
                         "/shop/**",
-                        "/articles/**",
 
                         // CartController
                         "/cart/**",
@@ -81,9 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/categorie/**",
 
                         //ArticleController
-                        "/manageArticles",
-                        "/makeUnavailable**",
-                        "/editArticle")
+                        "/articles**")
                 .hasRole("ADMIN")
                 .antMatchers(
                         // LoginController

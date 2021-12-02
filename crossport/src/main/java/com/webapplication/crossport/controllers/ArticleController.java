@@ -12,67 +12,30 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping(value = {"/articles", "/shop"})
+@RequestMapping(value = {"/articles"})
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @Autowired
-    private CategoryService categoryService;
-
-    @GetMapping("")
-    public String getCategory(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
-        List<Article> articles;
-        Category selectedCategory = null;
-        try {
-            if (idCategory == null) {
-                articles = articleService.getAllArticles();
-            } else {
-                selectedCategory = categoryService.getCategoryById(idCategory);
-                articles = articleService.getCategoryArticles(selectedCategory);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "shop?error";
-        }
-
-        List<Category> categories = categoryService.getAllCategories();
-        if (selectedCategory != null) {
-            categories.remove(selectedCategory);
-            categories.add(0, selectedCategory);
-        }
-
-        model.addAttribute("categorySelected", selectedCategory);
-        model.addAttribute("listArticles", articles);
-        model.addAttribute("listCategories", categories);
-        return "shop";
-    }
-
-    @GetMapping("/{id}")
-    public String getById(@PathVariable(value = "id") Integer id, Model model) {
-        Article article;
-        try {
-            article = articleService.getArticleById(id);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "article?error";
-        }
-        model.addAttribute("article", article);
-        return "article";
-    }
+    static String[] extensions = new String[]{"jpeg", "jpg", "gif", "png"};
 
     @GetMapping("/manage")
     public String viewArticles(Model model) {
@@ -102,9 +65,16 @@ public class ArticleController {
                               final Model model,
                               @RequestParam(value = "id", required = false) Integer id,
                               @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+
         if (articleData.getArticlePrice() != null && articleData.getArticlePrice() <= 0) {
             bindingResult.addError(
                     new ObjectError("priceError", "The price of the article must be greater than 0"));
+        }
+
+        // Is an authorized extension
+        if(!multipartFile.isEmpty() && !Arrays.asList(extensions).contains(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))) {
+            bindingResult.addError(
+                    new ObjectError("priceError", "File extension not supported"));
         }
 
         Article sameName = articleService.findFirstByName(articleData.getArticleName());
@@ -161,6 +131,7 @@ public class ArticleController {
             }
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
+
         } catch (IOException ioe) {
             System.err.println(ioe);
         }

@@ -1,9 +1,7 @@
 package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
-import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.services.ArticleService;
-import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.ArticleData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,11 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -26,7 +21,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
 @Controller

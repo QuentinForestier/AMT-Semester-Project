@@ -107,7 +107,7 @@ public class ArticleController {
                     new ObjectError("priceError", "The price of the article must be greater than 0"));
         }
 
-        Article sameName = articleService.getArticleByName(articleData.getArticleName());
+        Article sameName = articleService.findFirstByName(articleData.getArticleName());
         if (sameName != null && !Objects.equals(sameName.getId(), id)) {
             bindingResult.addError(
                     new ObjectError("nameError", "Two article cannot have the same name"));
@@ -142,7 +142,7 @@ public class ArticleController {
 
         if (!multipartFile.isEmpty()) {
             if (id == null) {
-                id = articleService.getArticleByName(articleData.getArticleName()).getId();
+                id = articleService.findFirstByName(articleData.getArticleName()).getId();
             }
 
             saveFile(id, multipartFile);

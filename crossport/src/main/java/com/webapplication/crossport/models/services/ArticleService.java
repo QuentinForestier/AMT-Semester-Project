@@ -52,8 +52,8 @@ public class ArticleService {
         }
     }
 
-    public Article getArticleByName(String name) {
-        return articleRepository.getArticleByName(name);
+    public Article findFirstByName(String name) {
+        return articleRepository.findFirstByName(name);
     }
 
     public void removeCategory(Integer idArticle, Category category) {

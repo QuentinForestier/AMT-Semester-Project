@@ -26,6 +26,9 @@ import java.util.Objects;
 @Controller
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
+
+    public static final String uploadDir = "articles_images";
+
     @Autowired
     private ArticleService articleService;
 
@@ -53,7 +56,26 @@ public class ArticleController {
         return "editArticle";
     }
 
-    @PostMapping("/edit")
+    // Les trois méthodes qui suivent doivent avoir la meme signature
+    @PostMapping(value = "/edit", params = "DeleteImage")
+    public String deleteImage(final @ModelAttribute @Valid ArticleData articleData,
+                              final BindingResult bindingResult,
+                              final Model model,
+                              @RequestParam(value = "id", required = false) Integer id,
+                              @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+        if (id != null) {
+            Article article = articleService.getArticleById(id);
+            removeFile(id, article.getImgExtension());
+            article.setImgExtension(null);
+            articleService.modifyArticle(article);
+        }
+
+        model.addAttribute("id", id);
+        model.addAttribute("articleData", articleData);
+        return "editArticle";
+    }
+
+    @PostMapping(value = "/edit", params = "Submit")
     public String postArticle(final @ModelAttribute @Valid ArticleData articleData,
                               final BindingResult bindingResult,
                               final Model model,
@@ -131,6 +153,17 @@ public class ArticleController {
         }
     }
 
+    private static void removeFile(Integer id, String extension) {
+        Path uploadPath = Paths.get(uploadDir);
+        String fileName = id.toString() + extension;
+        Path filePath = uploadPath.resolve(fileName);
+        try {
+            Files.delete(filePath);
+        } catch (IOException ioe) {
+            System.err.println(ioe);
+        }
+    }
+
     private static String getExtension(MultipartFile multipartFile) {
         String extension = "";
         String fileName = multipartFile.getOriginalFilename();
@@ -144,6 +177,4 @@ public class ArticleController {
         }
         return extension;
     }
-
-    public static final String uploadDir = "ProductsImages";
 }

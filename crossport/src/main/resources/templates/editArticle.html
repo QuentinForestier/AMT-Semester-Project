@@ -74,12 +74,16 @@ Modification date: 08/11/2021
                             <input id="articleStock" type="checkbox" th:field="*{articleStock}"/>
                             <br>
 
-                            <label>Current Image</label>
-                            <img th:src="@{${articleData.imgPath}}" class="img-responsive shop_img" alt=""/>
+                            <label th:if="${articleData.getImgPath() != null}">Current Image</label>
+                            <img th:if="${articleData.getImgPath() != null}"
+                                 th:src="@{${articleData.imgPath}}" class="img-responsive shop_img" alt=""/>
                             <label for="articleImage">New Image</label>
                             <input type="file" id="articleImage" name="image" accept="image/*">
                         </p>
                         <input type="submit" name="Submit" class="button" value="Save article" style="float: left">
+                        <input th:if="${articleData.getImgPath() != null}"
+                               type="submit" name="DeleteImage" class="button" value="Remove Image" style="float: left; margin-left: 15px">
+
                     </fieldset>
                 </form>
             </div>

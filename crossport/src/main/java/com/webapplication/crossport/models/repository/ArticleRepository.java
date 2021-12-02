@@ -15,6 +15,5 @@ public interface ArticleRepository extends JpaRepository<Article, Integer> {
 
     List<Article> findArticlesByCategoriesNotContaining(Category category);
 
-    @Query("select a from Article a where a.name = :name")
-    Article getArticleByName(@Param("name") String name);
+    Article findFirstByName(String name);
 }

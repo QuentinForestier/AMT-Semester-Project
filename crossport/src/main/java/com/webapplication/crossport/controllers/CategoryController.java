@@ -35,18 +35,15 @@ public class CategoryController {
 
     @PostMapping("")
     public String add(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("categoryForm", categoryData);
-            return "categories";
-        }
-
-        // Checking if already exists
         Category sameCategory = categoryService.getFirstByName(categoryData.getCategoryName());
 
-        if (sameCategory != null) { // It already exists
+        if (sameCategory != null) {
             bindingResult.addError(new ObjectError("globalError", "Same category already exists."));
+        }
+
+        if (bindingResult.hasErrors()) {
             model.addAttribute("categoryForm", categoryData);
-        } else { // No category with the same name
+        } else {
             Category category = new Category();
             category.setName(categoryData.getCategoryName());
             categoryService.saveCategory(category);

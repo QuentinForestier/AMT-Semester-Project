@@ -32,6 +32,15 @@
     border-bottom:  1px solid #E1E8EE;
 }
 
+.total-cart {
+    padding: 20px 30px;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    border-top:  1px solid #E1E8EE;
+    border-bottom:  1px solid #E1E8EE;
+}
+
 /* Buttons -  Delete and Like */
 .buttons {
     position: relative;

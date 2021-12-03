@@ -1,6 +1,8 @@
 package com.webapplication.crossport.controllers;
 
 import com.webapplication.crossport.models.Article;
+import com.webapplication.crossport.models.Category;
+import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
 import com.webapplication.crossport.service.CategoryData;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,45 +11,39 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
-
-import com.webapplication.crossport.models.Category;
-
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
+@RequestMapping("/categories")
 public class CategoryController {
-
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/categories")
-    public String listCategories(Model model) {
+    @Autowired
+    private ArticleService articleService;
 
+    @GetMapping("")
+    public String getAll(Model model) {
         model.addAttribute("listCategories", categoryService.getAllCategories());
         model.addAttribute("categoryData", new CategoryData());
 
         return "categories";
     }
 
-    @PostMapping("/categories")
-    public String saveCategory(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
-
-        if(bindingResult.hasErrors()){
-            model.addAttribute("categoryForm", categoryData);
-            return "categories";
-        }
-
-
-        // Checking if already exists
+    @PostMapping("")
+    public String add(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
         Category sameCategory = categoryService.getFirstByName(categoryData.getCategoryName());
 
-        if (sameCategory != null){ // It already exists
+        if (sameCategory != null) {
             bindingResult.addError(new ObjectError("globalError", "Same category already exists."));
-            model.addAttribute("categoryForm", categoryData);
         }
-        else { // No category with the same name
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("categoryForm", categoryData);
+        } else {
             Category category = new Category();
             category.setName(categoryData.getCategoryName());
             categoryService.saveCategory(category);
@@ -57,36 +53,88 @@ public class CategoryController {
         return "categories";
     }
 
-    @GetMapping("/category/{id}")
-    public String getCategoryId(@PathVariable(value = "id") Integer id, Model model) {
+    @GetMapping("/{id}")
+    public String getById(@PathVariable(value = "id") Integer id, Model model) {
         Category category = categoryService.getCategoryById(id);
+        List<Article> articlesNotInCategory = articleService.getArticlesNotInCategory(category);
 
         model.addAttribute("category", category);
+        model.addAttribute("articlesNotInCategory", articlesNotInCategory);
         return "category";
     }
 
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable(value = "id") Integer id,
+                         @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
+                         RedirectAttributes redir) {
+        Category category;
+        try {
+            category = categoryService.getCategoryById(id);
+        } catch (RuntimeException e) {
+            return "redirect:/categories";
+        }
 
-    @GetMapping("/deleteCategory/{id}")
-    public String deleteCategory(@PathVariable(value = "id") Integer id, @RequestParam(value = "confirm", defaultValue = "false") boolean confirm, RedirectAttributes redir) {
-
-        // boolean error = false;
-
-        Category cat = categoryService.getCategoryById(id);
-
-        if (cat.getArticles().isEmpty() || confirm) {
-            categoryService.deleteCategory(id);
+        if (category.getArticles().isEmpty() || confirm) {
+            try {
+                categoryService.deleteCategory(id);
+            } catch (RuntimeException e) {
+                return "redirect:/categories";
+            }
         } else {
-            // error = true;
             String delError = "You cannot delete this category as it has articles bound.";
             redir.addFlashAttribute("delError", delError);
-
-            return "redirect:/category/" + id;
+            return "redirect:/categories/" + id;
         }
         redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
         redir.addFlashAttribute("categoryData", new CategoryData());
-
-        // return error ? "redirect:/categories?error=" + cat.getName() : "redirect:/categories";
         return "redirect:/categories";
     }
 
+    @DeleteMapping("/{idCategory}/{idArticle}")
+    public String removeArticle(@PathVariable(value = "idCategory") Integer idCategory,
+                                @PathVariable(value = "idArticle") Integer idArticle,
+                                RedirectAttributes redir) {
+        Category category;
+        try {
+            category = categoryService.getCategoryById(idCategory);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to find the category selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/categories/" + idCategory;
+        }
+
+        try {
+            articleService.removeCategory(idArticle, category);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to delete the category from the article selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/categories/" + idCategory;
+        }
+
+        return "redirect:/categories/" + idCategory;
+    }
+
+    @PostMapping("/{idCategory}/{idArticle}")
+    public String addArticle(@PathVariable(value = "idCategory") Integer idCategory,
+                             @PathVariable(value = "idArticle") Integer idArticle,
+                             RedirectAttributes redir) {
+        Category category;
+        try {
+            category = categoryService.getCategoryById(idCategory);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to find the category selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/categories/" + idCategory;
+        }
+
+        try {
+            articleService.addCategory(idArticle, category);
+        } catch (RuntimeException e) {
+            String delError = "An error occured when we tried to add the category from the article selected";
+            redir.addFlashAttribute("delError", delError);
+            return "redirect:/categories/" + idCategory;
+        }
+
+        return "redirect:/categories/" + idCategory;
+    }
 }

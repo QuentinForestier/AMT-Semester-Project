@@ -5,18 +5,16 @@ import com.webapplication.crossport.models.CartArticle;
 import com.webapplication.crossport.models.Member;
 import com.webapplication.crossport.models.repository.CartRepository;
 import com.webapplication.crossport.models.repository.MemberRepository;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler
@@ -33,34 +31,28 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     @Override
     public void onAuthenticationSuccess(HttpServletRequest httpServletRequest,
                                         HttpServletResponse httpServletResponse,
-                                        Authentication authentication) throws IOException, ServletException
+                                        Authentication authentication) throws IOException
     {
 
         int memberId = (int) session.getAttribute("memberId");
         Member member = getMember(memberId);
         if (member == null) member = new Member();
-        syncCart(member);
+        
+        Cart cartInSession = Cart.getContextCart(session);
+        Cart cartMember = member.getCart();
+
+        cartMember.SyncCarts(cartInSession);
+
+        cartRepository.save(cartMember);
+
         session.setAttribute("member", member);
 
+        httpServletResponse.addCookie(new Cookie("jwt", authentication.getCredentials().toString()));
         httpServletResponse.sendRedirect("/home");
     }
 
     private Member getMember(int id)
     {
         return memberRepository.findById(id).orElse(null);
-    }
-
-    private void syncCart(Member member)
-    {
-        Cart cartInSession = Cart.getCartInSession(session);
-
-        Cart cartMember = member.getCart();
-        for (CartArticle ca : cartInSession.getCartArticles())
-        {
-            cartMember.addToCart(ca.getQuantity(), ca.getArticle());
-
-        }
-
-        cartRepository.save(cartMember);
     }
 }

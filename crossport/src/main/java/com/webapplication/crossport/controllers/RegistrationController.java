@@ -23,13 +23,13 @@ public class RegistrationController {
     private MemberService memberService;
 
     @GetMapping
-    public String register(Model model){
+    public String getRegisterPage(Model model){
         model.addAttribute("memberRegistrationData", new MemberRegistrationData());
         return "register";
     }
 
     @PostMapping
-    public String userRegistration(final @Valid MemberRegistrationData memberRegistrationData, final BindingResult bindingResult, final Model model){
+    public String performRegistration(final @Valid MemberRegistrationData memberRegistrationData, final BindingResult bindingResult, final Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute("memberRegistrationData", memberRegistrationData);

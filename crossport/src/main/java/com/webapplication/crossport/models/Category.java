@@ -29,7 +29,7 @@ public class Category {
     /**
      * Related articles.
      */
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "category_article",
             joinColumns = {@JoinColumn(name = "fk_category_id")},
@@ -74,7 +74,7 @@ public class Category {
      * Gets the set of articles
      * @return Category articles
      */
-    public Set<Article> getArticles() {return this.articles; }
+    public Set<Article> getArticles() { return this.articles; }
 
     /**
      * Set related articles

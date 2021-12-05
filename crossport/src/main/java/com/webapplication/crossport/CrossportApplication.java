@@ -1,6 +1,8 @@
 package com.webapplication.crossport;
 
+import com.webapplication.crossport.config.filter.JWTFilter;
 import com.webapplication.crossport.controllers.ArticleController;
+import com.webapplication.crossport.service.AuthService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
@@ -28,6 +30,10 @@ public class CrossportApplication extends SpringBootServletInitializer
             e.printStackTrace();
         }
         ArticleController.uploadDir = appProps.getProperty("image_path");
+        JWTFilter.secret = appProps.getProperty("secret");
+        AuthService.address = appProps.getProperty("address");
+        String temp = appProps.getProperty("port");
+        AuthService.port = Integer.parseInt(temp);
 
         // Start
         SpringApplication.run(CrossportApplication.class, args);

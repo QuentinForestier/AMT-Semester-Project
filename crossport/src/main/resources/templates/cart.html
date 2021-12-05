@@ -57,7 +57,7 @@ Modification date: 09/10/2021
 
             <div class="image">
                 <img th:if="${cartArticle.getArticle().getImgPath() == null }" src="../images/pic6.jpg"  alt=""/>
-                <img th:if="${cartArticle.getArticle().getImgPath() != null }" th:src="@{${cartArticle.getArticle().getImgPath()}}"  alt=""/>
+                <img th:if="${cartArticle.getArticle().getImgPath() != null }" th:src="@{${cartArticle.getArticle().getImgPath()}}" style="height: 100%;" alt=""/>
             </div>
 
             <div class="description">

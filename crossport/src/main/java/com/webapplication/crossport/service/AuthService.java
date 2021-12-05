@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Properties;
 
 /**
  * Class connecting to auth service
@@ -15,12 +14,12 @@ public class AuthService {
     /**
      * Service address
      */
-    private String address;
+    public static String address;
 
     /**
      * Service port
      */
-    private int port;
+    public static int port;
 
     /**
      * Unique class instance
@@ -30,24 +29,7 @@ public class AuthService {
     /**
      * Use singleton pattern to get service
      */
-    private AuthService()
-    {
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "custom.properties";
-
-        appConfigPath = appConfigPath.replace("%20", " ");
-
-        Properties appProps = new Properties();
-        try {
-            appProps.load(new FileInputStream(appConfigPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        address = appProps.getProperty("address");
-        String temp = appProps.getProperty("port");
-        port = Integer.parseInt(temp);
-    }
+    private AuthService() {}
 
     /**
      * Getting instance

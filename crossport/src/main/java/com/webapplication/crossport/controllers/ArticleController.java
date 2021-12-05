@@ -4,6 +4,7 @@ import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.service.ArticleData;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,7 +28,7 @@ import java.util.Objects;
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
 
-    public static final String uploadDir = "/opt/tomcat/webapps/articles_images";
+    public static String uploadDir = "";
 
     @Autowired
     private ArticleService articleService;

@@ -28,7 +28,7 @@ import java.util.Objects;
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
 
-    public static String uploadDir = "";
+    public static String uploadDir = "/opt/tomcat/webapps/articles_images";
 
     @Autowired
     private ArticleService articleService;

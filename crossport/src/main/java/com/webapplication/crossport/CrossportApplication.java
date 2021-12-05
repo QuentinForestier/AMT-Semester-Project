@@ -29,7 +29,6 @@ public class CrossportApplication extends SpringBootServletInitializer
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ArticleController.uploadDir = appProps.getProperty("image_path");
         JWTFilter.secret = appProps.getProperty("secret");
         AuthService.address = appProps.getProperty("address");
         String temp = appProps.getProperty("port");

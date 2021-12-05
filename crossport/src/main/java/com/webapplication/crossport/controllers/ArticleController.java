@@ -29,7 +29,7 @@ import java.util.Properties;
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
 
-    public static String uploadDir;
+    public static String uploadDir="/opt/tomcat/webapps/articles_images";
 
     public ArticleController() {
         // Retrieving secret

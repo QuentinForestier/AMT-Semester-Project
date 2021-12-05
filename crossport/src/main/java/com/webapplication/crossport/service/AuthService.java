@@ -32,7 +32,7 @@ public class AuthService {
      */
     private AuthService() {
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "custom.properties";
+        String appConfigPath = rootPath + "authentication.properties";
 
         appConfigPath = appConfigPath.replace("%20", " ");
 

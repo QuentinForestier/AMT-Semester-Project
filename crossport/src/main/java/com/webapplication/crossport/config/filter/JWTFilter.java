@@ -13,10 +13,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * Class to filter incoming request based on JWT token get from cookie.
@@ -25,6 +27,27 @@ import java.util.List;
 public class JWTFilter extends OncePerRequestFilter {
 
 	public static String secret;
+
+	/**
+	 * Constructor
+	 */
+	public JWTFilter() {
+
+		// Retrieving secret
+		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+		String appConfigPath = rootPath + "custom.properties";
+
+		appConfigPath = appConfigPath.replace("%20", " ");
+
+		Properties appProps = new Properties();
+		try {
+			appProps.load(new FileInputStream(appConfigPath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		secret = appProps.getProperty("secret");
+	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest req,

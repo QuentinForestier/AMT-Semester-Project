@@ -76,6 +76,8 @@ public class CartController {
     @DeleteMapping("")
     public String clear(HttpServletRequest request) {
         Cart cart = Cart.getContextCart(request.getSession());
+        if (cart.getId() != null)
+            cart = cartService.load(cart.getId());
         cart.clear();
 
         saveCart(cart);

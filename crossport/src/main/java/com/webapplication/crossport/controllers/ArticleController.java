@@ -15,6 +15,7 @@ import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -23,12 +24,30 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Objects;
+import java.util.Properties;
 
 @Controller
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
 
-    public static String uploadDir = "/opt/tomcat/webapps/articles_images";
+    public static String uploadDir;
+
+    public ArticleController() {
+        // Retrieving secret
+        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        String appConfigPath = rootPath + "custom.properties";
+
+        appConfigPath = appConfigPath.replace("%20", " ");
+
+        Properties appProps = new Properties();
+        try {
+            appProps.load(new FileInputStream(appConfigPath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        uploadDir = appProps.getProperty("imagepath");
+    }
 
     @Autowired
     private ArticleService articleService;

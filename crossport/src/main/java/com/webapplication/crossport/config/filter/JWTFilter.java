@@ -35,7 +35,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
 		// Retrieving secret
 		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-		String appConfigPath = rootPath + "custom.properties";
+		String appConfigPath = rootPath + "authentication.properties";
 
 		appConfigPath = appConfigPath.replace("%20", " ");
 

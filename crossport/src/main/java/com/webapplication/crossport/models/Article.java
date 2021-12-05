@@ -194,7 +194,7 @@ public class Article {
         if (imgExtension == null)
             return null;
 
-        return "/" + ArticleController.uploadDir + "/" + id.toString() + imgExtension;
+        return "/articles_images/" + id.toString() + imgExtension;
     }
 
     /**

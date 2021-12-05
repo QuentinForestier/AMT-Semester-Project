@@ -4,7 +4,6 @@ import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.service.ArticleData;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,7 +34,7 @@ public class ArticleController {
     public ArticleController() {
         // Retrieving secret
         String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "custom.properties";
+        String appConfigPath = rootPath + "authentication.properties";
 
         appConfigPath = appConfigPath.replace("%20", " ");
 

@@ -1,10 +1,10 @@
 package com.webapplication.crossport.authentication;
 
-import com.webapplication.crossport.config.CustomAuthenticationProvider;
-import com.webapplication.crossport.service.AuthService;
-import com.webapplication.crossport.models.services.DefaultMemberService;
-import com.webapplication.crossport.service.MemberRegistrationData;
-import com.webapplication.crossport.service.exception.RegistrationException;
+import com.webapplication.crossport.config.security.CustomAuthenticationProvider;
+import com.webapplication.crossport.config.security.AuthService;
+import com.webapplication.crossport.domain.services.DefaultMemberService;
+import com.webapplication.crossport.ui.formdata.MemberRegistrationData;
+import com.webapplication.crossport.config.security.exception.RegistrationException;
 import org.junit.jupiter.api.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

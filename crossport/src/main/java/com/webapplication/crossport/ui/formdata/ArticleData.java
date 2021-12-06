@@ -1,5 +1,7 @@
 package com.webapplication.crossport.ui.formdata;
 
+import lombok.Getter;
+import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
@@ -11,6 +13,8 @@ import java.io.Serializable;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 public class ArticleData implements Serializable {
     @NotBlank(message = "Article name cannot be empty")
     private String articleName = "";
@@ -33,29 +37,5 @@ public class ArticleData implements Serializable {
 
     public void setArticleDesc(String articleDesc) {
         this.articleDesc = articleDesc == null ? "" : articleDesc;
-    }
-
-    public Double getArticlePrice() {
-        return articlePrice;
-    }
-
-    public void setArticlePrice(Double articlePrice) {
-        this.articlePrice = articlePrice;
-    }
-
-    public boolean isArticleStock() {
-        return articleStock;
-    }
-
-    public void setArticleStock(boolean articleStock) {
-        this.articleStock = articleStock;
-    }
-
-    public String getImgPath() {
-        return imgPath;
-    }
-
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
     }
 }

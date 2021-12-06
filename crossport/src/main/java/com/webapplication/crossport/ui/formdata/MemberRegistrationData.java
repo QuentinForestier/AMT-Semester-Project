@@ -1,5 +1,7 @@
 package com.webapplication.crossport.ui.formdata;
 
+import lombok.Getter;
+import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 
 /**
@@ -11,6 +13,8 @@ import javax.validation.constraints.NotEmpty;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 public class MemberRegistrationData {
 
     /**
@@ -30,53 +34,4 @@ public class MemberRegistrationData {
      */
     @NotEmpty(message = "Password confirmation can not be empty")
     private String passwordConfirmation;
-
-    /**
-     * Gets the username
-     * @return Username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Sets a new username
-     * @param username New username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * Gets the password
-     * @return Password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the password
-     * @param password New password
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    /**
-     * Gets password confirmation
-     * @return Password confirmation
-     */
-    public String getPasswordConfirmation() {
-        return passwordConfirmation;
-    }
-
-    /**
-     * Sets the password confirmation
-     * @param password Password confirmation
-     */
-    public void setPasswordConfirmation(String password) {
-        this.passwordConfirmation = password;
-    }
 }

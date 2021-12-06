@@ -1,5 +1,8 @@
 package com.webapplication.crossport.infra.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -11,6 +14,8 @@ import javax.persistence.*;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "cart_article", uniqueConstraints = { @UniqueConstraint(columnNames = { "fk_cart_id", "fk_article_id" }) })
 public class CartArticle {
@@ -41,57 +46,6 @@ public class CartArticle {
     @ManyToOne
     @JoinColumn(name = "fk_cart_id")
     private Cart cart;
-
-    /* -------------------------- GETTERS AND SETTERS -------------------------------*/
-
-    /**
-     * Gets id
-     * @return CartArticle id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * Sets new id
-     * @param id New id
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets quantity
-     * @return Quantity asked
-     */
-    public int getQuantity() {
-        return quantity;
-    }
-
-    /**
-     * Sets a new quantity
-     * @param quantity New quantity
-     */
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    /**
-     * Gets the related article
-     * @return Related article
-     */
-    public Article getArticle() {
-        return article;
-    }
-
-    /**
-     * Sets a new related article
-     * @param article New article
-     */
-    public void setArticle(Article article) {
-        this.article = article;
-    }
-
 
     /**
      * Add desired quantity to existing quantity

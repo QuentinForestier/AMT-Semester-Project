@@ -1,5 +1,7 @@
 package com.webapplication.crossport.infra.models;
 
+import lombok.Getter;
+import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
@@ -14,6 +16,8 @@ import java.util.Set;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "article")
 public class Article {
@@ -89,107 +93,9 @@ public class Article {
 
     /* -------------------------- GETTERS AND SETTERS -------------------------------*/
 
-    /**
-     * Gets article id
-     *
-     * @return Article id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * Sets new article id
-     *
-     * @param id New acrticle
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * Gets description
-     *
-     * @return description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the description
-     *
-     * @param description New description
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * Gets article name
-     *
-     * @return Article name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the set of categories
-     *
-     * @return Article categories
-     */
-    public Set<Category> getCategories() {
-        return this.categories;
-    }
-
-    /**
-     * Sets a new name
-     *
-     * @param name New name
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Gets price
-     *
-     * @return Article price
-     */
-    public double getPrice() {
-        return price;
-    }
 
     public Double getNullablePrice() {
         return price;
-    }
-
-    /**
-     * Sets a new price
-     *
-     * @param price New price
-     */
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    /**
-     * Gets image path
-     *
-     * @return Image path
-     */
-    public String getImgExtension() {
-        return imgExtension;
-    }
-
-    /**
-     * sets a new image path
-     *
-     * @param imgPath New path
-     */
-    public void setImgExtension(String imgPath) {
-        this.imgExtension = imgPath;
     }
 
     public String getImgPath() {
@@ -197,32 +103,5 @@ public class Article {
             return null;
 
         return "/articles_images/" + id.toString() + imgExtension;
-    }
-
-    /**
-     * Gets if article is available
-     *
-     * @return True if article is available else false
-     */
-    public boolean isInStock() {
-        return inStock;
-    }
-
-    /**
-     * Changes article availability
-     *
-     * @param inStock New availability
-     */
-    public void setInStock(boolean inStock) {
-        this.inStock = inStock;
-    }
-
-    /**
-     * Sets new related categories
-     *
-     * @param categories New categories
-     */
-    public void setCategories(Set<Category> categories) {
-        this.categories = categories;
     }
 }

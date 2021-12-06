@@ -1,5 +1,8 @@
 package com.webapplication.crossport.infra.models;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 /**
@@ -11,6 +14,8 @@ import javax.persistence.*;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "member")
 public class Member
@@ -36,64 +41,10 @@ public class Member
     @JoinColumn(name = "fk_cart_id")
     private Cart cart;
 
-
-    // Constructor
-
+    /**
+     * Constructor
+     */
     public Member(){
         cart = new Cart();
     }
-
-    /* -------------------------- GETTERS AND SETTERS
-    -------------------------------*/
-
-    /**
-     * Gets id
-     *
-     * @return User id
-     */
-    public Integer getId()
-    {
-        return id;
-    }
-
-    /**
-     * Sets id
-     *
-     * @return User id
-     */
-    public void setId(int id)
-    {
-        this.id = id;
-    }
-
-    /**
-     * Gets user name
-     *
-     * @return User name
-     */
-    public String getUsername()
-    {
-        return username;
-    }
-
-    /**
-     * Sets user name
-     *
-     * @param name New name
-     */
-    public void setUsername(String name)
-    {
-        this.username = name;
-    }
-
-    public Cart getCart()
-    {
-        return this.cart;
-    }
-
-    public void setCart(Cart newCart)
-    {
-        this.cart = newCart;
-    }
-
 }

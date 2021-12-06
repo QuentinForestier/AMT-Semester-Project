@@ -1,5 +1,7 @@
 package com.webapplication.crossport.ui.formdata;
 
+import lombok.Getter;
+import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
@@ -12,25 +14,9 @@ import java.io.Serializable;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 public class CategoryData implements Serializable {
     @NotBlank(message = "Category name cannot be empty")
     String categoryName;
-
-    /**
-     * Gets category's name.
-     *
-     * @return the name of the category
-     */
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    /**
-     * Sets the name of the category
-     *
-     * @param categoryName Category new name
-     */
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
-    }
 }

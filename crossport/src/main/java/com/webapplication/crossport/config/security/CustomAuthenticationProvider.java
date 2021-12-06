@@ -1,7 +1,5 @@
 package com.webapplication.crossport.config.security;
 
-import com.webapplication.crossport.config.security.AuthService;
-import com.webapplication.crossport.config.security.RequestType;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -75,9 +73,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	 */
 	@Override
 	public boolean supports(Class<?> authentication) {
-
 		return authentication.equals(UsernamePasswordAuthenticationToken.class);
 	}
-
-
 }

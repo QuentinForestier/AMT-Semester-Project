@@ -51,5 +51,4 @@ public class RegistrationException extends Exception{
     public List<String> getErrors() {
         return List.copyOf(errors);
     }
-
 }

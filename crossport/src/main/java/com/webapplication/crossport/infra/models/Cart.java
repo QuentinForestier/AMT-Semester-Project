@@ -1,5 +1,7 @@
 package com.webapplication.crossport.infra.models;
 
+import lombok.Getter;
+import lombok.Setter;
 import javax.persistence.*;
 import javax.servlet.http.HttpSession;
 import java.util.HashSet;
@@ -15,11 +17,12 @@ import java.util.*;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Getter
+@Setter
 @Entity
 @Table(name = "cart")
 public class Cart
 {
-
     /**
      * Primary key, unique identifier
      */
@@ -36,33 +39,7 @@ public class Cart
     @JoinColumn(name = "fk_cart_id")
     private Set<CartArticle> cartArticles = new HashSet<>();
 
-    /* -------------------------- GETTERS AND SETTERS
-    -------------------------------*/
-
-    /**
-     * Gets cart id
-     *
-     * @return Cart id
-     */
-    public Integer getId()
-    {
-        return id;
-    }
-
-    /**
-     * Sets new cart id
-     *
-     * @param id New cart
-     */
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
-    public Set<CartArticle> getCartArticles()
-    {
-        return cartArticles;
-    }
+    /* -------------------------- GETTERS AND SETTERS -------------------------------*/
 
     /**
      * For a given http request, gets the session cart. If none creates and
@@ -91,7 +68,6 @@ public class Cart
 
         return member.getCart();
     }
-
 
     /**
      * Adds a cartArticle. If article already exists in cart, quantity is

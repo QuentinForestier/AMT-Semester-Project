@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Objects;
+
 @RestController
 public class LoginController {
     @Autowired
@@ -31,7 +33,10 @@ public class LoginController {
 
         return new ResponseEntity<>(
                 new LoginResponse(
-                        new AccountResponse(user.getId(), user.getUsername(), "User"),
+                        new AccountResponse(
+                                user.getId(),
+                                user.getUsername(),
+                                Objects.equals(user.getUsername(), UserService.adminUsername) ? "Admin" : "User"),
                         ""),
                 HttpStatus.OK);
     }
@@ -46,7 +51,7 @@ public class LoginController {
                     new ErrorResponse("Invalid register information format"),
                     HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        
+
         User user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
         if (user == null) {
             return new ResponseEntity<>(

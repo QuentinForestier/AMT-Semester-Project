@@ -1,6 +1,7 @@
 package com.webapplication.ui;
 
 import com.webapplication.domain.UserService;
+import com.webapplication.infra.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,20 +16,46 @@ public class LoginController {
 
     @PostMapping("/auth/login")
     public ResponseEntity<Response> login(@RequestBody(required = false) LoginInformation loginInformation) {
-        if (loginInformation == null || loginInformation.getUsername() == null || loginInformation.getPassword() == null) {
+        if (loginInformation == null ||
+                loginInformation.getUsername() == null ||
+                loginInformation.getPassword() == null) {
+            // TODO : Quel type utiliser
             return new ResponseEntity<>(new ErrorResponse("Invalid login information format"), HttpStatus.FORBIDDEN);
         }
-        System.out.println("Try to log with : " + loginInformation.getUsername() + " - " + loginInformation.getPassword());
-        return new ResponseEntity<>(new LoginResponse(new AccountResponse(0, "Name", "User"), ""), HttpStatus.OK);
+
+        User user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
+
+        if (user == null) {
+            return new ResponseEntity<>(new ErrorResponse("The credentials are incorrect"), HttpStatus.FORBIDDEN);
+        }
+
+        return new ResponseEntity<>(
+                new LoginResponse(
+                        new AccountResponse(user.getId(), user.getUsername(), "User"),
+                        ""),
+                HttpStatus.OK);
     }
 
     @PostMapping("/accounts/register")
     public ResponseEntity<Response> register(@RequestBody(required = false) LoginInformation loginInformation) {
-        if (loginInformation == null || loginInformation.getUsername() == null || loginInformation.getPassword() == null) {
+        if (loginInformation == null ||
+                loginInformation.getUsername() == null ||
+                loginInformation.getPassword() == null) {
             // TODO : Quel type utiliser
-            return new ResponseEntity<>(new ErrorResponse("Invalid register information format"), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(
+                    new ErrorResponse("Invalid register information format"),
+                    HttpStatus.UNPROCESSABLE_ENTITY);
         }
-        System.out.println("Try to register with : " + loginInformation.getUsername() + " - " + loginInformation.getPassword());
-        return new ResponseEntity<>(new AccountResponse(0, "Name", "User"), HttpStatus.CREATED);
+        
+        User user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
+        if (user == null) {
+            return new ResponseEntity<>(
+                    new ErrorResponse("The username already exist"),
+                    HttpStatus.CONFLICT);
+        }
+
+        return new ResponseEntity<>(
+                new AccountResponse(user.getId(), user.getUsername(), "User"),
+                HttpStatus.CREATED);
     }
 }

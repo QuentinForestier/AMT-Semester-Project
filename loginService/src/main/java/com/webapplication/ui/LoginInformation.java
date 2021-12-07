@@ -1,14 +1,9 @@
 package com.webapplication.ui;
 
+import lombok.Data;
+
+@Data
 public class LoginInformation {
-    private String username;
-    private String password;
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getUsername() {
-        return username;
-    }
+    private final String username;
+    private final String password;
 }

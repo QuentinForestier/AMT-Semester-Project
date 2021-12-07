@@ -1,11 +1,20 @@
 package com.webapplication.infra;
 
-import javax.validation.constraints.NotNull;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
+// Il est déconseillé d'utiliser l'annotation de lombok @Data sur des entite JPA :
+//      https://dzone.com/articles/lombok-and-jpa-what-may-go-wrong
 
 @Entity
-@Table(name = "article")
+@Table(name = "users")
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,12 +28,4 @@ public class User {
     @Column(name = "password")
     @NotNull
     private String password;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

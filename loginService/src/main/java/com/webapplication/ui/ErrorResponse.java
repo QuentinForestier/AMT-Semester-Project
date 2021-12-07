@@ -1,13 +1,10 @@
 package com.webapplication.ui;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
 public class ErrorResponse extends Response {
     private final String error;
-
-    public ErrorResponse(String error) {
-        this.error = error;
-    }
-
-    public String getError() {
-        return error;
-    }
 }

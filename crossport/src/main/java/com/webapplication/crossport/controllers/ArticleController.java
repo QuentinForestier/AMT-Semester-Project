@@ -1,5 +1,6 @@
 package com.webapplication.crossport.controllers;
 
+import com.webapplication.crossport.config.ImageConfiguration;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.service.ArticleData;
@@ -14,7 +15,6 @@ import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -23,30 +23,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.Properties;
 
 @Controller
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
-
-    public static String uploadDir="/opt/tomcat/webapps/articles_images";
-
-    public ArticleController() {
-        // Retrieving secret
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "authentication.properties";
-
-        appConfigPath = appConfigPath.replace("%20", " ");
-
-        Properties appProps = new Properties();
-        try {
-            appProps.load(new FileInputStream(appConfigPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        uploadDir = appProps.getProperty("imagepath");
-    }
 
     @Autowired
     private ArticleService articleService;
@@ -157,7 +137,7 @@ public class ArticleController {
     }
 
     private static void saveFile(Integer id, MultipartFile multipartFile) {
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(ImageConfiguration.uploadDir);
         String fileName = id.toString() + getExtension(multipartFile);
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -173,7 +153,7 @@ public class ArticleController {
     }
 
     private static void removeFile(Integer id, String extension) {
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(ImageConfiguration.uploadDir);
         String fileName = id.toString() + extension;
         Path filePath = uploadPath.resolve(fileName);
         try {

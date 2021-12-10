@@ -1,7 +1,6 @@
 package com.webapplication.crossport.config;
 
 import com.webapplication.crossport.config.filter.JWTFilter;
-import com.webapplication.crossport.controllers.ArticleController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -66,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cart/**",
 
                         //Images des produits
-                        "/" + ArticleController.uploadDir + "/**",
+                        "/" + ImageConfiguration.uploadDir + "/**",
 
                         // Ressources Statiques
                         "/css/**",
@@ -77,10 +76,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         // CategoryController
-                        "/categorie/**",
+                        "/categories/**",
 
                         //ArticleController
-                        "/articles**")
+                        "/articles/**")
                 .hasRole("ADMIN")
                 .antMatchers(
                         // LoginController

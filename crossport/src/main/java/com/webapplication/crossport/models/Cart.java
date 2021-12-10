@@ -43,8 +43,7 @@ public class Cart
     @JoinColumn(name = "fk_cart_id")
     private Set<CartArticle> cartArticles = new HashSet<>();
 
-    /* -------------------------- GETTERS AND SETTERS
-    -------------------------------*/
+    /* -------------------------- GETTERS AND SETTERS  -------------------------------*/
 
     /**
      * Gets cart id

@@ -187,12 +187,12 @@ public class Article {
      * @param imgPath New path
      */
     public void setImgExtension(String imgPath) {
-        this.imgExtension = imgPath;
+        imgExtension = imgPath;
     }
 
     public String getImgPath() {
         if (imgExtension == null)
-            return null;
+            return "bibip";
 
         return "/articles_images/" + id.toString() + imgExtension;
     }

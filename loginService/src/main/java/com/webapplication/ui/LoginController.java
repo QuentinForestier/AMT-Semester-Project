@@ -21,8 +21,7 @@ public class LoginController {
         if (loginInformation == null ||
                 loginInformation.getUsername() == null ||
                 loginInformation.getPassword() == null) {
-            // TODO : Quel type utiliser
-            return new ResponseEntity<>(new ErrorResponse("Invalid login information format"), HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
         User user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
@@ -46,7 +45,9 @@ public class LoginController {
         if (loginInformation == null ||
                 loginInformation.getUsername() == null ||
                 loginInformation.getPassword() == null) {
-            // TODO : Quel type utiliser
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
             return new ResponseEntity<>(
                     new ErrorResponse("Invalid register information format"),
                     HttpStatus.UNPROCESSABLE_ENTITY);

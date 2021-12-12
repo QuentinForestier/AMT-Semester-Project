@@ -89,7 +89,7 @@ public class ArticleController {
         // Is an authorized extension
         if(!multipartFile.isEmpty() && !Arrays.asList(extensions).contains(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))) {
             bindingResult.addError(
-                    new ObjectError("priceError", "File extension not supported"));
+                    new ObjectError("extError", "File extension not supported"));
         }
 
         Article sameName = articleService.findFirstByName(articleData.getArticleName());

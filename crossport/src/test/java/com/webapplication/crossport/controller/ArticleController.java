@@ -1,24 +1,36 @@
 package com.webapplication.crossport.controller;
 
+import com.webapplication.crossport.config.ImageConfiguration;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.services.ArticleService;
 import com.webapplication.crossport.models.services.CategoryService;
+import org.apache.commons.compress.utils.IOUtils;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.ModelAndView;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
@@ -35,9 +47,6 @@ public class ArticleController {
 
 	@MockBean
 	private ArticleService articleService;
-
-	@MockBean
-	private CategoryService categoryService;
 
 	@Test
 	@WithAnonymousUser
@@ -116,62 +125,265 @@ public class ArticleController {
 	}
 
 	@Test
-	@WithMockUser(roles = {"ADMIN"})
-	public void getCategoryPage_Admin_getAllCategories() throws Exception {
-		        Category skis = new Category();
-		        skis.setId(1);
-		        skis.setName("skis");
+	@WithAnonymousUser
+	public void AsVisitor_getArticlesEdit_Fail() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get("/articles/edit"))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl("http://localhost/login"));
 
-		        Category snowboards = new Category();
-		        snowboards.setId(2);
-		        snowboards.setName("snowboards");
+		mvc.perform(MockMvcRequestBuilders.post("/articles/edit"))
+				.andExpect(status().is3xxRedirection());
+	}
 
-		        Category empty = new Category();
-		        empty.setId(3);
-		        empty.setName("empty");
+	@Test
+	@WithMockUser(roles = {"USER"})
+	public void AsUser_getArticlesEdit_Fail() throws Exception {
+		mvc.perform(MockMvcRequestBuilders.get("/articles/edit"))
+				.andExpect(status().is4xxClientError());
 
-		List<Category> mockCategories = new ArrayList<>();
-		        mockCategories.add(skis);
-		        mockCategories.add(snowboards);
-		        mockCategories.add(empty);
+		mvc.perform(MockMvcRequestBuilders.post("/articles/edit"))
+				.andExpect(status().is4xxClientError());
 
-		        List<Article> mockArticles = new ArrayList<>();
-		        for (int i = 0; i < 5; ++i) {
-		            Article article = new Article();
-		            article.setId(i);
-		            article.setName("test item " + i);
-		            article.setDescription("test item desc " + i);
-		            article.setPrice(i * 100.0);
+	}
 
-		            if (i % 2 == 0) {
-		                article.getCategories().add(skis);
-		                skis.getArticles().add(article);
-		            } else {
-		                article.getCategories().add(snowboards);
-		                snowboards.getArticles().add(article);
-		            }
-		            mockArticles.add(article);
-		        }
 
-		Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
+	@Test
+	@WithMockUser(roles={"ADMIN"})
+	public void AsAdmin_getEditForm_Success() throws Exception {
 
-		        mvc.perform(MockMvcRequestBuilders.get("/categories"))
-		                .andExpect(status().isOk())
-		                .andExpect(view().name("categories"))
-		                .andExpect(model().attribute("listCategories", hasItem(
-		                        allOf(
-		                                hasProperty("name", is("skis"))
-		                        )
-		                )))
-		                .andExpect(model().attribute("listCategories", hasItem(
-		                       allOf(
-		                                hasProperty("name", is("snowboards"))
-		                       )
-		               )))
-		               .andExpect(model().attribute("listCategories", hasItem(
-		                       allOf(
-		                               hasProperty("name", is("empty"))
-		                       )
-		              )));
+		Article article = new Article();
+		article.setId(1);
+		article.setName("test name");
+		article.setDescription("test desc");
+		article.setInStock(false);
+		article.setPrice(10.);
+
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		mvc.perform(MockMvcRequestBuilders.get("/articles/edit?id=1"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("editArticle"))
+				.andExpect(model().attribute("id", 1))
+				.andExpect(model().attribute("articleData",
+						allOf(
+								hasProperty("articleName", is("test name")),
+								hasProperty("articleDesc", is("test desc")),
+								hasProperty("articlePrice", is(10.0)),
+								hasProperty("articleStock", is(false))
+						)
+				));
+	}
+
+	@Test
+	@WithMockUser(roles={"ADMIN"})
+	public void AsAdmin_submitEditFormWithSameName_Fail() throws Exception {
+
+		Article article = new Article();
+		article.setId(1);
+		article.setName("test name");
+		article.setDescription("test desc");
+		article.setInStock(false);
+		article.setPrice(10.);
+
+		Article article2 = new Article();
+		article2.setId(2);
+		article2.setName(article.getName());
+		article2.setDescription("a desc");
+		article2.setInStock(true);
+		article2.setPrice(12.);
+
+		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article2);
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		MockMultipartFile image
+				= new MockMultipartFile("image", "", "img", new byte[]{});
+
+		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+						.file(image)
+						.param("Submit", "Submit")
+						.param("articleName", article.getName())
+						.param("articleDesc", article.getDescription())
+						.param("articlePrice", Double.toString(article.getPrice()))
+						.param("articleStock", "true")
+
+				)
+				.andExpect(status().isOk())
+				.andExpect(model().hasErrors());
+
+		MvcResult mvcResult = resultActions.andReturn();
+
+		ModelAndView mav = mvcResult.getModelAndView();
+
+		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
+		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleData");
+		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("nameError")));
+
+	}
+
+	@Test
+	@WithMockUser(roles={"ADMIN"})
+	public void AsAdmin_submitEditFormWith0Price_Fail() throws Exception {
+
+		Article article = new Article();
+		article.setId(1);
+		article.setName("test name");
+		article.setDescription("test desc");
+		article.setInStock(false);
+		article.setPrice(0.);
+
+
+		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		MockMultipartFile image
+				= new MockMultipartFile("image", "", "img", new byte[]{});
+
+		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+						.file(image)
+						.param("Submit", "Submit")
+						.param("articleName", article.getName())
+						.param("articleDesc", article.getDescription())
+						.param("articlePrice", Double.toString(article.getPrice()))
+						.param("articleStock", "true")
+
+				)
+				.andExpect(status().isOk())
+				.andExpect(model().hasErrors());
+
+		MvcResult mvcResult = resultActions.andReturn();
+
+		ModelAndView mav = mvcResult.getModelAndView();
+
+		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
+		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleData");
+		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("priceError")));
+
+	}
+
+	@Test
+	@WithMockUser(roles={"ADMIN"})
+	public void AsAdmin_submitEditFormWithBadFileType_Fail() throws Exception {
+
+		Article article = new Article();
+		article.setId(1);
+		article.setName("test name");
+		article.setDescription("test desc");
+		article.setInStock(false);
+		article.setPrice(0.);
+
+
+		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		MockMultipartFile image
+				= new MockMultipartFile("image", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+
+		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+						.file(image)
+						.param("Submit", "Submit")
+						.param("articleName", article.getName())
+						.param("articleDesc", article.getDescription())
+						.param("articlePrice", Double.toString(article.getPrice()))
+						.param("articleStock", "true")
+
+				)
+				.andExpect(status().isOk())
+				.andExpect(model().hasErrors());
+
+		MvcResult mvcResult = resultActions.andReturn();
+
+		ModelAndView mav = mvcResult.getModelAndView();
+
+		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
+		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleData");
+		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("extError")));
+
+	}
+
+	@Test
+	@WithMockUser(roles={"ADMIN"})
+	public void AsAdmin_editArticle_Success() throws Exception {
+
+
+		Article article = new Article();
+		article.setId(1);
+		article.setName("test name");
+		article.setDescription("test desc");
+		article.setInStock(false);
+		article.setPrice(10.);
+
+		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		File fileItem = new File("src/main/resources/static/images/1.jpg");
+		FileInputStream input = new FileInputStream(fileItem);
+		MockMultipartFile image = new MockMultipartFile("image",
+				fileItem.getName(), "image/png", IOUtils.toByteArray(input));
+
+		String newName = "new article name";
+		String newDesc = "new article desc";
+		Boolean newDisponibility = true;
+		String newExtension = ".jpg";
+
+		mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+						.file(image)
+						.param("Submit", "Submit")
+						.param("articleName", newName)
+						.param("articleDesc", newDesc)
+						.param("articleStock", newDisponibility.toString()))
+				.andExpect(status().is3xxRedirection())
+				.andExpect(view().name("redirect:manage"));
+
+		Article articleModified = articleService.getArticleById(1);
+		assertEquals(articleModified.getName(), newName);
+		assertEquals(articleModified.getDescription(), newDesc);
+		assertEquals(articleModified.isInStock(), (boolean) newDisponibility);
+		assertEquals(articleModified.getImgExtension(), newExtension);
+	}
+
+	@Test
+	@WithMockUser(roles={"ADMIN"})
+	public void AsAdmin_removeArticleImage_Success() throws Exception {
+
+		Article article = new Article();
+		article.setId(1);
+		article.setName("test name");
+		article.setDescription("test desc");
+		article.setInStock(false);
+		article.setImgExtension(".jpg");
+		article.setPrice(10.);
+
+		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		String newName = "new article name";
+
+		File fileSrc = new File("src/main/resources/static/images/1.jpg");
+		File fileDst = new File(ImageConfiguration.uploadDir + "/1.jpg");
+		InputStream in = new BufferedInputStream(new FileInputStream(fileSrc));
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(fileDst));
+
+		byte[] buffer = new byte[1024];
+		int lengthRead;
+		while ((lengthRead = in.read(buffer)) > 0) {
+			out.write(buffer, 0, lengthRead);
+			out.flush();
+		}
+		in.close();
+		out.close();
+
+		mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+						.param("DeleteImage", "DeleteImage")
+						.param("articleName", newName))
+				.andExpect(status().isOk())
+				.andExpect(view().name("editArticle"))
+				.andExpect(model().attribute("articleData",
+				allOf(
+						hasProperty("articleName", is(newName))
+					)
+				));
+
+		Article articleModified = articleService.getArticleById(1);
+		assertNull(articleModified.getImgExtension());
 	}
 }

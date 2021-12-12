@@ -1,10 +1,10 @@
 package com.webapplication.crossport.controller;
 
 import com.webapplication.crossport.config.ImageConfiguration;
+import com.webapplication.crossport.config.filter.JWTFilter;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.services.ArticleService;
-import com.webapplication.crossport.models.services.CategoryService;
 import org.apache.commons.compress.utils.IOUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -60,6 +60,7 @@ public class ArticleController {
 	@Test
 	@WithMockUser(roles = {"USER"})
 	public void AsUser_getArticles_Fail() throws Exception {
+
 		mvc.perform(MockMvcRequestBuilders.get("/articles/manage"))
 				.andExpect(status().is4xxClientError());
 

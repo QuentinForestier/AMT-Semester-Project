@@ -31,13 +31,15 @@ public class LoginController {
             return new ResponseEntity<>(new ErrorResponse("The credentials are incorrect"), HttpStatus.FORBIDDEN);
         }
 
+        String role = Objects.equals(user.getUsername(), UserService.adminUsername) ? "admin" : "user";
+
         return new ResponseEntity<>(
                 new LoginResponse(
                         new AccountResponse(
                                 user.getId(),
                                 user.getUsername(),
-                                Objects.equals(user.getUsername(), UserService.adminUsername) ? "admin" : "user"),
-                        ""),
+                                role),
+                        userService.CreateJWT(role)),
                 HttpStatus.OK);
     }
 

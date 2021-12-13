@@ -17,8 +17,11 @@ import java.util.Objects;
 
 @Service
 public class UserService {
-    public static final String adminUsername = "crossport";
-    private static final String adminPassword = "nXcuifw5y$zcsh8sjK@b";
+    @Value("${com.webapplication.loginCrossport.config.admin.username}")
+    private String adminUsername = "crossport";
+
+    @Value("${com.webapplication.loginCrossport.config.admin.password}")
+    private String adminPassword = "nXcuifw5y$zcsh8sjK@b";
 
     @Value("${com.webapplication.loginCrossport.config.jwt.secret}")
     private String secret;
@@ -35,38 +38,38 @@ public class UserService {
         }
     }
 
-    public static boolean checkBlankChar(String message) {
+    public static boolean detectBlankInString(String message) {
         if (message.length() == 0)
-            return false;
+            return true;
 
         System.out.println(message);
         for (int i = 0; i < message.length(); i++) {
             System.out.println(message.charAt(i));
             if (Character.isSpaceChar(message.charAt(i))) {
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     public static boolean isPasswordValid(String password) {
         if (password.length() < 8)
             return false;
 
-        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#&()–\\[{}\\]_:;',?\\/*~$^+=<>]).*$");
+        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#&()–\\[{}\\]_:;',?/*~$^+=<>]).*$");
     }
 
-    public User createUser(String userName, String password) {
+    public UserDTO createUser(String userName, String password) {
         User u = new User(0L, userName, password);
         try {
             u = userRepository.save(u);
-            return u;
+            return new UserDTO(u.getId(), u.getUsername(), "user");
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             return null;
         }
     }
 
-    public User login(String userName, String password) {
+    public UserDTO login(String userName, String password) {
         User u = userRepository.findFirstByUsername(userName);
 
         if (u == null) {
@@ -77,7 +80,7 @@ public class UserService {
             return null;
         }
 
-        return u;
+        return new UserDTO(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? "admin" : "user");
     }
 
     public String CreateJWT(String role) {
@@ -96,7 +99,7 @@ public class UserService {
                 .setIssuedAt(now)
                 .setSubject("crossport")
                 .setIssuer("crossport")
-                .claim("role", "admin")
+                .claim("role", role)
                 .signWith(signatureAlgorithm, signingKey)
                 .setHeaderParam("typ", "JWT");
 

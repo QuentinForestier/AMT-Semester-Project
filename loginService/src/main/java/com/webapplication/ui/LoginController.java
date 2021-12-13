@@ -1,7 +1,7 @@
 package com.webapplication.ui;
 
+import com.webapplication.domain.UserDTO;
 import com.webapplication.domain.UserService;
-import com.webapplication.infra.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 public class LoginController {
@@ -25,21 +24,19 @@ public class LoginController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
+        UserDTO user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
 
         if (user == null) {
             return new ResponseEntity<>(new ErrorResponse("The credentials are incorrect"), HttpStatus.FORBIDDEN);
         }
-
-        String role = Objects.equals(user.getUsername(), UserService.adminUsername) ? "admin" : "user";
 
         return new ResponseEntity<>(
                 new LoginResponse(
                         new AccountResponse(
                                 user.getId(),
                                 user.getUsername(),
-                                role),
-                        userService.CreateJWT(role)),
+                                user.getRole()),
+                        userService.CreateJWT(user.getRole())),
                 HttpStatus.OK);
     }
 
@@ -51,9 +48,7 @@ public class LoginController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        new ErrorsResponse.Error("", "");
-
-        if (!UserService.checkBlankChar(loginInformation.getUsername())) {
+        if (UserService.detectBlankInString(loginInformation.getUsername())) {
             return new ResponseEntity<>(
                     new ErrorsResponse(
                             List.of(
@@ -65,7 +60,7 @@ public class LoginController {
                     ), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        if (!UserService.checkBlankChar(loginInformation.getPassword())) {
+        if (UserService.detectBlankInString(loginInformation.getPassword())) {
             return new ResponseEntity<>(
                     new ErrorsResponse(
                             List.of(
@@ -89,7 +84,7 @@ public class LoginController {
                     ), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        User user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
+        UserDTO user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
         if (user == null) {
             return new ResponseEntity<>(
                     new ErrorResponse("The username already exist"),
@@ -97,7 +92,7 @@ public class LoginController {
         }
 
         return new ResponseEntity<>(
-                new AccountResponse(user.getId(), user.getUsername(), "user"),
+                new AccountResponse(user.getId(), user.getUsername(), user.getRole()),
                 HttpStatus.CREATED);
     }
 }

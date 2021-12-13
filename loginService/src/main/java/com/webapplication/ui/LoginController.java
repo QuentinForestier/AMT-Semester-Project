@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Objects;
 
 @RestController
@@ -35,7 +36,7 @@ public class LoginController {
                         new AccountResponse(
                                 user.getId(),
                                 user.getUsername(),
-                                Objects.equals(user.getUsername(), UserService.adminUsername) ? "Admin" : "User"),
+                                Objects.equals(user.getUsername(), UserService.adminUsername) ? "admin" : "user"),
                         ""),
                 HttpStatus.OK);
     }
@@ -48,9 +49,42 @@ public class LoginController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
+        new ErrorsResponse.Error("", "");
+
+        if (!UserService.checkBlankChar(loginInformation.getUsername())) {
             return new ResponseEntity<>(
-                    new ErrorResponse("Invalid register information format"),
-                    HttpStatus.UNPROCESSABLE_ENTITY);
+                    new ErrorsResponse(
+                            List.of(
+                                    new ErrorsResponse.Error(
+                                            "username",
+                                            "The username cannot contain blank characters"
+                                    )
+                            )
+                    ), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        if (!UserService.checkBlankChar(loginInformation.getPassword())) {
+            return new ResponseEntity<>(
+                    new ErrorsResponse(
+                            List.of(
+                                    new ErrorsResponse.Error(
+                                            "password",
+                                            "The password cannot contain blank characters"
+                                    )
+                            )
+                    ), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
+        if (!UserService.isPasswordValid(loginInformation.getPassword())) {
+            return new ResponseEntity<>(
+                    new ErrorsResponse(
+                            List.of(
+                                    new ErrorsResponse.Error(
+                                            "password",
+                                            "The password does not match the security politics, it should be at least 8 char long, should contain at least one uppercase char, one lowercase char, one digit and one special character"
+                                    )
+                            )
+                    ), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         User user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
@@ -61,7 +95,7 @@ public class LoginController {
         }
 
         return new ResponseEntity<>(
-                new AccountResponse(user.getId(), user.getUsername(), "User"),
+                new AccountResponse(user.getId(), user.getUsername(), "user"),
                 HttpStatus.CREATED);
     }
 }

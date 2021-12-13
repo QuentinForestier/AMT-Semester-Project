@@ -25,6 +25,27 @@ public class UserService {
         }
     }
 
+    public static boolean checkBlankChar(String message) {
+        if (message.length() == 0)
+            return false;
+
+        System.out.println(message);
+        for (int i = 0; i < message.length(); i++) {
+            System.out.println(message.charAt(i));
+            if (Character.isSpaceChar(message.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isPasswordValid(String password) {
+        if (password.length() < 8)
+            return false;
+
+        return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#&()–\\[{}\\]_:;',?\\/*~$^+=<>]).*$");
+    }
+
     public User createUser(String userName, String password) {
         User u = new User(0L, userName, password);
         try {

@@ -42,9 +42,9 @@ Modification date: 08/11/2021
 <div class="main">
     <div class="shop_top">
         <div class="container">
-            <h2>Edit article</h2>
+            <h2>Add an article</h2>
             <div id="loginbox" class="loginbox" style="width: 100%">
-                <form th:method="put" th:action="@{/articles?id={id}(id=${id})}"
+                <form th:method="post" th:action="@{/articles}"
                       th:object="${articleDTO}" enctype="multipart/form-data">
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                         <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
@@ -53,15 +53,10 @@ Modification date: 08/11/2021
                         <p id="login-form-password">
                             <div th:insert="formArticle.html :: formArticle"></div>
 
-                            <label th:if="${articleDTO.getImgPath() != null}">Current Image</label>
-                            <img th:if="${articleDTO.getImgPath() != null}"
-                                 th:src="@{${articleDTO.imgPath}}" class="img-responsive shop_img" alt=""/>
                             <label for="articleImage">New Image</label>
                             <input type="file" id="articleImage" name="image" accept="image/*">
                         </p>
-                        <input type="submit" name="Submit" class="button" value="Save article" style="float: left">
-                        <input th:if="${articleDTO.getImgPath() != null}"
-                               type="submit" name="DeleteImage" class="button" value="Remove Image" style="float: left; margin-left: 15px">
+                        <input type="submit" class="button" value="Save article" style="float: left">
                     </fieldset>
                 </form>
             </div>

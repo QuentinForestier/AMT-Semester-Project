@@ -15,7 +15,8 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class ArticleData implements Serializable {
+// TODO: Serializable possiblement inutile
+public class ArticleDTO implements Serializable {
     @NotBlank(message = "Article name cannot be empty")
     private String articleName = "";
     private String articleDesc = "";

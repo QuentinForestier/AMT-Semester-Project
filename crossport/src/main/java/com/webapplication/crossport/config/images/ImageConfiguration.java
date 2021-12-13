@@ -1,6 +1,6 @@
 package com.webapplication.crossport.config.images;
 
-import com.webapplication.crossport.ui.controllers.ArticleController;
+import com.webapplication.crossport.domain.services.FileService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -19,7 +19,7 @@ import java.nio.file.Paths;
 public class ImageConfiguration implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        exposeDirectory(ArticleController.uploadDir, registry);
+        exposeDirectory(FileService.uploadDir, registry);
     }
 
     private void exposeDirectory(String dirName, ResourceHandlerRegistry registry) {

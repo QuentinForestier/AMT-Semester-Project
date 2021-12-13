@@ -1,8 +1,9 @@
 package com.webapplication.crossport.ui.controllers;
 
+import com.webapplication.crossport.domain.services.FileService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.domain.services.ArticleService;
-import com.webapplication.crossport.ui.formdata.ArticleData;
+import com.webapplication.crossport.ui.formdata.ArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,19 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Properties;
 
 /**
  *
@@ -36,171 +25,101 @@ import java.util.Properties;
 @RequestMapping(value = {"/articles"})
 public class ArticleController {
 
-    public static String uploadDir="/opt/tomcat/webapps/articles_images";
-
-    public ArticleController() {
-        // Retrieving secret
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "authentication.properties";
-
-        appConfigPath = appConfigPath.replace("%20", " ");
-
-        Properties appProps = new Properties();
-        try {
-            appProps.load(new FileInputStream(appConfigPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        uploadDir = appProps.getProperty("imagepath");
-    }
-
     @Autowired
     private ArticleService articleService;
 
-    static String[] extensions = new String[]{"jpeg", "jpg", "gif", "png"};
+    private final FileService fileService = new FileService();
 
-    @GetMapping("/manage")
-    public String viewArticles(Model model) {
+    @GetMapping("")
+    public String getAll(Model model) {
         model.addAttribute("listArticles", articleService.getAllArticles());
         return "manageArticles";
     }
 
-    @GetMapping("/edit")
-    public String editArticle(HttpServletRequest request, Model model, @RequestParam(value = "id", required = false) Integer id) {
-        ArticleData ad = new ArticleData();
-        if (id != null) {
-            Article a = articleService.getArticleById(id);
-            ad.setArticleDesc(a.getDescription());
-            ad.setArticleName(a.getName());
-            ad.setArticleStock(a.isInStock());
-            ad.setArticlePrice(a.getNullablePrice());
-            ad.setImgPath(a.getImgPath());
+    @GetMapping("/new")
+    public String newPage(Model model) {
+        model.addAttribute("articleDTO", new ArticleDTO());
+        return "newArticle";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String editPage(Model model,
+                           @PathVariable(value = "id") Integer id) {
+        ArticleDTO articleDTO = new ArticleDTO();
+        Article article;
+        try {
+            article = articleService.getArticleById(id);
+        } catch (RuntimeException e) {
+            // TODO: erreur
+            return "manageArticles";
         }
+
+        articleDTO.setArticleDesc(article.getDescription());
+        articleDTO.setArticleName(article.getName());
+        articleDTO.setArticleStock(article.isInStock());
+        articleDTO.setArticlePrice(article.getNullablePrice());
+        articleDTO.setImgPath(article.getImgPath());
+
         model.addAttribute("id", id);
-        model.addAttribute("articleData", ad);
+        model.addAttribute("articleDTO", articleDTO);
         return "editArticle";
     }
 
-    // Les trois méthodes qui suivent doivent avoir la meme signature
-    @PostMapping(value = "/edit", params = "DeleteImage")
-    public String deleteImage(final @ModelAttribute @Valid ArticleData articleData,
-                              final BindingResult bindingResult,
-                              final Model model,
-                              @RequestParam(value = "id", required = false) Integer id,
-                              @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
-        if (id != null) {
+    @PostMapping(value = "")
+    public String add(final @ModelAttribute @Valid ArticleDTO articleDTO,
+                      final BindingResult bindingResult,
+                      final Model model,
+                      @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+        Article article = new Article();
+
+        try {
+            articleService.modifyArticle(article, articleDTO, multipartFile, null);
+        } catch (RuntimeException e) {
+            bindingResult.addError(new ObjectError("Error", e.getMessage()));
+            model.addAttribute("articleDTO", articleDTO);
+            return "newArticle";
+        }
+
+        return "redirect:/articles";
+    }
+
+    @PutMapping(value = "", params = "Submit")
+    public String edit(final @ModelAttribute @Valid ArticleDTO articleDTO,
+                          final BindingResult bindingResult,
+                          final Model model,
+                          @RequestParam(value = "id", required = true) Integer id,
+                          @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+        try {
             Article article = articleService.getArticleById(id);
-            removeFile(id, article.getImgExtension());
-            article.setImgExtension(null);
-            articleService.modifyArticle(article);
-        }
+            articleService.modifyArticle(article, articleDTO, multipartFile, id);
+        } catch(RuntimeException e) {
+            bindingResult.addError(new ObjectError("Error", e.getMessage()));
 
-        model.addAttribute("id", id);
-        model.addAttribute("articleData", articleData);
-        return "editArticle";
-    }
-
-    @PostMapping(value = "/edit", params = "Submit")
-    public String postArticle(final @ModelAttribute @Valid ArticleData articleData,
-                              final BindingResult bindingResult,
-                              final Model model,
-                              @RequestParam(value = "id", required = false) Integer id,
-                              @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
-
-        if (articleData.getArticlePrice() != null && articleData.getArticlePrice() <= 0) {
-            bindingResult.addError(
-                    new ObjectError("priceError", "The price of the article must be greater than 0"));
-        }
-
-        // Is an authorized extension
-        if(!multipartFile.isEmpty() && !Arrays.asList(extensions).contains(FilenameUtils.getExtension(multipartFile.getOriginalFilename()))) {
-            bindingResult.addError(
-                    new ObjectError("priceError", "File extension not supported"));
-        }
-
-        Article sameName = articleService.findFirstByName(articleData.getArticleName());
-        if (sameName != null && !Objects.equals(sameName.getId(), id)) {
-            bindingResult.addError(
-                    new ObjectError("nameError", "Two article cannot have the same name"));
-        }
-
-        if (bindingResult.hasErrors()) {
+            // Remet l'image par défaut
             if (id != null) {
-                articleData.setImgPath(articleService.getArticleById(id).getImgPath());
+                articleDTO.setImgPath(articleService.getArticleById(id).getImgPath());
             }
 
             model.addAttribute("id", id);
-            model.addAttribute("articleData", articleData);
+            model.addAttribute("articleDTO", articleDTO);
             return "editArticle";
         }
 
-        Article article;
-        if (id == null) {
-            article = new Article();
-        } else {
-            article = articleService.getArticleById(id);
-        }
-
-        if (!multipartFile.isEmpty()) {
-            article.setImgExtension(getExtension(multipartFile));
-        }
-
-        article.setPrice(articleData.getArticlePrice());
-        article.setName(articleData.getArticleName());
-        article.setDescription(articleData.getArticleDesc());
-        article.setInStock(articleData.isArticleStock());
-        articleService.modifyArticle(article);
-
-        if (!multipartFile.isEmpty()) {
-            if (id == null) {
-                id = articleService.findFirstByName(articleData.getArticleName()).getId();
-            }
-
-            saveFile(id, multipartFile);
-        }
-
-        return "redirect:manage";
+        return "redirect:/articles";
     }
 
-    private static void saveFile(Integer id, MultipartFile multipartFile) {
-        Path uploadPath = Paths.get(uploadDir);
-        String fileName = id.toString() + getExtension(multipartFile);
+    @PutMapping(value = "", params = "DeleteImage")
+    public String deleteImage(final @ModelAttribute @Valid ArticleDTO articleDTO,
+                              final Model model,
+                              @RequestParam(value = "id", required = true) Integer id,
+                              @RequestParam(value = "image", required = false) MultipartFile multipartFile) {
+        Article article = articleService.getArticleById(id);
+        fileService.removeFile(id, article.getImgExtension());
+        article.setImgExtension(null);
+        articleService.modifyArticleImage(article, articleDTO, multipartFile, id);
 
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        }
-    }
-
-    private static void removeFile(Integer id, String extension) {
-        Path uploadPath = Paths.get(uploadDir);
-        String fileName = id.toString() + extension;
-        Path filePath = uploadPath.resolve(fileName);
-        try {
-            Files.delete(filePath);
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        }
-    }
-
-    private static String getExtension(MultipartFile multipartFile) {
-        String extension = "";
-        String fileName = multipartFile.getOriginalFilename();
-
-        int i = fileName.lastIndexOf('.');
-        int p = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
-
-        if (i > p) {
-            extension = multipartFile.getOriginalFilename().substring(i + 1);
-            extension = "." + extension;
-        }
-        return extension;
+        model.addAttribute("id", id);
+        model.addAttribute("articleData", articleDTO);
+        return "editArticle";
     }
 }

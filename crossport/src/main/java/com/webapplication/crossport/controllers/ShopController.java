@@ -57,9 +57,8 @@ public class ShopController {
 		Article article;
 		try {
 			article = articleService.getArticleById(id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "article?error";
+		} catch (RuntimeException e) {
+			return "shop";
 		}
 		model.addAttribute("article", article);
 		return "article";

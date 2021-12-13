@@ -1,7 +1,6 @@
 package com.webapplication.crossport.controller;
 
 import com.webapplication.crossport.config.ImageConfiguration;
-import com.webapplication.crossport.config.filter.JWTFilter;
 import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Category;
 import com.webapplication.crossport.models.services.ArticleService;
@@ -40,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ArticleController {
+public class ArticleControllerTest {
 
 	@Autowired
 	private MockMvc mvc;

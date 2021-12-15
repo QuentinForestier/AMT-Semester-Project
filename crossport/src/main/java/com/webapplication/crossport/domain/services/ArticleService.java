@@ -95,29 +95,18 @@ public class ArticleService {
         article.setDescription(articleDTO.getArticleDesc());
         article.setInStock(articleDTO.isArticleStock());
 
-        // Gestion des images
-        // ------------------
-        // Ajoute l'extension de la nouvelle image
-        if (!multipartFile.isEmpty()) {
-            article.setImgExtension(fileService.getExtension(multipartFile));
-        }
-
-        // Sauvegarde le fichier
-        if (!multipartFile.isEmpty()) {
-            if (id == null) {
-                id = this.findFirstByName(articleDTO.getArticleName()).getId();
-            }
-            fileService.saveFile(id, multipartFile);
-        }
+        saveArticleImage(article, articleDTO, multipartFile, id);
 
         articleRepository.save(article);
     }
 
     public void modifyArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
         validateFileOrThrow(multipartFile);
+        saveArticleImage(article, articleDTO, multipartFile, id);
+        articleRepository.save(article);
+    }
 
-        // Gestion des images
-        // ------------------
+    private void saveArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
         // Ajoute l'extension de la nouvelle image
         if (!multipartFile.isEmpty()) {
             article.setImgExtension(fileService.getExtension(multipartFile));
@@ -130,8 +119,6 @@ public class ArticleService {
             }
             fileService.saveFile(id, multipartFile);
         }
-
-        articleRepository.save(article);
     }
 
     private void validateArticleOrThrow(ArticleDTO articleDTO, Integer id) {

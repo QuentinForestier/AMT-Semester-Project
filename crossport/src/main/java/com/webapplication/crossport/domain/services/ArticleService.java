@@ -99,13 +99,13 @@ public class ArticleService {
 
         articleRepository.save(article);
 
-        saveArticleImage(article, articleDTO, multipartFile, id);
+        saveArticleImage(articleDTO, multipartFile, id);
     }
 
     public void modifyArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
         validateFileOrThrow(multipartFile);
         setArticleImageExtension(article, multipartFile);
-        saveArticleImage(article, articleDTO, multipartFile, id);
+        saveArticleImage(articleDTO, multipartFile, id);
         articleRepository.save(article);
     }
 
@@ -115,7 +115,7 @@ public class ArticleService {
         }
     }
 
-    private void saveArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
+    private void saveArticleImage(ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
         if (!multipartFile.isEmpty()) {
             if (id == null) {
                 id = this.findFirstByName(articleDTO.getArticleName()).getId();

@@ -1,11 +1,11 @@
-package com.webapplication.crossport.ui.formdata;
+package com.webapplication.crossport.ui.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
+ * Implements an object to receive/send article data
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -15,8 +15,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-// TODO: Serializable possiblement inutile
-public class ArticleDTO implements Serializable {
+public class ArticleDTO {
     @NotBlank(message = "Article name cannot be empty")
     private String articleName = "";
     private String articleDesc = "";

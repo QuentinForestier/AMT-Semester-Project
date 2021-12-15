@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.List;
 
 /**
+ * Controller charged to manage the shop with articles and categories
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -59,7 +60,7 @@ public class ShopController {
 		return "shop";
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/articles/{id}")
 	public String getById(@PathVariable(value = "id") Integer id, Model model) {
 		Article article;
 		try {

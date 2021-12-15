@@ -4,7 +4,7 @@ import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.domain.services.ArticleService;
 import com.webapplication.crossport.domain.services.CategoryService;
-import com.webapplication.crossport.ui.formdata.CategoryData;
+import com.webapplication.crossport.ui.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +16,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * Controller charged to manage categories form admin view
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -35,24 +36,24 @@ public class CategoryController {
     @GetMapping("")
     public String getAll(Model model) {
         model.addAttribute("listCategories", categoryService.getAllCategories());
-        model.addAttribute("categoryData", new CategoryData());
+        model.addAttribute("categoryDTO", new CategoryDTO());
 
         return "categories";
     }
 
     @PostMapping("")
-    public String add(final @Valid CategoryData categoryData, final BindingResult bindingResult, final Model model) {
-        Category sameCategory = categoryService.getFirstByName(categoryData.getCategoryName());
+    public String add(final @Valid CategoryDTO categoryDTO, final BindingResult bindingResult, final Model model) {
+        Category sameCategory = categoryService.getFirstByName(categoryDTO.getCategoryName());
 
         if (sameCategory != null) {
             bindingResult.addError(new ObjectError("globalError", "Same category already exists."));
         }
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("categoryForm", categoryData);
+            model.addAttribute("categoryDTO", categoryDTO);
         } else {
             Category category = new Category();
-            category.setName(categoryData.getCategoryName());
+            category.setName(categoryDTO.getCategoryName());
             categoryService.saveCategory(category);
         }
 
@@ -93,12 +94,11 @@ public class CategoryController {
             return "redirect:/categories/" + id;
         }
         redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
-        redir.addFlashAttribute("categoryData", new CategoryData());
+        redir.addFlashAttribute("categoryDTO", new CategoryDTO());
         return "redirect:/categories";
     }
 
-    // TODO: /articles/{id}
-    @DeleteMapping("/{idCategory}/{idArticle}")
+    @DeleteMapping("/{idCategory}/articles/{idArticle}")
     public String removeArticle(@PathVariable(value = "idCategory") Integer idCategory,
                                 @PathVariable(value = "idArticle") Integer idArticle,
                                 RedirectAttributes redir) {
@@ -122,7 +122,7 @@ public class CategoryController {
         return "redirect:/categories/" + idCategory;
     }
 
-    @PostMapping("/{idCategory}/{idArticle}")
+    @PostMapping("/{idCategory}/articles/{idArticle}")
     public String addArticle(@PathVariable(value = "idCategory") Integer idCategory,
                              @PathVariable(value = "idArticle") Integer idArticle,
                              RedirectAttributes redir) {

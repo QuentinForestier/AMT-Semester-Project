@@ -50,7 +50,7 @@ public class CartController {
         return "cart";
     }
 
-    @PostMapping("/article")
+    @PostMapping("/articles")
     public String addArticle(HttpServletRequest request,
                              @RequestParam(value = "id") Integer id,
                              @RequestParam(value = "quantity",
@@ -90,7 +90,7 @@ public class CartController {
         return "redirect:" + referer;
     }
 
-    @DeleteMapping("/article/{id}")
+    @DeleteMapping("/articles/{id}")
     public String removeArticle(@PathVariable(value = "id") Integer id,
                                 HttpServletRequest request) {
         Cart cart = Cart.getContextCart(request.getSession());
@@ -107,7 +107,7 @@ public class CartController {
         return "redirect:" + referer;
     }
 
-    @PutMapping("/article/{id}/{quantity}")
+    @PutMapping("/articles/{id}/quantity/{quantity}")
     public String updateQuantity(@PathVariable(value = "id") Integer id,
                                  @PathVariable(value = "quantity") Integer quantity,
                                  HttpServletRequest request) {

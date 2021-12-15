@@ -4,7 +4,7 @@ import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.ArticleRepository;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
-import com.webapplication.crossport.ui.formdata.ArticleDTO;
+import com.webapplication.crossport.ui.dto.ArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,24 +95,27 @@ public class ArticleService {
         article.setDescription(articleDTO.getArticleDesc());
         article.setInStock(articleDTO.isArticleStock());
 
-        saveArticleImage(article, articleDTO, multipartFile, id);
+        setArticleImageExtension(article, multipartFile);
 
         articleRepository.save(article);
+
+        saveArticleImage(article, articleDTO, multipartFile, id);
     }
 
     public void modifyArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
         validateFileOrThrow(multipartFile);
+        setArticleImageExtension(article, multipartFile);
         saveArticleImage(article, articleDTO, multipartFile, id);
         articleRepository.save(article);
     }
 
-    private void saveArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
-        // Ajoute l'extension de la nouvelle image
+    private void setArticleImageExtension(Article article, MultipartFile multipartFile) {
         if (!multipartFile.isEmpty()) {
             article.setImgExtension(fileService.getExtension(multipartFile));
         }
+    }
 
-        // Sauvegarde le fichier
+    private void saveArticleImage(Article article, ArticleDTO articleDTO, MultipartFile multipartFile, Integer id) {
         if (!multipartFile.isEmpty()) {
             if (id == null) {
                 id = this.findFirstByName(articleDTO.getArticleName()).getId();

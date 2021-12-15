@@ -3,7 +3,7 @@ package com.webapplication.crossport.authentication;
 import com.webapplication.crossport.config.security.CustomAuthenticationProvider;
 import com.webapplication.crossport.config.security.AuthService;
 import com.webapplication.crossport.domain.services.DefaultMemberService;
-import com.webapplication.crossport.ui.formdata.MemberRegistrationData;
+import com.webapplication.crossport.ui.dto.MemberRegistrationDTO;
 import com.webapplication.crossport.config.security.exception.RegistrationException;
 import org.junit.jupiter.api.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -153,7 +153,7 @@ public class AuthenticationTest extends DefaultMemberService{
      * @return True if authentication is a success else false
      */
     private boolean tryRegister(String username, String password, String passwordConfirmation) {
-        MemberRegistrationData member = new MemberRegistrationData();
+        MemberRegistrationDTO member = new MemberRegistrationDTO();
         member.setUsername(username);
         member.setPassword(password);
         member.setPasswordConfirmation(passwordConfirmation);

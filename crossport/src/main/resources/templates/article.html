@@ -62,7 +62,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 </div>
                 <div class="col-md-9 single_left">
                     <div class="single_image">
-                        <img th:if="${article.getImgPath() == null }" src="../images/pic6.jpg" class="img-responsive" alt=""/>
+                        <img th:if="${article.getImgPath() == null }" th:src="@{~/images/pic6.jpg}" class="img-responsive" alt=""/>
                         <img th:if="${article.getImgPath() != null }" th:src="@{${article.getImgPath()}}" class="img-responsive" alt=""/>
                     </div>
                     <!-- end product_slider -->
@@ -77,11 +77,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                            class="price2">
                         </p>
                         <p th:unless="${article.isInStock()}">Not in stock</p>
-                        <form th:method="post" th:action="@{/cart/article}"
+                        <form th:method="post" th:action="@{/cart/articles}"
                               th:if="${article.getNullablePrice()!=null && article.isInStock()}">
                             <input name="id" th:value="${article.id}" hidden/>
                             <span>Quantity:</span>
-                            <input type="number" id="quantity" name="quantity" value="1" min="1"/>
+                            <input type="number" id="quantity" name="quantity" value="1" min="1" max="10000"/>
                             <br/><br/>
                             <button type="submit" name="Submit" class="exclusive">
                                 <span>Add to cart</span>

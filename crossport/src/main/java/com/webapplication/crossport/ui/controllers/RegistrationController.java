@@ -1,6 +1,6 @@
 package com.webapplication.crossport.ui.controllers;
 
-import com.webapplication.crossport.ui.formdata.MemberRegistrationData;
+import com.webapplication.crossport.ui.dto.MemberRegistrationDTO;
 import com.webapplication.crossport.domain.services.MemberService;
 import com.webapplication.crossport.config.security.exception.RegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
+ * Controller charged to manage register new members
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -31,20 +32,20 @@ public class RegistrationController {
 
     @GetMapping
     public String getRegisterPage(Model model){
-        model.addAttribute("memberRegistrationData", new MemberRegistrationData());
+        model.addAttribute("memberRegistrationDTO", new MemberRegistrationDTO());
         return "register";
     }
 
     @PostMapping
-    public String performRegistration(final @Valid MemberRegistrationData memberRegistrationData, final BindingResult bindingResult, final Model model){
+    public String performRegistration(final @Valid MemberRegistrationDTO memberRegistrationDTO, final BindingResult bindingResult, final Model model){
 
         if(bindingResult.hasErrors()){
-            model.addAttribute("memberRegistrationData", memberRegistrationData);
+            model.addAttribute("memberRegistrationDTO", memberRegistrationDTO);
             return "register";
         }
 
         try {
-            memberService.register(memberRegistrationData);
+            memberService.register(memberRegistrationDTO);
         } catch (RegistrationException e){
 
             List<String> errors = e.getErrors();
@@ -54,7 +55,7 @@ public class RegistrationController {
             }
 
             // Refill
-            model.addAttribute("memberRegistrationData", memberRegistrationData);
+            model.addAttribute("memberRegistrationDTO", memberRegistrationDTO);
             return "register";
         }
 

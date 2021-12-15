@@ -1,11 +1,11 @@
-package com.webapplication.crossport.ui.formdata;
+package com.webapplication.crossport.ui.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * Implements a serializable object to receive/send user registration data
+ * Implements an object to receive/send user registration data
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
  */
 @Getter
 @Setter
-public class MemberRegistrationData {
+public class MemberRegistrationDTO {
 
     /**
      * Username

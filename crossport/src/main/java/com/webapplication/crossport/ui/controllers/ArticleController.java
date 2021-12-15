@@ -3,7 +3,7 @@ package com.webapplication.crossport.ui.controllers;
 import com.webapplication.crossport.domain.services.FileService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.domain.services.ArticleService;
-import com.webapplication.crossport.ui.formdata.ArticleDTO;
+import com.webapplication.crossport.ui.dto.ArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 
 /**
+ *  Controller charged to manage articles form admin view
  *
  * @author Berney Alec
  * @author Forestier Quentin

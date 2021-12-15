@@ -1,12 +1,11 @@
-package com.webapplication.crossport.ui.formdata;
+package com.webapplication.crossport.ui.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
- * Implements a serializable object to receive categories creation
+ * Implements an object to receive categories creation
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -16,7 +15,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
-public class CategoryData implements Serializable {
+public class CategoryDTO {
     @NotBlank(message = "Category name cannot be empty")
     String categoryName;
 }

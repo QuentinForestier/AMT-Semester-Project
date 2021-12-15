@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/home",
                         "/index.html",
 
-                        // ArticleController
+                        // ShopController
                         "/shop/**",
 
                         // CartController
@@ -81,7 +81,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         // CategoryController
-                        "/categorie/**",
+                        "/categories/**",
 
                         //ArticleController
                         "/articles**")

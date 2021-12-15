@@ -4,7 +4,7 @@ import com.webapplication.crossport.infra.models.Cart;
 import com.webapplication.crossport.infra.models.Member;
 import com.webapplication.crossport.infra.repository.MemberRepository;
 import com.webapplication.crossport.config.security.AuthService;
-import com.webapplication.crossport.ui.formdata.MemberRegistrationData;
+import com.webapplication.crossport.ui.dto.MemberRegistrationDTO;
 import com.webapplication.crossport.config.security.RequestType;
 import com.webapplication.crossport.config.security.exception.RegistrationException;
 import org.json.JSONArray;
@@ -37,7 +37,7 @@ public class DefaultMemberService implements MemberService
      * @throws RegistrationException Threw when the registration failed ( for example, username already used)
      */
     @Override
-    public void register(MemberRegistrationData user) throws RegistrationException {
+    public void register(MemberRegistrationDTO user) throws RegistrationException {
 
         JSONObject jsonObject = authenticate(user);
 
@@ -54,7 +54,7 @@ public class DefaultMemberService implements MemberService
      * Thus, we can test authenticate with custom server address / port on testing time.
      * @param user Serialized received user registration information
      */
-    public JSONObject authenticate (MemberRegistrationData user) throws RegistrationException{
+    public JSONObject authenticate (MemberRegistrationDTO user) throws RegistrationException{
 
         // basic check
         if(!user.getPasswordConfirmation().equals(user.getPassword())){

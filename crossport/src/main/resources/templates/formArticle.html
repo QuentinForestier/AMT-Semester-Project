@@ -1,0 +1,24 @@
+<div th:fragment="formArticle">
+    <label for="articleName">Name</label>
+    <input
+            id="articleName" type="text" placeholder="Article name"
+            class="form-control col-md-4"
+            th:field="*{articleName}">
+    <br>
+
+    <label for="articleDesc">Description</label>
+    <textarea id="articleDesc" class="form-control col-md-4" rows="5"
+              placeholder="Article description" name="description"
+              th:field="*{articleDesc}"></textarea>
+    <br>
+
+    <label for="articlePrice">Price (CHF) </label>
+    <input id="articlePrice" type="number" min="0" step="0.01"
+           class="form-control col-md-4 numInput" placeholder="preview"
+           th:field="*{articlePrice}"/>
+    <br>
+
+    <label for="articleStock">En Stock</label>
+    <input id="articleStock" type="checkbox" th:field="*{articleStock}"/>
+    <br>
+</div>

@@ -35,7 +35,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                         No category found
                     </div>
 
-                    <form method="get" action="/shop">
+                    <form th:method="get" th:action="@{/shop}">
                         <label th:for="idCategory">Choose a category: </label>
                         <select name="idCategory">
                             <option th:value=null>All</option>
@@ -54,27 +54,27 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                     -- No article found --
                 </div>
                 <div th:each="article:${listArticles}" class="col-md-3 shop_box">
-                    <a th:href="@{/shop/{id}(id=${article.id})}">
+                    <a th:href="@{/shop/articles/{id}(id=${article.id})}">
                         <img th:if="${article.getImgPath() == null }" src="images/pic6.jpg" class="img-responsive shop_img" alt=""/>
                         <img th:if="${article.getImgPath() != null }" th:src="@{${article.getImgPath()}}" class="img-responsive shop_img" alt=""/>
                         <span th:if="${!article.isInStock()}" class="sale-box">
 						    <span class="sale-label">Sold out</span>
 					    </span>
                     <div class="shop_desc">
-                        <h3><a th:href="@{/shop/{id}(id=${article.id})}"><span th:text="${article.name}"></span></a>
+                        <h3><a th:href="@{/shop/articles/{id}(id=${article.id})}"><span th:text="${article.name}"></span></a>
                         </h3>
-                        <span th:href="@{/shop/{id}(id=${article.id})}"
+                        <span th:href="@{/shop/articles/{id}(id=${article.id})}"
                               th:text="${article.getNullablePrice()==null} ? 'PREVIEW' : ${article.getNullablePrice()} + ' CHF'"></span>
                         <span class="actual"></span><br>
                         <ul class="buttons">
                             <li class="cart" style="cursor: pointer"
                                 th:if="${article.getNullablePrice()!=null && article.isInStock()}">
-                                <form th:method="post" th:action="@{/cart/article}">
+                                <form th:method="post" th:action="@{/cart/articles}">
                                     <input name="id" th:value="${article.id}" hidden/>
                                     <a onclick="this.closest('form').submit();"><span>Add To Cart</span></a>
                                 </form>
                             </li>
-                            <li class="shop_btn"><a th:href="@{/shop/{id}(id=${article.id})}">Read More</a></li>
+                            <li class="shop_btn"><a th:href="@{/shop/articles/{id}(id=${article.id})}">Read More</a></li>
                             <div class="clear"></div>
                         </ul>
                     </div>

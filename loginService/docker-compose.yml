@@ -1,0 +1,11 @@
+services:
+  server:
+    build: .
+    ports:
+      - "8081:8080"
+
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: crossportLogin
+      POSTGRES_PASSWORD: CrossportDatabase

@@ -1,5 +1,6 @@
 package com.webapplication.crossport.domain.services;
 
+import com.webapplication.crossport.config.images.ImageConfiguration;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
@@ -23,32 +24,15 @@ import java.util.Properties;
  */
 public class FileService {
 
-    public static String uploadDir="/opt/tomcat/webapps/articles_images";
     private static final String[] extensions = new String[]{"jpeg", "jpg", "gif", "png"};
 
-    public FileService() {
-        // Retrieving secret
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        String appConfigPath = rootPath + "authentication.properties";
-
-        appConfigPath = appConfigPath.replace("%20", " ");
-
-        Properties appProps = new Properties();
-        try {
-            appProps.load(new FileInputStream(appConfigPath));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        uploadDir = appProps.getProperty("imagepath");
-    }
 
     public boolean isAnAuthorizedExtension(MultipartFile multipartFile) {
         return Arrays.asList(extensions).contains(FilenameUtils.getExtension(multipartFile.getOriginalFilename()));
     }
 
     public void saveFile(Integer id, MultipartFile multipartFile) {
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(ImageConfiguration.uploadDir);
         String fileName = id.toString() + getExtension(multipartFile);
 
         try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -64,7 +48,7 @@ public class FileService {
     }
 
     public void removeFile(Integer id, String extension) {
-        Path uploadPath = Paths.get(uploadDir);
+        Path uploadPath = Paths.get(ImageConfiguration.uploadDir);
         String fileName = id.toString() + extension;
         Path filePath = uploadPath.resolve(fileName);
         try {

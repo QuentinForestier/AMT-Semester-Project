@@ -1,7 +1,7 @@
 package com.webapplication.crossport.config.security;
 
+import com.webapplication.crossport.config.images.ImageConfiguration;
 import com.webapplication.crossport.config.jwt.JWTFilter;
-import com.webapplication.crossport.domain.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -70,7 +70,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cart/**",
 
                         //Images des produits
-                        "/" + FileService.uploadDir + "/**",
+                        "/" + ImageConfiguration.uploadDir + "/**",
 
                         // Ressources Statiques
                         "/css/**",

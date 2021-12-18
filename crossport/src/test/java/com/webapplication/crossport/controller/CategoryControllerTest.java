@@ -23,7 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Testing routes from article controller.
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc

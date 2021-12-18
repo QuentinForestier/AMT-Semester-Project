@@ -106,7 +106,7 @@ public class ArticleController {
             return "editArticle";
         }
 
-        return "manageArticles";
+        return "redirect:/articles";
     }
 
     @PutMapping(value = "", params = "DeleteImage")

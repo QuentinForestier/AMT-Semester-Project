@@ -23,7 +23,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Testing jwtFilter
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,7 +46,7 @@ public class JwtFilterTest {
 		String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjcm9zc3BvcnQiLCJyb2xlIjoiYWRtaW4iLCJpc3MiOiJJSUNUIiwiZXhwIjoxNjM3NDIxNTkxLCJpYXQiOjE2MzczMzUxOTF9.oLTiY43UmRMV_bYGr3mxRGeb3tN0w-9d4oKLU1KCV1s";
 		Cookie cookie = new Cookie("jwt", expiredToken);
 
-		mvc.perform(MockMvcRequestBuilders.get("/articles/manage").cookie(cookie))
+		mvc.perform(MockMvcRequestBuilders.get("/articles").cookie(cookie))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/logout"));
 
@@ -81,7 +85,7 @@ public class JwtFilterTest {
 
 		Cookie cookie = new Cookie("jwt", token);
 
-		mvc.perform(MockMvcRequestBuilders.get("/articles/manage").cookie(cookie))
+		mvc.perform(MockMvcRequestBuilders.get("/articles").cookie(cookie))
 				.andExpect(status().isOk())
 				.andExpect(view().name("manageArticles"));
 	}

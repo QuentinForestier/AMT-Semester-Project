@@ -36,6 +36,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     LogoutSuccessHandler logoutSuccessHandler;
 
+    @Autowired
+    JWTFilter jwtFilter;
+
     @Bean
     public CustomAuthenticationProvider authProvider() {
         CustomAuthenticationProvider authProvider = new CustomAuthenticationProvider();
@@ -106,7 +109,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler(logoutSuccessHandler)
                 .logoutSuccessUrl("/home");
 
-        http.addFilterBefore(new JWTFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     /**

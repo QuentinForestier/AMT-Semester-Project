@@ -20,7 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for authentication. This test class checks multiple users inputs for registration and login.
  * For registration: checks if DefaultMemberService behave correctly depending on authentication server response.
  * For login: checks if authenticate method of customAuthenticationProvider works
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 public class AuthenticationTest extends DefaultMemberService{
 

@@ -302,4 +302,53 @@ public class CategoryControllerTest {
                 .andExpect(redirectedUrl("/categories/" + category1.getId()))
                 .andExpect(flash().attribute("delError", delError));
     }
+
+    @Test
+    @WithMockUser(roles={"ADMIN"})
+    public void AsAdmin_deleteCategoryWithArticleConfirm_Success() throws Exception {
+        List<Category> mockCategories = new ArrayList<>();
+        Category category1 = new Category();
+        category1.setId(1);
+        category1.setName("category1");
+        mockCategories.add(category1);
+
+        Category category2 = new Category();
+        category2.setId(2);
+        category2.setName("category2");
+        mockCategories.add(category2);
+
+        List<Article> mockArticles = new ArrayList<>();
+        Article article1 = new Article();
+        article1.setId(1);
+        article1.setName("article1");
+        article1.getCategories().add(category1);
+        category1.getArticles().add(article1);
+        article1.setPrice(10.0);
+        article1.setDescription("article 1");
+        mockArticles.add(article1);
+
+        String delError = "You cannot delete this category as it has articles bound.";
+
+
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category1);
+        Mockito.when(articleService.getCategoryArticles(category1)).thenReturn(mockArticles);
+
+        mockCategories.remove(mockCategories.get(0));
+        Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", 1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/categories/" + category1.getId()))
+                .andExpect(flash().attribute("delError", delError));
+
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}?confirm=true", 1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/categories"))
+                .andExpect(flash().attribute("listCategories", hasSize(1)))
+                .andExpect(flash().attribute("listCategories", hasItem(
+                        allOf(
+                                hasProperty("name", is(category2.getName()))
+                        )
+                )));
+    }
 }

@@ -48,7 +48,7 @@ public class CategoryService {
             article.getCategories().remove(category);
         }
         category.getArticles().clear();
-        this.categoryRepository.delete(category);
+        categoryRepository.delete(category);
     }
 
     public Category getFirstByName(String name) {

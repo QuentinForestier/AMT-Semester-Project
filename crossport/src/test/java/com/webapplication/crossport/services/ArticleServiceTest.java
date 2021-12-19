@@ -3,26 +3,28 @@ package com.webapplication.crossport.services;
 import com.webapplication.crossport.config.images.ImageConfiguration;
 import com.webapplication.crossport.domain.services.ArticleService;
 import com.webapplication.crossport.infra.models.Article;
+import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.ArticleRepository;
+import com.webapplication.crossport.infra.repository.CategoryRepository;
 import com.webapplication.crossport.ui.dto.ArticleDTO;
-import org.checkerframework.checker.units.qual.A;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.web.multipart.MultipartFile;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Testing routes from article controller.
+ * Testing article service
  * @author Berney Alec
  * @author Forestier Quentin
  * @author Gazetta Florian
@@ -39,6 +41,192 @@ public class ArticleServiceTest {
 
 	@Mock
 	private ArticleRepository ar;
+
+	@Mock
+	private CategoryRepository cr;
+
+	@Test
+	public void getAllArticles_NoArticle() {
+		Mockito.when(ar.findAll()).thenThrow(RuntimeException.class);
+
+		List<Article> list = as.getAllArticles();
+
+		assertTrue(list.isEmpty());
+	}
+
+	@Test
+	public void getAllArticles_WithArticle() {
+
+		List<Article> returnedArticles = new LinkedList<>();
+		returnedArticles.add(new Article());
+		returnedArticles.add(new Article());
+
+		Mockito.when(ar.findAll()).thenReturn(returnedArticles);
+
+		List<Article> list = as.getAllArticles();
+
+		assertEquals(list.size(), 2);
+	}
+
+	@Test
+	public void getCategoryArticles_NoArticle() {
+
+		Category cat = new Category();
+
+		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenThrow(RuntimeException.class);
+
+		List<Article> list = as.getCategoryArticles(cat);
+
+		assertTrue(list.isEmpty());
+	}
+
+	@Test
+	public void getCategoryArticles_WithArticle() {
+
+		Category cat = new Category();
+
+		List<Article> returnedArticles = new LinkedList<>();
+		returnedArticles.add(new Article());
+		returnedArticles.add(new Article());
+
+		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenReturn(returnedArticles);
+
+		List<Article> list = as.getCategoryArticles(cat);
+
+		assertEquals(list.size(), 2);
+	}
+
+	@Test
+	public void getArticlesNotInCategory_NoArticle() {
+
+		Category cat = new Category();
+
+		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenThrow(RuntimeException.class);
+
+		List<Article> list = as.getCategoryArticles(cat);
+
+		assertTrue(list.isEmpty());
+	}
+
+	@Test
+	public void getArticlesNotInCategory_WithArticle() {
+
+		Category cat = new Category();
+
+		List<Article> returnedArticles = new LinkedList<>();
+		returnedArticles.add(new Article());
+		returnedArticles.add(new Article());
+
+		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenReturn(returnedArticles);
+
+		List<Article> list = as.getCategoryArticles(cat);
+
+		assertEquals(list.size(), 2);
+	}
+
+	@Test
+	public void getArticleById_badId() {
+
+		Optional<Article> optional = Optional.empty();
+
+		Mockito.when(ar.findById(1)).thenReturn(optional);
+
+		boolean success = false;
+
+		try {
+			Article article = as.getArticleById(1);
+		} catch (Exception e) {
+			if (e.getMessage().equals("Article not found for id :: 1")){
+				success = true;
+			}
+		}
+
+		assertTrue(success);
+	}
+
+	@Test
+	public void getArticleById_goodId() {
+
+		Optional<Article> optional = Optional.of(new Article());
+
+		Mockito.when(ar.findById(1)).thenReturn(optional);
+
+		boolean success = true;
+
+		try {
+			as.getArticleById(1);
+		} catch (Exception e) {
+			success = false;
+		}
+
+		assertTrue(success);
+	}
+
+	@Test
+	public void findFirstByName_badName() {
+
+		Mockito.when(ar.findFirstByName("a name")).thenReturn(null);
+
+		boolean success = false;
+
+		try {
+			as.findFirstByName("a name");
+		} catch (Exception e) {
+			if (e.getMessage().equals("Article not found for name :: a name")){
+				success = true;
+			}
+		}
+
+		assertTrue(success);
+	}
+
+	@Test
+	public void findFirstByName_goodName() {
+
+		Mockito.when(ar.findFirstByName("a name")).thenReturn(new Article());
+
+		boolean success = true;
+
+		try {
+			as.findFirstByName("a name");
+		} catch (Exception e) {
+			success = false;
+		}
+
+		assertTrue(success);
+	}
+
+	@Test
+	public void removeCategory() {
+		Category cat = new Category();
+		Article article = new Article();
+
+		Optional<Article> optional = Optional.of(article);
+		Mockito.when(ar.findById(1)).thenReturn(optional);
+
+		article.addCategory(cat);
+
+		assertTrue(!cat.getArticles().isEmpty());
+
+		as.removeCategory(1, cat);
+
+		assertTrue(article.getCategories().isEmpty());
+		assertTrue(cat.getArticles().isEmpty());
+	}
+
+	@Test
+	public void addCategory() {
+		Category cat = new Category();
+		Article article = new Article();
+
+		Optional<Article> optional = Optional.of(article);
+		Mockito.when(ar.findById(1)).thenReturn(optional);
+
+		as.addCategory(1, cat);
+
+		assertTrue(!article.getCategories().isEmpty());
+		assertTrue(!cat.getArticles().isEmpty());
+	}
 
 	@Test
 	public void  modifyArticle_BadPrice_Fail() {

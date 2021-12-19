@@ -1,6 +1,5 @@
 package com.webapplication.crossport.controllers;
 
-import com.webapplication.crossport.models.Article;
 import com.webapplication.crossport.models.Cart;
 import com.webapplication.crossport.models.CartArticle;
 import com.webapplication.crossport.models.services.ArticleService;
@@ -12,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * Cart controller to insert / remove article
@@ -21,7 +19,8 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 @RequestMapping("/cart")
-public class CartController {
+public class CartController
+{
     @Autowired
     private ArticleService articleService;
 
@@ -31,15 +30,11 @@ public class CartController {
     @Autowired
     CartArticleService cartArticleService;
 
-    @Autowired
-    private HttpSession session;
 
     @GetMapping("")
-    public String viewCart(HttpServletRequest request, Model model) {
-        Cart cartInSession = Cart.getContextCart(request.getSession());
-
-        if (cartInSession.getId() != null)
-            cartInSession = cartService.load(cartInSession.getId());
+    public String viewCart(Model model)
+    {
+        Cart cartInSession = cartService.getContextCart();
 
         model.addAttribute("cart", cartInSession);
 
@@ -50,23 +45,15 @@ public class CartController {
     public String addArticle(HttpServletRequest request,
                              @RequestParam(value = "id") Integer id,
                              @RequestParam(value = "quantity",
-                                     defaultValue = "1") Integer quantity) {
+                                     defaultValue = "1") Integer quantity)
+    {
 
-        Cart cart = Cart.getContextCart(request.getSession());
-        if (cart.getId() != null)
-            cart = cartService.load(cart.getId());
+        Cart cart = cartService.getContextCart();
 
-        try {
-            Article article = articleService.getArticleById(id);
-            if (article.getNullablePrice() != null && article.isInStock()) {
-                CartArticle ca = cart.addToCart(quantity, article);
-                saveCartArticle(ca);
-            }
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-        }
 
-        //your controller code
+        cartService.addToCart(cart, quantity,
+                articleService.getArticleById(id));
+
         String referer = request.getHeader("Referer");
         String parameter = (referer.contains("added") ? "" :
                 referer.contains("?") ? "&added" : "?added");
@@ -74,13 +61,13 @@ public class CartController {
     }
 
     @DeleteMapping("")
-    public String clear(HttpServletRequest request) {
-        Cart cart = Cart.getContextCart(request.getSession());
-        if (cart.getId() != null)
-            cart = cartService.load(cart.getId());
+    public String clear(HttpServletRequest request)
+    {
+        Cart cart = cartService.getContextCart();
+
         cart.clear();
 
-        saveCart(cart);
+        cartService.save(cart);
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
@@ -88,16 +75,16 @@ public class CartController {
 
     @DeleteMapping("/article/{id}")
     public String removeArticle(@PathVariable(value = "id") Integer id,
-                                HttpServletRequest request) {
-        Cart cart = Cart.getContextCart(request.getSession());
-        if (cart.getId() != null)
-            cart = cartService.load(cart.getId());
+                                HttpServletRequest request)
+    {
+        Cart cart = cartService.getContextCart();
 
-        CartArticle ca = cart.getCartArticleByArticle(articleService.getArticleById(id));
+        CartArticle ca =
+                cart.getCartArticleByArticle(articleService.getArticleById(id));
 
         cart.removeArticle(ca);
 
-        saveCart(cart);
+        cartService.save(cart);
 
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
@@ -106,35 +93,13 @@ public class CartController {
     @PutMapping("/article/{id}/{quantity}")
     public String updateQuantity(@PathVariable(value = "id") Integer id,
                                  @PathVariable(value = "quantity") Integer quantity,
-                                 HttpServletRequest request) {
-        Cart cart = Cart.getContextCart(request.getSession());
-        if (cart.getId() != null)
-            cart = cartService.load(cart.getId());
+                                 HttpServletRequest request)
+    {
 
-        CartArticle ca = cart.getCartArticleByArticle(articleService.getArticleById(id));
-
-        if (quantity == 0) {
-            cartArticleService.delete(ca);
-            cart.removeArticle(ca);
-        } else {
-            ca.setQuantity(quantity);
-        }
-
-        saveCart(cart);
-
+        Cart cart = cartService.getContextCart();
+        cartService.updateQuantity(cart, quantity,
+                articleService.getArticleById(id));
         String referer = request.getHeader("Referer");
         return "redirect:" + referer;
-    }
-
-    private void saveCartArticle(CartArticle ca) {
-        if (ca != null && session != null && session.getAttribute("member") != null) {
-            cartArticleService.save(ca);
-        }
-    }
-
-    private void saveCart(Cart cart) {
-        if (session != null && session.getAttribute("member") != null) {
-            cartService.save(cart);
-        }
     }
 }

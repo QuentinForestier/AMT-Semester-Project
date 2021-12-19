@@ -22,15 +22,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
-
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 /**
  * Testing routes from article controller.
@@ -70,12 +67,15 @@ public class CategoryControllerTest {
     public void AsAdmin_getCategories_success() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
         Category category1 = new Category();
+        category1.setId(1);
         category1.setName("category1");
 
         Category category2 = new Category();
+        category1.setId(2);
         category2.setName("category2");
 
         Category empty = new Category();
+        category1.setId(3);
         empty.setName("empty");
 
         mockCategories.add(category1);
@@ -90,17 +90,17 @@ public class CategoryControllerTest {
                 .andExpect(model().attribute("listCategories", hasSize(3)))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is("category1"))
+                                hasProperty("name", is(category1.getName()))
                         )
                 )))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is("category2"))
+                                hasProperty("name", is(category2.getName()))
                         )
                 )))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is("empty"))
+                                hasProperty("name", is(empty.getName()))
                         )
                 )));
     }
@@ -147,7 +147,7 @@ public class CategoryControllerTest {
         Mockito.when(articleService.getArticlesNotInCategory(category)).thenReturn(articlesNotInCategory);
         Mockito.when(categoryService.getCategoryById(1)).thenReturn(category);
 
-        mvc.perform(MockMvcRequestBuilders.get("/categories/1"))
+        mvc.perform(MockMvcRequestBuilders.get("/categories/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category"))
                 .andExpect(model().attribute("category",
@@ -158,17 +158,17 @@ public class CategoryControllerTest {
                 .andExpect(model().attribute("articlesNotInCategory", hasSize(3)))
                 .andExpect(model().attribute("articlesNotInCategory", hasItem(
                         allOf(
-                                hasProperty("name", is("test item 1"))
+                                hasProperty("name", is(articlesNotInCategory.get(0).getName()))
                         )
                 )))
                 .andExpect(model().attribute("articlesNotInCategory", hasItem(
                         allOf(
-                                hasProperty("name", is("test item 3"))
+                                hasProperty("name", is(articlesNotInCategory.get(1).getName()))
                         )
                 )))
                 .andExpect(model().attribute("articlesNotInCategory", hasItem(
                         allOf(
-                                hasProperty("name", is("test item 5"))
+                                hasProperty("name", is(articlesNotInCategory.get(2).getName()))
                         )
                 )));
     }
@@ -188,19 +188,18 @@ public class CategoryControllerTest {
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 
         mvc.perform(MockMvcRequestBuilders.post("/categories")
-                        .with(csrf())
-                .param("categoryName", "category2"))
+                .param("categoryName", category2.getName()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories"))
                 .andExpect(model().attribute("listCategories", hasSize(2)))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is("category1"))
+                                hasProperty("name", is(category1.getName()))
                         )
                 )))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is("category2"))
+                                hasProperty("name", is(category2.getName()))
                         )
                 )));
     }
@@ -221,8 +220,7 @@ public class CategoryControllerTest {
         Mockito.when(categoryService.getAllCategories()).thenReturn(List.of(category1));
 
         ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post("/categories")
-                        .with(csrf())
-                .param("categoryName", "category1"))
+                .param("categoryName", category1.getName()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories"))
                 .andExpect(model().hasErrors());
@@ -237,7 +235,71 @@ public class CategoryControllerTest {
 
     @Test
     @WithMockUser(roles={"ADMIN"})
-    public void AsAdmin_deleteCategoryWithoutArticle_Fail() throws Exception {
+    public void AsAdmin_deleteCategoryWithoutArticle_Success() throws Exception {
+        List<Category> mockCategories = new ArrayList<>();
+        Category category1 = new Category();
+        category1.setId(1);
+        category1.setName("category1");
+        mockCategories.add(category1);
 
+        Category category2 = new Category();
+        category2.setId(2);
+        category2.setName("category2");
+        mockCategories.add(category2);
+
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category1);
+        Mockito.when(articleService.getCategoryArticles(category1)).thenReturn(new ArrayList<>());
+
+        mockCategories.remove(mockCategories.get(0));
+        Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", 1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/categories"))
+                .andExpect(flash().attribute("listCategories", hasSize(1)))
+                .andExpect(flash().attribute("listCategories", hasItem(
+                        allOf(
+                                hasProperty("name", is(category2.getName()))
+                        )
+                )));
+    }
+
+    @Test
+    @WithMockUser(roles={"ADMIN"})
+    public void AsAdmin_deleteCategoryWithArticle_Fail() throws Exception {
+        List<Category> mockCategories = new ArrayList<>();
+        Category category1 = new Category();
+        category1.setId(1);
+        category1.setName("category1");
+        mockCategories.add(category1);
+
+        Category category2 = new Category();
+        category2.setId(2);
+        category2.setName("category2");
+        mockCategories.add(category2);
+
+        List<Article> mockArticles = new ArrayList<>();
+        Article article1 = new Article();
+        article1.setId(1);
+        article1.setName("article1");
+        article1.getCategories().add(category1);
+        category1.getArticles().add(article1);
+        article1.setPrice(10.0);
+        article1.setDescription("article 1");
+        mockArticles.add(article1);
+
+        String delError = "You cannot delete this category as it has articles bound.";
+
+
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category1);
+        Mockito.when(articleService.getCategoryArticles(category1)).thenReturn(mockArticles);
+
+        mockCategories.remove(mockCategories.get(0));
+        Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
+
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", 1))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/categories/" + category1.getId()))
+                .andExpect(flash().attribute("delError", delError));
     }
 }

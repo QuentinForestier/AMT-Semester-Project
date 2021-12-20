@@ -42,19 +42,13 @@ public class CategoryController {
     }
 
     @PostMapping("")
-    public String add(final @Valid CategoryDTO categoryDTO, final BindingResult bindingResult, final Model model) {
-        Category sameCategory = categoryService.getFirstByName(categoryDTO.getCategoryName());
-
-        if (sameCategory != null) {
-            bindingResult.addError(new ObjectError("globalError", "Same category already exists."));
-        }
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("categoryDTO", categoryDTO);
-        } else {
-            Category category = new Category();
-            category.setName(categoryDTO.getCategoryName());
-            categoryService.saveCategory(category);
+    public String add(final @Valid CategoryDTO categoryDTO,
+                      final BindingResult bindingResult,
+                      final Model model) {
+        try {
+            categoryService.addCategory(categoryDTO);
+        } catch (RuntimeException e) {
+            bindingResult.addError(new ObjectError("Error", e.getMessage()));
         }
 
         model.addAttribute("listCategories", categoryService.getAllCategories());

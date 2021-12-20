@@ -51,7 +51,6 @@ public class ArticleController {
         try {
             article = articleService.getArticleById(id);
         } catch (RuntimeException e) {
-            // TODO: erreur
             return "manageArticles";
         }
 

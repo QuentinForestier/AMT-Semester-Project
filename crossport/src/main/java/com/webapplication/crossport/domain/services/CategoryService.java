@@ -3,10 +3,12 @@ package com.webapplication.crossport.domain.services;
 import java.util.List;
 import java.util.Optional;
 import com.webapplication.crossport.infra.models.Article;
+import com.webapplication.crossport.ui.dto.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.ObjectError;
 
 /**
  *
@@ -37,6 +39,19 @@ public class CategoryService {
 
     public void saveCategory(Category category) {
         this.categoryRepository.save(category);
+    }
+
+    public void addCategory(CategoryDTO categoryDTO) {
+        Category sameCategory = getFirstByName(categoryDTO.getCategoryName());
+
+        if (sameCategory != null) {
+            throw new RuntimeException("Same category already exists.");
+        }
+
+        Category category = new Category();
+        category.setName(categoryDTO.getCategoryName());
+
+        saveCategory(category);
     }
 
     public Category getCategoryById(Integer id) {

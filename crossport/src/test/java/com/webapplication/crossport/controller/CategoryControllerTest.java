@@ -68,22 +68,22 @@ public class CategoryControllerTest {
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    public void AsAdmin_getCategories_success() throws Exception {
+    public void AsAdmin_getCategories_Success() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
-        Category category1 = new Category();
-        category1.setId(1);
-        category1.setName("category1");
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
 
-        Category category2 = new Category();
-        category1.setId(2);
-        category2.setName("category2");
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
 
         Category empty = new Category();
-        category1.setId(3);
+        empty.setId(3);
         empty.setName("empty");
 
-        mockCategories.add(category1);
-        mockCategories.add(category2);
+        mockCategories.add(snowboards);
+        mockCategories.add(skis);
         mockCategories.add(empty);
 
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
@@ -91,15 +91,15 @@ public class CategoryControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/categories"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories"))
-                .andExpect(model().attribute("listCategories", hasSize(3)))
+                .andExpect(model().attribute("listCategories", hasSize(mockCategories.size())))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is(category1.getName()))
+                                hasProperty("name", is(snowboards.getName()))
                         )
                 )))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is(category2.getName()))
+                                hasProperty("name", is(skis.getName()))
                         )
                 )))
                 .andExpect(model().attribute("listCategories", hasItem(
@@ -115,7 +115,6 @@ public class CategoryControllerTest {
         mvc.perform(MockMvcRequestBuilders.get("/categories/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
-
     }
 
     @Test
@@ -123,14 +122,14 @@ public class CategoryControllerTest {
     public void AsUser_getCategory_Fail() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/categories/1"))
                 .andExpect(status().is4xxClientError());
-
     }
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    public void AsAdmin_getCategory_success() throws Exception {
-        Category category = new Category();
-        category.setName("category");
+    public void AsAdmin_getCategory_Success() throws Exception {
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
 
         List<Article> articlesNotInCategory = new ArrayList<>();
         for (int i = 1; i <= 5; ++i) {
@@ -141,25 +140,25 @@ public class CategoryControllerTest {
             article.setPrice(i * 100.0);
 
             if (i % 2 == 0) {
-                article.getCategories().add(category);
-                category.getArticles().add(article);
+                article.getCategories().add(snowboards);
+                snowboards.getArticles().add(article);
             } else {
                 articlesNotInCategory.add(article);
             }
         }
 
-        Mockito.when(articleService.getArticlesNotInCategory(category)).thenReturn(articlesNotInCategory);
-        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category);
+        Mockito.when(articleService.getArticlesNotInCategory(snowboards)).thenReturn(articlesNotInCategory);
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(snowboards);
 
-        mvc.perform(MockMvcRequestBuilders.get("/categories/{id}", 1))
+        mvc.perform(MockMvcRequestBuilders.get("/categories/{id}", snowboards.getId()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("category"))
                 .andExpect(model().attribute("category",
                         allOf(
-                                hasProperty("name", is("category"))
+                                hasProperty("name", is(snowboards.getName()))
                         )
                 ))
-                .andExpect(model().attribute("articlesNotInCategory", hasSize(3)))
+                .andExpect(model().attribute("articlesNotInCategory", hasSize(articlesNotInCategory.size())))
                 .andExpect(model().attribute("articlesNotInCategory", hasItem(
                         allOf(
                                 hasProperty("name", is(articlesNotInCategory.get(0).getName()))
@@ -181,29 +180,31 @@ public class CategoryControllerTest {
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_submitCategory_Success() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
-        Category category1 = new Category();
-        category1.setName("category1");
-        mockCategories.add(category1);
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+        mockCategories.add(snowboards);
 
-        Category category2 = new Category();
-        category2.setName("category2");
-        mockCategories.add(category2);
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+        mockCategories.add(skis);
 
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 
         mvc.perform(MockMvcRequestBuilders.post("/categories")
-                .param("categoryName", category2.getName()))
+                .param("categoryName", skis.getName()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories"))
-                .andExpect(model().attribute("listCategories", hasSize(2)))
+                .andExpect(model().attribute("listCategories", hasSize(mockCategories.size())))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is(category1.getName()))
+                                hasProperty("name", is(snowboards.getName()))
                         )
                 )))
                 .andExpect(model().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is(category2.getName()))
+                                hasProperty("name", is(skis.getName()))
                         )
                 )));
     }
@@ -212,19 +213,20 @@ public class CategoryControllerTest {
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_submitCategoryWithSameName_Fail() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
-        Category category1 = new Category();
-        category1.setName("category1");
-        mockCategories.add(category1);
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+        mockCategories.add(snowboards);
 
-        Category category2 = new Category();
-        category2.setName(category1.getName());
-        mockCategories.add(category2);
+        Category snowboard2 = new Category();
+        snowboard2.setName(snowboards.getName());
+        mockCategories.add(snowboard2);
 
-        Mockito.when(categoryService.getFirstByName(category1.getName())).thenReturn(mockCategories.get(0));
-        Mockito.when(categoryService.getAllCategories()).thenReturn(List.of(category1));
+        Mockito.when(categoryService.getFirstByName(snowboards.getName())).thenReturn(mockCategories.get(0));
+        Mockito.when(categoryService.getAllCategories()).thenReturn(List.of(snowboards));
 
         ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post("/categories")
-                .param("categoryName", category1.getName()))
+                .param("categoryName", snowboards.getName()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("categories"))
                 .andExpect(model().hasErrors());
@@ -241,29 +243,29 @@ public class CategoryControllerTest {
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_deleteCategoryWithoutArticle_Success() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
-        Category category1 = new Category();
-        category1.setId(1);
-        category1.setName("category1");
-        mockCategories.add(category1);
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+        mockCategories.add(snowboards);
 
-        Category category2 = new Category();
-        category2.setId(2);
-        category2.setName("category2");
-        mockCategories.add(category2);
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+        mockCategories.add(skis);
 
-        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category1);
-        Mockito.when(articleService.getCategoryArticles(category1)).thenReturn(new ArrayList<>());
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(snowboards);
+        Mockito.when(articleService.getCategoryArticles(snowboards)).thenReturn(new ArrayList<>());
 
         mockCategories.remove(mockCategories.get(0));
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", 1))
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", snowboards.getId()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/categories"))
                 .andExpect(flash().attribute("listCategories", hasSize(1)))
                 .andExpect(flash().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is(category2.getName()))
+                                hasProperty("name", is(skis.getName()))
                         )
                 )));
     }
@@ -272,38 +274,38 @@ public class CategoryControllerTest {
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_deleteCategoryWithArticle_Fail() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
-        Category category1 = new Category();
-        category1.setId(1);
-        category1.setName("category1");
-        mockCategories.add(category1);
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+        mockCategories.add(snowboards);
 
-        Category category2 = new Category();
-        category2.setId(2);
-        category2.setName("category2");
-        mockCategories.add(category2);
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+        mockCategories.add(skis);
 
         List<Article> mockArticles = new ArrayList<>();
-        Article article1 = new Article();
-        article1.setId(1);
-        article1.setName("article1");
-        article1.getCategories().add(category1);
-        category1.getArticles().add(article1);
-        article1.setPrice(10.0);
-        article1.setDescription("article 1");
-        mockArticles.add(article1);
+        Article snowboardArticle = new Article();
+        snowboardArticle.setId(1);
+        snowboardArticle.setName("snowboard");
+        snowboardArticle.getCategories().add(snowboards);
+        snowboards.getArticles().add(snowboardArticle);
+        snowboardArticle.setPrice(10.0);
+        snowboardArticle.setDescription("snowboard test 1");
+        mockArticles.add(snowboardArticle);
 
         String delError = "You cannot delete this category as it has articles bound.";
 
 
-        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category1);
-        Mockito.when(articleService.getCategoryArticles(category1)).thenReturn(mockArticles);
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(snowboards);
+        Mockito.when(articleService.getCategoryArticles(snowboards)).thenReturn(mockArticles);
 
         mockCategories.remove(mockCategories.get(0));
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", 1))
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", snowboards.getId()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/categories/" + category1.getId()))
+                .andExpect(redirectedUrl("/categories/" + snowboards.getId()))
                 .andExpect(flash().attribute("delError", delError));
     }
 
@@ -311,22 +313,22 @@ public class CategoryControllerTest {
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_deleteCategoryWithArticleConfirm_Success() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
-        Category category1 = new Category();
-        category1.setId(1);
-        category1.setName("category1");
-        mockCategories.add(category1);
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+        mockCategories.add(snowboards);
 
-        Category category2 = new Category();
-        category2.setId(2);
-        category2.setName("category2");
-        mockCategories.add(category2);
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+        mockCategories.add(skis);
 
         List<Article> mockArticles = new ArrayList<>();
         Article article1 = new Article();
         article1.setId(1);
         article1.setName("article1");
-        article1.getCategories().add(category1);
-        category1.getArticles().add(article1);
+        article1.getCategories().add(snowboards);
+        snowboards.getArticles().add(article1);
         article1.setPrice(10.0);
         article1.setDescription("article 1");
         mockArticles.add(article1);
@@ -334,24 +336,24 @@ public class CategoryControllerTest {
         String delError = "You cannot delete this category as it has articles bound.";
 
 
-        Mockito.when(categoryService.getCategoryById(1)).thenReturn(category1);
-        Mockito.when(articleService.getCategoryArticles(category1)).thenReturn(mockArticles);
+        Mockito.when(categoryService.getCategoryById(1)).thenReturn(snowboards);
+        Mockito.when(articleService.getCategoryArticles(snowboards)).thenReturn(mockArticles);
 
         mockCategories.remove(mockCategories.get(0));
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 
-        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", 1))
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", snowboards.getId()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/categories/" + category1.getId()))
+                .andExpect(redirectedUrl("/categories/" + snowboards.getId()))
                 .andExpect(flash().attribute("delError", delError));
 
-        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}?confirm=true", 1))
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}?confirm=true", snowboards.getId()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/categories"))
                 .andExpect(flash().attribute("listCategories", hasSize(1)))
                 .andExpect(flash().attribute("listCategories", hasItem(
                         allOf(
-                                hasProperty("name", is(category2.getName()))
+                                hasProperty("name", is(skis.getName()))
                         )
                 )));
     }

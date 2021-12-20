@@ -26,7 +26,8 @@ public class ArticleService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private final FileService fileService = new FileService();
+    @Autowired
+    private FileService fileService;
 
     public List<Article> getAllArticles() {
         try {
@@ -94,6 +95,10 @@ public class ArticleService {
         article.setName(articleDTO.getArticleName());
         article.setDescription(articleDTO.getArticleDesc());
         article.setInStock(articleDTO.isArticleStock());
+
+        if(article.getImgPath() != null) {
+            fileService.removeFile(article.getId(), article.getImgExtension());
+        }
 
         setArticleImageExtension(article, multipartFile);
 

@@ -48,8 +48,10 @@ jobs:
         with:
           java-version: '11'
           distribution: 'adopt'
-      - name: Delete authentication.properties
-        run: rm /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties
+      - name: Create application.properties
+        run: touch /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/application.properties
+      - name: Set application.properties for production
+        run: echo "${{secrets.APP_PROP}}" >> /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/application.properties    
       - name: Create authentication.properties
         run: touch /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/authentication.properties
       - name: Set authentication.properties for production

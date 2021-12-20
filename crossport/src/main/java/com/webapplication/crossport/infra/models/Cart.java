@@ -41,75 +41,40 @@ public class Cart
 
     /* -------------------------- GETTERS AND SETTERS -------------------------------*/
 
+    /* -------------------------- GETTERS AND SETTERS
+    -------------------------------*/
+
     /**
-     * For a given http request, gets the session cart. If none creates and
-     * return one.
+     * Gets cart id
      *
-     * @param session Context session
-     * @return The session cart.
+     * @return Cart id
      */
-    public static Cart getContextCart(HttpSession session)
+    public Integer getId()
     {
-        Member member = (Member) session.getAttribute("member");
-
-        if (member == null)
-        {
-            if (session.getAttribute("tempCart") == null)
-            {
-                session.setAttribute("tempCart", new Cart());
-            }
-            return (Cart) session.getAttribute("tempCart");
-        }
-
-        if (member.getCart() == null)
-        {
-            member.setCart(new Cart());
-        }
-
-        return member.getCart();
+        return id;
     }
 
     /**
-     * Adds a cartArticle. If article already exists in cart, quantity is
-     * updated. If quantity is 0, article is removed.
+     * Sets new cart id
      *
-     * @param quantity Quantity in carty for the given article
-     * @param article  Article to add
-     * @return The inserted or modified CartArticle. Null if removed
+     * @param id New cart
      */
-    public CartArticle addToCart(int quantity, Article article)
+    public void setId(Integer id)
     {
+        this.id = id;
+    }
 
-        Optional<CartArticle> cartArticle =
-                cartArticles.stream().filter(ca -> Objects.equals(ca.getArticle().getId(), article.getId())).findFirst();
+    public Set<CartArticle> getCartArticles()
+    {
+        return cartArticles;
+    }
 
-        CartArticle ca = null;
+    public void addArticle(CartArticle ca){
+        this.cartArticles.add(ca);
+    }
 
-        if (cartArticle.isPresent())
-        {
-            ca = cartArticle.get();
-            if (quantity < 1)
-            {
-                cartArticles.remove(ca);
-                return null;
-            }
-            else
-            {
-                ca.addQuantity(quantity);
-            }
-        }
-        else
-        {
-            if (quantity >= 1)
-            {
-                ca = new CartArticle();
-                ca.setArticle(article);
-                ca.setQuantity(quantity);
-                cartArticles.add(ca);
-            }
-        }
-
-        return ca;
+    public void removeArticle(CartArticle ca){
+        this.cartArticles.remove(ca);
     }
 
     public void clear()
@@ -117,28 +82,16 @@ public class Cart
         this.cartArticles.clear();
     }
 
-    public void removeArticle(CartArticle ca)
-    {
-        this.cartArticles.remove(ca);
-    }
-
     public double getTotalPrice()
     {
         return cartArticles.stream().mapToDouble(a -> a.getArticle().getPrice() * a.getQuantity()).sum();
     }
 
-    public void SyncCarts(Cart c)
-    {
-        for (CartArticle ca : c.getCartArticles())
-        {
-            this.addToCart(ca.getQuantity(), ca.getArticle());
-        }
-    }
 
     public CartArticle getCartArticleByArticle(Article article)
     {
         for(CartArticle ca : getCartArticles()){
-            if(ca.getArticle().getId() == article.getId()){
+            if(Objects.equals(ca.getArticle().getId(), article.getId())){
                 return ca;
             }
         }

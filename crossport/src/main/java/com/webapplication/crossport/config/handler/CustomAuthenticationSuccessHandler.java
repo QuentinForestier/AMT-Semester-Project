@@ -1,8 +1,8 @@
 package com.webapplication.crossport.config.handler;
 
+import com.webapplication.crossport.domain.services.CartService;
 import com.webapplication.crossport.infra.models.Cart;
 import com.webapplication.crossport.infra.models.Member;
-import com.webapplication.crossport.infra.repository.CartRepository;
 import com.webapplication.crossport.infra.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     MemberRepository memberRepository;
 
     @Autowired
-    CartRepository cartRepository;
+    CartService cartService;
 
     @Autowired
     HttpSession session;
@@ -43,12 +43,12 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         Member member = getMember(memberId);
         if (member == null) member = new Member();
         
-        Cart cartInSession = Cart.getContextCart(session);
+        Cart cartInSession = cartService.getContextCart();
         Cart cartMember = member.getCart();
 
-        cartMember.SyncCarts(cartInSession);
+        cartService.SyncCarts(cartMember, cartInSession);
 
-        cartRepository.save(cartMember);
+        cartService.save(cartMember);
 
         session.setAttribute("member", member);
 

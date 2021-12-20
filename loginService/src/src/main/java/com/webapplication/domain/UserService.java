@@ -1,6 +1,6 @@
 package com.webapplication.domain;
 
-import com.webapplication.infra.User;
+import com.webapplication.infra.UserDAO;
 import com.webapplication.infra.UserRepository;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -32,7 +32,7 @@ public class UserService {
     // Creation de l'utilisateur admin
     @PostConstruct
     public void init() {
-        User u = userRepository.findFirstByUsername(adminUsername);
+        UserDAO u = userRepository.findFirstByUsername(adminUsername);
         if (u == null) {
             createUser(adminUsername, adminPassword);
         }
@@ -59,18 +59,18 @@ public class UserService {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#&()–\\[{}\\]_:;',?/*~$^+=<>]).*$");
     }
 
-    public UserDTO createUser(String userName, String password) {
-        User u = new User(0L, userName, password);
+    public User createUser(String userName, String password) {
+        UserDAO u = new UserDAO(0L, userName, password);
         try {
             u = userRepository.save(u);
-            return new UserDTO(u.getId(), u.getUsername(), "user");
+            return new User(u.getId(), u.getUsername(), "user");
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             return null;
         }
     }
 
-    public UserDTO login(String userName, String password) {
-        User u = userRepository.findFirstByUsername(userName);
+    public User login(String userName, String password) {
+        UserDAO u = userRepository.findFirstByUsername(userName);
 
         if (u == null) {
             return null;
@@ -80,7 +80,7 @@ public class UserService {
             return null;
         }
 
-        return new UserDTO(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? "admin" : "user");
+        return new User(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? "admin" : "user");
     }
 
     public String CreateJWT(String role) {

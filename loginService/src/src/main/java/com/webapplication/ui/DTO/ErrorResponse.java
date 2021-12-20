@@ -1,4 +1,4 @@
-package com.webapplication.ui;
+package com.webapplication.ui.DTO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

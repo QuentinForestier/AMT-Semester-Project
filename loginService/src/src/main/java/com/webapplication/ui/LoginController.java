@@ -1,7 +1,8 @@
 package com.webapplication.ui;
 
-import com.webapplication.domain.UserDTO;
+import com.webapplication.domain.User;
 import com.webapplication.domain.UserService;
+import com.webapplication.ui.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class LoginController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        UserDTO user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
+        User user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
 
         if (user == null) {
             return new ResponseEntity<>(new ErrorResponse("The credentials are incorrect"), HttpStatus.FORBIDDEN);
@@ -84,7 +85,7 @@ public class LoginController {
                     ), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        UserDTO user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
+        User user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
         if (user == null) {
             return new ResponseEntity<>(
                     new ErrorResponse("The username already exist"),

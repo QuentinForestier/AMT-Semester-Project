@@ -18,10 +18,10 @@ import java.util.Objects;
 @Service
 public class UserService {
     @Value("${com.webapplication.loginCrossport.config.admin.username}")
-    private String adminUsername = "crossport";
+    private String adminUsername;
 
     @Value("${com.webapplication.loginCrossport.config.admin.password}")
-    private String adminPassword = "nXcuifw5y$zcsh8sjK@b";
+    private String adminPassword;
 
     @Value("${com.webapplication.loginCrossport.config.jwt.secret}")
     private String secret;

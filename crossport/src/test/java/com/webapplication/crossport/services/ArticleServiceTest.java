@@ -1,12 +1,14 @@
 package com.webapplication.crossport.services;
 
 import com.webapplication.crossport.domain.services.ArticleService;
+import com.webapplication.crossport.domain.services.FileService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.ArticleRepository;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
 import com.webapplication.crossport.ui.dto.ArticleDTO;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -43,6 +45,9 @@ public class ArticleServiceTest {
 
 	@Mock
 	private CategoryRepository cr;
+
+	@Mock
+	private FileService fs;
 
 	@Test
 	public void getAllArticles_NoArticle() {
@@ -317,6 +322,9 @@ public class ArticleServiceTest {
 		MockMultipartFile image
 				= new MockMultipartFile("image", "hello.png",  MediaType.IMAGE_PNG_VALUE, "Hello, World!".getBytes());
 
+		Mockito.when(fs.isAnAuthorizedExtension(ArgumentMatchers.any())).thenReturn(true);
+		Mockito.when(fs.getExtension(ArgumentMatchers.any())).thenReturn(".png");
+
 		as.modifyArticle(article, articleDTO, image, article.getId());
 
 		assertEquals(article.getName(), newName);
@@ -365,6 +373,9 @@ public class ArticleServiceTest {
 
 		MockMultipartFile text
 				= new MockMultipartFile("image", "hello.png",  MediaType.IMAGE_PNG_VALUE, "Hello, World!".getBytes());
+
+		Mockito.when(fs.isAnAuthorizedExtension(ArgumentMatchers.any())).thenReturn(true);
+		Mockito.when(fs.getExtension(ArgumentMatchers.any())).thenReturn(".png");
 
 		as.modifyArticleImage(article, adto, text, article.getId());
 

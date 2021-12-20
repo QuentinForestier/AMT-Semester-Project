@@ -42,10 +42,6 @@ public class FileServiceTest {
 		Assertions.assertFalse(fs.isAnAuthorizedExtension(image));
 	}
 
-	// TODO SaveFile when cdn is in place
-
-	// TODO RemoveFile when cdn is in place
-
 	@Test
 	public void getExtension(){
 

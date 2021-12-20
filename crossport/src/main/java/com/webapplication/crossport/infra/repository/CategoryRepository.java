@@ -19,5 +19,5 @@ import java.util.List;
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 	Category findFirstByName(@Param("name") String name);
 
-	List<Category> findByOrderByNameDesc();
+	List<Category> findByOrderByNameAsc();
 }

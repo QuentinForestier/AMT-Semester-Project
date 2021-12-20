@@ -23,7 +23,7 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public List<Category> getAllCategories() {
-        return categoryRepository.findByOrderByNameDesc();
+        return categoryRepository.findByOrderByNameAsc();
     }
 
     public List<Category> getShopCategories(Category selectedCategory) {

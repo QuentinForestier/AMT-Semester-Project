@@ -1,0 +1,68 @@
+<!--A Design by W3layouts
+Author: W3layout
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+Modified by: Lamrani Soulaymane
+Modification date: 08/11/2021
+-->
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Free Snow Bootstrap Website Template | Shop :: w3layouts</title>
+    <link th:href="@{~/css/bootstrap.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{~/css/style.css}" rel='stylesheet' type='text/css'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <script type="application/x-javascript">
+         addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); }
+    </script>
+    <script th:src="@{~/js/jquery.min.js}"></script>
+    <style>
+        label, .button {
+            margin-top: 20px;
+        }
+
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="navbar.html :: navbar"></div>
+<div class="main">
+    <div class="shop_top">
+        <div class="container">
+            <h2>Add an article</h2>
+            <div id="loginbox" class="loginbox" style="width: 100%">
+                <form th:method="post" th:action="@{/articles}"
+                      th:object="${articleDTO}" enctype="multipart/form-data">
+                    <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                        <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                    </div>
+                    <fieldset class="input">
+                        <p id="login-form-password">
+                            <div th:insert="formArticle.html :: formArticle"></div>
+
+                            <label for="articleImage">New Image</label>
+                            <input type="file" id="articleImage" name="image" accept="image/*">
+                        </p>
+                        <input type="submit" class="button" value="Save article" style="float: left">
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:insert="footer.html :: footer"></div>
+</body>
+</html>

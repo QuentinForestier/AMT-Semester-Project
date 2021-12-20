@@ -1,25 +1,27 @@
 package com.webapplication.crossport.controller;
 
-import com.webapplication.crossport.config.ImageConfiguration;
-import com.webapplication.crossport.models.Article;
-import com.webapplication.crossport.models.Category;
-import com.webapplication.crossport.models.services.ArticleService;
+import com.webapplication.crossport.config.images.ImageConfiguration;
+import com.webapplication.crossport.domain.services.ArticleService;
+import com.webapplication.crossport.infra.models.Article;
+import com.webapplication.crossport.infra.models.Category;
+import com.webapplication.crossport.ui.dto.ArticleDTO;
 import org.apache.commons.compress.utils.IOUtils;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,12 +32,17 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doAnswer;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 /**
  * Testing routes from article controller.
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -96,7 +103,7 @@ public class ArticleControllerTest {
 		Mockito.when(articleService.getAllArticles()).thenReturn(mockArticles);
 
 
-		mvc.perform(MockMvcRequestBuilders.get("/articles/manage"))
+		mvc.perform(MockMvcRequestBuilders.get("/articles"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("manageArticles"))
 				.andExpect(model().attribute("listArticles", hasSize(6)))
@@ -160,11 +167,11 @@ public class ArticleControllerTest {
 
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
 
-		mvc.perform(MockMvcRequestBuilders.get("/articles/edit?id=1"))
+		mvc.perform(MockMvcRequestBuilders.get("/articles/edit/1"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("editArticle"))
 				.andExpect(model().attribute("id", 1))
-				.andExpect(model().attribute("articleData",
+				.andExpect(model().attribute("articleDTO",
 						allOf(
 								hasProperty("articleName", is("test name")),
 								hasProperty("articleDesc", is("test desc")),
@@ -192,13 +199,25 @@ public class ArticleControllerTest {
 		article2.setInStock(true);
 		article2.setPrice(12.);
 
-		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article2);
-		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+		ArticleDTO ad = new ArticleDTO();
+		ad.setArticleDesc(article.getDescription());
+		ad.setArticleName(article.getName());
+		ad.setArticlePrice(article.getPrice());
+		ad.setArticleStock(article.isInStock());
+		ad.setImgPath(article.getImgPath());
 
 		MockMultipartFile image
 				= new MockMultipartFile("image", "", "img", new byte[]{});
 
-		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+		Mockito.doThrow(new RuntimeException("Two article cannot have the same name")).
+				when(articleService).modifyArticle(
+						ArgumentMatchers.any(),
+						ArgumentMatchers.any(),
+						ArgumentMatchers.any(),
+						ArgumentMatchers.any());
+		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
+
+		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles")
 						.file(image)
 						.param("Submit", "Submit")
 						.param("articleName", article.getName())
@@ -207,22 +226,21 @@ public class ArticleControllerTest {
 						.param("articleStock", "true")
 
 				)
-				.andExpect(status().isOk())
-				.andExpect(model().hasErrors());
+				.andExpect(status().isOk());
 
 		MvcResult mvcResult = resultActions.andReturn();
 
 		ModelAndView mav = mvcResult.getModelAndView();
 
-		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
-		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleData");
-		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("nameError")));
-
+		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("newArticle"));
+		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleDTO");
+		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("Error")));
 	}
 
 	@Test
 	@WithMockUser(roles={"ADMIN"})
-	public void AsAdmin_submitEditFormWith0Price_Fail() throws Exception {
+
+	public void AsAdmin_submitEditFormWithError_Fail() throws Exception {
 
 		Article article = new Article();
 		article.setId(1);
@@ -231,16 +249,28 @@ public class ArticleControllerTest {
 		article.setInStock(false);
 		article.setPrice(0.);
 
-
-		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
+		Mockito.doThrow(new RuntimeException("Two article cannot have the same name")).
+				when(articleService).modifyArticle(
+				ArgumentMatchers.any(),
+				ArgumentMatchers.any(),
+				ArgumentMatchers.any(),
+				ArgumentMatchers.any());
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
 
 		MockMultipartFile image
 				= new MockMultipartFile("image", "", "img", new byte[]{});
 
-		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+		MockMultipartHttpServletRequestBuilder builder =
+				MockMvcRequestBuilders.multipart("/articles");
+		builder.with(request -> {
+			request.setMethod("PUT");
+			return request;
+		});
+
+		ResultActions resultActions = mvc.perform(builder
 						.file(image)
 						.param("Submit", "Submit")
+						.param("id", article.getId().toString())
 						.param("articleName", article.getName())
 						.param("articleDesc", article.getDescription())
 						.param("articlePrice", Double.toString(article.getPrice()))
@@ -255,62 +285,37 @@ public class ArticleControllerTest {
 		ModelAndView mav = mvcResult.getModelAndView();
 
 		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
-		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleData");
-		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("priceError")));
-
-	}
-
-	@Test
-	@WithMockUser(roles={"ADMIN"})
-	public void AsAdmin_submitEditFormWithBadFileType_Fail() throws Exception {
-
-		Article article = new Article();
-		article.setId(1);
-		article.setName("test name");
-		article.setDescription("test desc");
-		article.setInStock(false);
-		article.setPrice(0.);
-
-
-		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
-		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
-
-		MockMultipartFile image
-				= new MockMultipartFile("image", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
-
-		ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
-						.file(image)
-						.param("Submit", "Submit")
-						.param("articleName", article.getName())
-						.param("articleDesc", article.getDescription())
-						.param("articlePrice", Double.toString(article.getPrice()))
-						.param("articleStock", "true")
-
-				)
-				.andExpect(status().isOk())
-				.andExpect(model().hasErrors());
-
-		MvcResult mvcResult = resultActions.andReturn();
-
-		ModelAndView mav = mvcResult.getModelAndView();
-
-		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
-		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleData");
-		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("extError")));
-
+		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleDTO");
+		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("Error")));
 	}
 
 	@Test
 	@WithMockUser(roles={"ADMIN"})
 	public void AsAdmin_editArticle_Success() throws Exception {
-
-
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
 		article.setDescription("test desc");
 		article.setInStock(false);
 		article.setPrice(10.);
+
+		String newName = "new article name";
+		String newDesc = "new article desc";
+		Boolean newDisponibility = true;
+		String newExtension = ".jpg";
+
+		doAnswer((i)->{
+			article.setInStock(newDisponibility);
+			article.setName(newName);
+			article.setDescription(newDesc);
+			article.setImgExtension(newExtension);
+
+			return null;
+		}).when(articleService).modifyArticle(
+				ArgumentMatchers.any(),
+				ArgumentMatchers.any(),
+				ArgumentMatchers.any(),
+				ArgumentMatchers.any());
 
 		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
@@ -320,19 +325,21 @@ public class ArticleControllerTest {
 		MockMultipartFile image = new MockMultipartFile("image",
 				fileItem.getName(), "image/png", IOUtils.toByteArray(input));
 
-		String newName = "new article name";
-		String newDesc = "new article desc";
-		Boolean newDisponibility = true;
-		String newExtension = ".jpg";
+		MockMultipartHttpServletRequestBuilder builder =
+				MockMvcRequestBuilders.multipart("/articles");
+		builder.with(request -> {
+			request.setMethod("PUT");
+			return request;
+		});
 
-		mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
-						.file(image)
+		mvc.perform( builder
+						.param("id", article.getId().toString())
 						.param("Submit", "Submit")
 						.param("articleName", newName)
 						.param("articleDesc", newDesc)
 						.param("articleStock", newDisponibility.toString()))
 				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:manage"));
+				.andExpect(view().name("redirect:/articles"));
 
 		Article articleModified = articleService.getArticleById(1);
 		assertEquals(articleModified.getName(), newName);
@@ -358,6 +365,10 @@ public class ArticleControllerTest {
 
 		String newName = "new article name";
 
+		File directory = new File(ImageConfiguration.uploadDir);
+		if (!directory.exists()) {
+			directory.mkdir();
+		}
 		File fileSrc = new File("src/main/resources/static/images/1.jpg");
 		File fileDst = new File(ImageConfiguration.uploadDir + "/1.jpg");
 		InputStream in = new BufferedInputStream(new FileInputStream(fileSrc));
@@ -372,9 +383,13 @@ public class ArticleControllerTest {
 		in.close();
 		out.close();
 
-		mvc.perform(MockMvcRequestBuilders.multipart("/articles/edit?id=1")
+		mvc.perform(MockMvcRequestBuilders.put("/articles")
+						.param("id", article.getId().toString())
 						.param("DeleteImage", "DeleteImage")
-						.param("articleName", newName))
+						.param("articleName", newName)
+						.param("articleDesc", article.getDescription())
+						.param("articlePrice", Double.toString(article.getPrice()))
+						.param("articleStock", "true"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("editArticle"))
 				.andExpect(model().attribute("articleData",
@@ -382,6 +397,8 @@ public class ArticleControllerTest {
 						hasProperty("articleName", is(newName))
 					)
 				));
+
+		directory.delete();
 
 		Article articleModified = articleService.getArticleById(1);
 		assertNull(articleModified.getImgExtension());

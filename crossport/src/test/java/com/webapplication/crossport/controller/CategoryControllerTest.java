@@ -1,9 +1,9 @@
 package com.webapplication.crossport.controller;
 
-import com.webapplication.crossport.models.Article;
-import com.webapplication.crossport.models.Category;
-import com.webapplication.crossport.models.services.ArticleService;
-import com.webapplication.crossport.models.services.CategoryService;
+import com.webapplication.crossport.domain.services.ArticleService;
+import com.webapplication.crossport.domain.services.CategoryService;
+import com.webapplication.crossport.infra.models.Article;
+import com.webapplication.crossport.infra.models.Category;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -20,18 +20,22 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 /**
  * Testing routes from article controller.
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -229,7 +233,7 @@ public class CategoryControllerTest {
         ModelAndView mav = mvcResult.getModelAndView();
 
         MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("categories"));
-        BindingResult br = (BindingResult) mav.getModel().get("org.springframework.validation.BindingResult.categoryData");
+        BindingResult br = (BindingResult) mav.getModel().get("org.springframework.validation.BindingResult.categoryDTO");
         assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("globalError")));
     }
 

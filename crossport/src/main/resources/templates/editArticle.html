@@ -44,46 +44,24 @@ Modification date: 08/11/2021
         <div class="container">
             <h2>Edit article</h2>
             <div id="loginbox" class="loginbox" style="width: 100%">
-                <form action="#" th:action="@{/articles/edit?id={id}(id=${id})}" method="post"
-                      th:object="${articleData}" enctype="multipart/form-data">
+                <form th:method="put" th:action="@{/articles?id={id}(id=${id})}"
+                      th:object="${articleDTO}" enctype="multipart/form-data">
                     <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
                         <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
                     </div>
                     <fieldset class="input">
                         <p id="login-form-password">
-                            <label for="articleName">Name</label>
-                            <input
-                                    id="articleName" type="text" placeholder="Article name"
-                                    class="form-control col-md-4"
-                                    th:field="*{articleName}">
-                            <br>
+                            <div th:insert="formArticle.html :: formArticle"></div>
 
-                            <label for="articleDesc">Description</label>
-                            <textarea id="articleDesc" class="form-control col-md-4" rows="5"
-                                      placeholder="Article description" name="description"
-                                      th:field="*{articleDesc}"></textarea>
-                            <br>
-
-                            <label for="articlePrice">Price (CHF) </label>
-                            <input id="articlePrice" type="number" min="0" step="0.01"
-                                   class="form-control col-md-4 numInput" placeholder="preview"
-                                   th:field="*{articlePrice}"/>
-                            <br>
-
-                            <label for="articleStock">En Stock</label>
-                            <input id="articleStock" type="checkbox" th:field="*{articleStock}"/>
-                            <br>
-
-                            <label th:if="${articleData.getImgPath() != null}">Current Image</label>
-                            <img th:if="${articleData.getImgPath() != null}"
-                                 th:src="@{${articleData.imgPath}}" class="img-responsive shop_img" alt=""/>
+                            <label th:if="${articleDTO.getImgPath() != null}">Current Image</label>
+                            <img th:if="${articleDTO.getImgPath() != null}"
+                                 th:src="@{${articleDTO.imgPath}}" class="img-responsive shop_img" alt=""/>
                             <label for="articleImage">New Image</label>
                             <input type="file" id="articleImage" name="image" accept="image/*">
                         </p>
                         <input type="submit" name="Submit" class="button" value="Save article" style="float: left">
-                        <input th:if="${articleData.getImgPath() != null}"
+                        <input th:if="${articleDTO.getImgPath() != null}"
                                type="submit" name="DeleteImage" class="button" value="Remove Image" style="float: left; margin-left: 15px">
-
                     </fieldset>
                 </form>
             </div>

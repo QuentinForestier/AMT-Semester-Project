@@ -47,7 +47,7 @@ Modification date: 08/11/2021
                             <tr th:each="article : ${category.getArticles()}">
                                 <td th:text="${article.name}"></td>
                                 <td>
-                                    <form th:method="delete" th:action="@{/categories/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}">
+                                    <form th:method="delete" th:action="@{/categories/{idCategory}/articles/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}">
                                         <button type="submit" class="btn btn-danger">Remove category from Article</button>
                                     </form>
                                 </td>
@@ -69,7 +69,7 @@ Modification date: 08/11/2021
                             <tr th:each="article : ${articlesNotInCategory}">
                                 <td th:text="${article.name}"></td>
                                 <td>
-                                    <form th:method="post" th:action="@{/categories/{idCategory}/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}">
+                                    <form th:method="post" th:action="@{/categories/{idCategory}/articles/{idArticle}(idCategory=${category.id}, idArticle=${article.id})}">
                                         <button type="submit" class="btn btn-success">Add Article to Category</button>
                                     </form>
                                 </td>

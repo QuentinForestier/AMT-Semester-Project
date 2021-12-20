@@ -50,7 +50,7 @@ Modification date: 09/10/2021
         </div>
         <div class="item" th:each="cartArticle:${cart.getCartArticles()}">
             <div class="buttons">
-                <form th:method="delete" th:action="@{/cart/article/{id}(id=${cartArticle.getArticle().getId()})}">
+                <form th:method="delete" th:action="@{/cart/articles/{id}(id=${cartArticle.getArticle().getId()})}">
                     <span class="delete-btn"><img onclick="this.closest('form').submit();" src="images/delete-icn.svg" alt="X"/></span>
                 </form>
             </div>
@@ -129,7 +129,7 @@ Modification date: 09/10/2021
     });
 
     function updateQuantity(id, quantity) {
-        fetch("/cart/article/" + id + "/" + quantity, {
+        fetch("/cart/articles/" + id + "/quantity" + "/" + quantity, {
             method: 'PUT'
         })
         .then(function() {

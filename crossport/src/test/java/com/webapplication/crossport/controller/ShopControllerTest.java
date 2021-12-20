@@ -1,9 +1,9 @@
 package com.webapplication.crossport.controller;
 
-import com.webapplication.crossport.models.Article;
-import com.webapplication.crossport.models.Category;
-import com.webapplication.crossport.models.services.ArticleService;
-import com.webapplication.crossport.models.services.CategoryService;
+import com.webapplication.crossport.domain.services.ArticleService;
+import com.webapplication.crossport.domain.services.CategoryService;
+import com.webapplication.crossport.infra.models.Article;
+import com.webapplication.crossport.infra.models.Category;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Testing shop controller routes
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -241,7 +245,7 @@ public class ShopControllerTest {
 
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
 
-		mvc.perform(MockMvcRequestBuilders.get("/shop/1").param("idCategory", "1"))
+		mvc.perform(MockMvcRequestBuilders.get("/shop/articles/1").param("idCategory", "1"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("article"))
 				.andExpect(model().attribute("article", article));
@@ -263,7 +267,7 @@ public class ShopControllerTest {
 
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
 
-		mvc.perform(MockMvcRequestBuilders.get("/shop/1").param("idCategory", "1"))
+		mvc.perform(MockMvcRequestBuilders.get("/shop/articles/1").param("idCategory", "1"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("article"))
 				.andExpect(model().attribute("article", article));
@@ -285,7 +289,7 @@ public class ShopControllerTest {
 
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
 
-		mvc.perform(MockMvcRequestBuilders.get("/shop/1").param("idCategory", "1"))
+		mvc.perform(MockMvcRequestBuilders.get("/shop/articles/1").param("idCategory", "1"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("article"))
 				.andExpect(model().attribute("article", article));
@@ -307,7 +311,7 @@ public class ShopControllerTest {
 
 		Mockito.when(articleService.getArticleById(1)).thenThrow(RuntimeException.class);
 
-		mvc.perform(MockMvcRequestBuilders.get("/shop/1"))
+		mvc.perform(MockMvcRequestBuilders.get("/shop/articles/1"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("shop"));
 	}

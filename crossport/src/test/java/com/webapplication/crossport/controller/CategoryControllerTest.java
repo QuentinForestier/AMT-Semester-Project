@@ -228,15 +228,14 @@ public class CategoryControllerTest {
         ResultActions resultActions = mvc.perform(MockMvcRequestBuilders.post("/categories")
                 .param("categoryName", snowboards.getName()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("categories"))
-                .andExpect(model().hasErrors());
+                .andExpect(view().name("categories"));
 
         MvcResult mvcResult = resultActions.andReturn();
         ModelAndView mav = mvcResult.getModelAndView();
 
         MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("categories"));
         BindingResult br = (BindingResult) mav.getModel().get("org.springframework.validation.BindingResult.categoryDTO");
-        assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("globalError")));
+        assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("Error")));
     }
 
     @Test

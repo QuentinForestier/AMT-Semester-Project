@@ -2,6 +2,7 @@ package com.webapplication.crossport.services;
 
 import com.webapplication.crossport.config.images.ImageConfiguration;
 import com.webapplication.crossport.domain.services.ArticleService;
+import com.webapplication.crossport.domain.services.CategoryService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.ArticleRepository;
@@ -41,6 +42,9 @@ public class ArticleServiceTest {
 
 	@Mock
 	private ArticleRepository articleRepository;
+
+	@Mock
+	private CategoryService categoryService;
 
 	@Mock
 	private CategoryRepository categoryRepository;
@@ -197,39 +201,41 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void removeCategory() {
-		Category cat = new Category();
+	public void removeCategory_Success() {
+		Category category = new Category();
 		Article article = new Article();
 
 		Optional<Article> optional = Optional.of(article);
 		Mockito.when(articleRepository.findById(1)).thenReturn(optional);
+		Mockito.when(categoryService.getCategoryById(1)).thenReturn(category);
 
-		article.addCategory(cat);
+		article.addCategory(category);
 
-		assertTrue(!cat.getArticles().isEmpty());
+		assertTrue(!category.getArticles().isEmpty());
 
 		articleService.removeCategory(1, 1);
 
 		assertTrue(article.getCategories().isEmpty());
-		assertTrue(cat.getArticles().isEmpty());
+		assertTrue(category.getArticles().isEmpty());
 	}
 
 	@Test
-	public void addCategory() {
-		Category cat = new Category();
+	public void AsAdmin_addCategory_Success() {
+		Category category = new Category();
 		Article article = new Article();
 
 		Optional<Article> optional = Optional.of(article);
 		Mockito.when(articleRepository.findById(1)).thenReturn(optional);
+		Mockito.when(categoryService.getCategoryById(1)).thenReturn(category);
 
 		articleService.addCategory(1, 1);
 
 		assertTrue(!article.getCategories().isEmpty());
-		assertTrue(!cat.getArticles().isEmpty());
+		assertTrue(!category.getArticles().isEmpty());
 	}
 
 	@Test
-	public void  modifyArticle_BadPrice_Fail() {
+	public void AsAdmin_modifyArticle_BadPrice_Fail() {
 		ArticleDTO articleDTO = new ArticleDTO();
 		articleDTO.setArticleName("test name");
 		articleDTO.setArticleDesc("test desc");
@@ -248,7 +254,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void  modifyArticle_ExistingName_Fail() {
+	public void AsAdmin_modifyArticle_ExistingName_Fail() {
 		ArticleDTO articleDTO = new ArticleDTO();
 		articleDTO.setArticleName("test name");
 		articleDTO.setArticleDesc("test desc");
@@ -269,7 +275,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void  modifyArticle_badFile_Fail() {
+	public void AsAdmin_modifyArticle_badFile_Fail() {
 		ArticleDTO articleDTO = new ArticleDTO();
 		articleDTO.setArticleName("test name");
 		articleDTO.setArticleDesc("test desc");
@@ -293,7 +299,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void  modifyArticle_Success() {
+	public void AsAdmin_modifyArticle_Success() {
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
@@ -328,7 +334,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void modifyArticleImage_badFile_Fail(){
+	public void AsAdmin_modifyArticleImage_badFile_Fail(){
 
 		Article article = new Article();
 		article.setId(1);
@@ -352,7 +358,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void modifyArticleImage_Success(){
+	public void AsAdmin_modifyArticleImage_Success(){
 
 		Article article = new Article();
 		article.setId(1);

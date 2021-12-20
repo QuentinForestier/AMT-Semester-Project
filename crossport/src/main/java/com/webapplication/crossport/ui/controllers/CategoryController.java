@@ -52,6 +52,7 @@ public class CategoryController {
         }
 
         model.addAttribute("listCategories", categoryService.getAllCategories());
+        model.addAttribute("categoryDTO", categoryDTO);
         return "categories";
     }
 

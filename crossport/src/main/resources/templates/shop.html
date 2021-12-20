@@ -56,7 +56,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <div th:each="article:${listArticles}" class="col-md-3 shop_box">
                     <a th:href="@{/shop/articles/{id}(id=${article.id})}">
                         <img th:if="${article.getImgPath() == null }" src="images/pic6.jpg" class="img-responsive shop_img" alt=""/>
-                        <img th:if="${article.getImgPath() != null }" th:src="@{'https://s3.eu-north-1.amazonaws.com/crossport.diduno.education/' + ${article.getImgPath()}}" class="img-responsive shop_img" alt=""/>
+                        <img th:if="${article.getImgPath() != null }" th:src="@{'/articles/images/' + ${article.getImgPath()}}" class="img-responsive shop_img" alt=""/>
                         <span th:if="${!article.isInStock()}" class="sale-box">
 						    <span class="sale-label">Sold out</span>
 					    </span>

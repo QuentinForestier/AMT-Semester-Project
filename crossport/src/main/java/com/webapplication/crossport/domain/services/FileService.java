@@ -1,10 +1,16 @@
 package com.webapplication.crossport.domain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 
 /**
@@ -52,5 +58,20 @@ public class FileService {
             extension = "." + extension;
         }
         return extension;
+    }
+
+    public ResponseEntity<byte[]> getImage(String imgName) throws IOException {
+
+        InputStream in = storageService.retrieveFile(imgName);
+        BufferedImage imageFromAws = ImageIO.read(in);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(imageFromAws, "png", baos );
+        byte[] imageBytes = baos.toByteArray();
+        in.close();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentLength(imageBytes.length);
+        return new ResponseEntity<>(imageBytes, headers, HttpStatus.OK);
     }
 }

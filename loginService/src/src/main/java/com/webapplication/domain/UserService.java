@@ -1,6 +1,6 @@
 package com.webapplication.domain;
 
-import com.webapplication.infra.UserDAO;
+import com.webapplication.infra.User;
 import com.webapplication.infra.UserRepository;
 import com.webapplication.ui.DTO.AccountResponse;
 import com.webapplication.ui.DTO.LoginResponse;
@@ -34,7 +34,7 @@ public class UserService {
     // Creation de l'utilisateur admin
     @PostConstruct
     public void init() {
-        UserDAO u = userRepository.findFirstByUsername(adminUsername);
+        User u = userRepository.findFirstByUsername(adminUsername);
         if (u == null) {
             createUser(adminUsername, adminPassword);
         }
@@ -62,7 +62,7 @@ public class UserService {
     }
 
     public AccountResponse createUser(String userName, String password) {
-        UserDAO u = new UserDAO(0L, userName, password);
+        User u = new User(0L, userName, password);
         try {
             u = userRepository.save(u);
             return new AccountResponse(u.getId(), u.getUsername(), Role.User.toString());
@@ -72,7 +72,7 @@ public class UserService {
     }
 
     public LoginResponse login(String userName, String password) {
-        UserDAO u = userRepository.findFirstByUsername(userName);
+        User u = userRepository.findFirstByUsername(userName);
 
         if (u == null) {
             return null;

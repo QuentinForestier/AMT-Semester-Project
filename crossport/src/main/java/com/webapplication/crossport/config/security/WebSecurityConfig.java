@@ -87,7 +87,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/categories/**",
 
                         //ArticleController
-                        "/articles**")
+                        "/articles/**")
                 .hasRole("ADMIN")
                 .antMatchers(
                         // LoginController

@@ -25,8 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Test class that check access to cart page and functionnality
- *
+ * @author Berney Alec
  * @author Forestier Quentin
+ * @author Gazetta Florian
+ * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc

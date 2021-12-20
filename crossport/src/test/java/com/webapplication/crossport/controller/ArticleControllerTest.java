@@ -235,11 +235,11 @@ public class ArticleControllerTest {
 		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("newArticle"));
 		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleDTO");
 		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("Error")));
-
 	}
 
 	@Test
 	@WithMockUser(roles={"ADMIN"})
+
 	public void AsAdmin_submitEditFormWithError_Fail() throws Exception {
 
 		Article article = new Article();
@@ -248,7 +248,6 @@ public class ArticleControllerTest {
 		article.setDescription("test desc");
 		article.setInStock(false);
 		article.setPrice(0.);
-
 
 		Mockito.doThrow(new RuntimeException("Two article cannot have the same name")).
 				when(articleService).modifyArticle(
@@ -288,13 +287,11 @@ public class ArticleControllerTest {
 		MatcherAssert.assertThat(mav.getViewName(), Matchers.equalTo("editArticle"));
 		BindingResult br = (BindingResult)mav.getModel().get("org.springframework.validation.BindingResult.articleDTO");
 		assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("Error")));
-
 	}
 
 	@Test
 	@WithMockUser(roles={"ADMIN"})
 	public void AsAdmin_editArticle_Success() throws Exception {
-
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
@@ -319,6 +316,7 @@ public class ArticleControllerTest {
 				ArgumentMatchers.any(),
 				ArgumentMatchers.any(),
 				ArgumentMatchers.any());
+
 		Mockito.when(articleService.findFirstByName("test name")).thenReturn(article);
 		Mockito.when(articleService.getArticleById(1)).thenReturn(article);
 

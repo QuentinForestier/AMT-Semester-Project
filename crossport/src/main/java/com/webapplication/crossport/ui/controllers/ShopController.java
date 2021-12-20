@@ -34,6 +34,8 @@ public class ShopController {
 
 	@GetMapping("")
 	public String getShop(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
+		// idCategory == null = All Articles / No Category
+
 		List<Article> articles;
 		Category selectedCategory = null;
 		try {
@@ -47,11 +49,7 @@ public class ShopController {
 			return "shop";
 		}
 
-		List<Category> categories = categoryService.getAllCategories();
-		if (selectedCategory != null) {
-			categories.remove(selectedCategory);
-			categories.add(0, selectedCategory);
-		}
+		List<Category> categories = categoryService.getShopCategories(selectedCategory);
 
 		model.addAttribute("categorySelected", selectedCategory);
 		model.addAttribute("listArticles", articles);

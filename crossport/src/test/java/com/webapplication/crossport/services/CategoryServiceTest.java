@@ -1,21 +1,15 @@
 package com.webapplication.crossport.services;
 
-import com.webapplication.crossport.domain.services.ArticleService;
 import com.webapplication.crossport.domain.services.CategoryService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
-import com.webapplication.crossport.infra.repository.ArticleRepository;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;

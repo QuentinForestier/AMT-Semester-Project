@@ -48,7 +48,7 @@ public class ArticleService {
         try {
             return articleRepository.findArticlesByCategoriesNotContaining(category);
         } catch (Exception e) {
-            return new LinkedList<Article>();
+            return new LinkedList<>();
         }
     }
 

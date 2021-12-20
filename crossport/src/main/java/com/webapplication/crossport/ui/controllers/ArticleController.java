@@ -29,7 +29,8 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    private final FileService fileService = new FileService();
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("")
     public String getAll(Model model) {

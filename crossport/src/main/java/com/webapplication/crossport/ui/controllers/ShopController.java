@@ -47,11 +47,7 @@ public class ShopController {
 			return "shop";
 		}
 
-		List<Category> categories = categoryService.getAllCategories();
-		if (selectedCategory != null) {
-			categories.remove(selectedCategory);
-			categories.add(0, selectedCategory);
-		}
+		List<Category> categories = categoryService.getShopCategories(selectedCategory);
 
 		model.addAttribute("categorySelected", selectedCategory);
 		model.addAttribute("listArticles", articles);

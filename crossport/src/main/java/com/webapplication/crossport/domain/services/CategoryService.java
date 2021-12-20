@@ -6,7 +6,6 @@ import com.webapplication.crossport.infra.models.Article;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,7 +23,16 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+        return categoryRepository.findByOrderByNameDesc();
+    }
+
+    public List<Category> getShopCategories(Category selectedCategory) {
+        List<Category> categories = getAllCategories();
+        if (selectedCategory != null) {
+            categories.remove(selectedCategory);
+            categories.add(0, selectedCategory);
+        }
+        return categories;
     }
 
     public void saveCategory(Category category) {

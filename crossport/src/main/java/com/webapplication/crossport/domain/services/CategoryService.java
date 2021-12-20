@@ -1,6 +1,7 @@
 package com.webapplication.crossport.domain.services;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.ui.dto.CategoryDTO;
@@ -41,6 +42,10 @@ public class CategoryService {
     }
 
     public void addCategory(CategoryDTO categoryDTO) {
+        if (categoryDTO == null || Objects.equals(categoryDTO.getCategoryName(), "")) {
+            throw new RuntimeException("Category name cannot be empty");
+        }
+
         Category sameCategory = getFirstByName(categoryDTO.getCategoryName());
 
         if (sameCategory != null) {

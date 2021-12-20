@@ -48,7 +48,9 @@ public class CategoryController {
         try {
             categoryService.addCategory(categoryDTO);
         } catch (RuntimeException e) {
-            bindingResult.addError(new ObjectError("Error", e.getMessage()));
+            if (!bindingResult.hasErrors()) {
+                bindingResult.addError(new ObjectError("Error", e.getMessage()));
+            }
         }
 
         model.addAttribute("listCategories", categoryService.getAllCategories());

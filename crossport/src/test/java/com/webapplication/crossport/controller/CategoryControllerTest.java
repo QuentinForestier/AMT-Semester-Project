@@ -74,24 +74,6 @@ public class CategoryControllerTest {
         mockCategories.add(snowboards);
         mockCategories.add(empty);
 
-//        List<Article> mockArticles = new ArrayList<>();
-//        for (int i = 0; i < 5; ++i) {
-//            Article article = new Article();
-//            article.setId(i);
-//            article.setName("test item " + i);
-//            article.setDescription("test item desc " + i);
-//            article.setPrice(i * 100.0);
-//
-//            if (i % 2 == 0) {
-//                article.getCategories().add(skis);
-//                skis.getArticles().add(article);
-//            } else {
-//                article.getCategories().add(snowboards);
-//                snowboards.getArticles().add(article);
-//            }
-//            mockArticles.add(article);
-//        }
-
         Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 
         mvc.perform(MockMvcRequestBuilders.get("/categories"))

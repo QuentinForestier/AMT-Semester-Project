@@ -55,7 +55,7 @@ Modification date: 08/11/2021
 
                             <label th:if="${articleDTO.getImgPath() != null}">Current Image</label>
                             <img th:if="${articleDTO.getImgPath() != null}"
-                                 th:src="@{${articleDTO.imgPath}}" class="img-responsive shop_img" alt=""/>
+                                 th:src="@{'https://s3.eu-north-1.amazonaws.com/crossport.diduno.education/' + ${articleDTO.getImgPath()}}" class="img-responsive shop_img" alt=""/>
                             <label for="articleImage">New Image</label>
                             <input type="file" id="articleImage" name="image" accept="image/*">
                         </p>

@@ -1,6 +1,7 @@
 package com.webapplication.crossport.domain.services;
 
-import com.webapplication.crossport.config.images.ImageConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.shaded.org.apache.commons.io.FilenameUtils;
 
@@ -20,7 +21,11 @@ import java.util.Arrays;
  * @author Herzig Melvyn
  * @author Lamrani Soulaymane
  */
+@Service
 public class FileService {
+
+    @Autowired
+    StorageService storageService;
 
     private static final String[] extensions = new String[]{"jpeg", "jpg", "gif", "png"};
 
@@ -30,30 +35,15 @@ public class FileService {
     }
 
     public void saveFile(Integer id, MultipartFile multipartFile) {
-        Path uploadPath = Paths.get(ImageConfiguration.uploadDir);
+
         String fileName = id.toString() + getExtension(multipartFile);
+        storageService.uploadFile(fileName, multipartFile);
 
-        try (InputStream inputStream = multipartFile.getInputStream()) {
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        }
     }
 
     public void removeFile(Integer id, String extension) {
-        Path uploadPath = Paths.get(ImageConfiguration.uploadDir);
         String fileName = id.toString() + extension;
-        Path filePath = uploadPath.resolve(fileName);
-        try {
-            Files.delete(filePath);
-        } catch (IOException ioe) {
-            System.err.println(ioe);
-        }
+        storageService.deleteFile(fileName);
     }
 
     public String getExtension(MultipartFile multipartFile) {

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
- *
+ * Class to handle login
  * @author Berney Alec
  * @author Forestier Quentin
  * @author Gazetta Florian

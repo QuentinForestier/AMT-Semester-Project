@@ -146,5 +146,4 @@ dist
 .pnp.*
 
 
-
-crossport/articles_images/
+*.properties

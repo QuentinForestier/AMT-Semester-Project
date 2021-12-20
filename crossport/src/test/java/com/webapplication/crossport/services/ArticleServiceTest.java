@@ -1,6 +1,5 @@
 package com.webapplication.crossport.services;
 
-import com.webapplication.crossport.config.images.ImageConfiguration;
 import com.webapplication.crossport.domain.services.ArticleService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
@@ -324,7 +323,7 @@ public class ArticleServiceTest {
 		assertEquals(article.getDescription(), newDesc);
 		assertEquals(article.getPrice(), newPrice, 0.000001);
 		assertEquals(article.isInStock(), newStock);
-		assertEquals(article.getImgPath(), "/" + ImageConfiguration.uploadDir + "/" + article.getId().toString() + ".png" );
+		assertEquals(article.getImgPath(), article.getId().toString() + ".png" );
 	}
 
 	@Test

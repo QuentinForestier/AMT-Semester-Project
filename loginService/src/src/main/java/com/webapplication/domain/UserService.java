@@ -63,7 +63,7 @@ public class UserService {
         UserDAO u = new UserDAO(0L, userName, password);
         try {
             u = userRepository.save(u);
-            return new User(u.getId(), u.getUsername(), "user");
+            return new User(u.getId(), u.getUsername(), Role.User);
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             return null;
         }
@@ -80,7 +80,7 @@ public class UserService {
             return null;
         }
 
-        return new User(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? "admin" : "user");
+        return new User(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? Role.Admin : Role.User);
     }
 
     public String CreateJWT(String role) {

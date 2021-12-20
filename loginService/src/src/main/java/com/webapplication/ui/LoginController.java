@@ -36,8 +36,8 @@ public class LoginController {
                         new AccountResponse(
                                 user.getId(),
                                 user.getUsername(),
-                                user.getRole()),
-                        userService.CreateJWT(user.getRole())),
+                                user.getRole().toString()),
+                        userService.CreateJWT(user.getRole().toString())),
                 HttpStatus.OK);
     }
 
@@ -93,7 +93,7 @@ public class LoginController {
         }
 
         return new ResponseEntity<>(
-                new AccountResponse(user.getId(), user.getUsername(), user.getRole()),
+                new AccountResponse(user.getId(), user.getUsername(), user.getRole().toString()),
                 HttpStatus.CREATED);
     }
 }

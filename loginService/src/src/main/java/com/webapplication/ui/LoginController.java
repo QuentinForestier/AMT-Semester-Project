@@ -1,6 +1,5 @@
 package com.webapplication.ui;
 
-import com.webapplication.domain.User;
 import com.webapplication.domain.UserService;
 import com.webapplication.ui.DTO.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,20 +24,13 @@ public class LoginController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
 
-        User user = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
+        LoginResponse response = userService.login(loginInformation.getUsername(), loginInformation.getPassword());
 
-        if (user == null) {
+        if (response == null) {
             return new ResponseEntity<>(new ErrorResponse("The credentials are incorrect"), HttpStatus.FORBIDDEN);
         }
 
-        return new ResponseEntity<>(
-                new LoginResponse(
-                        new AccountResponse(
-                                user.getId(),
-                                user.getUsername(),
-                                user.getRole().toString()),
-                        userService.createJWT(user.getRole().toString())),
-                HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/accounts/register")
@@ -85,15 +77,13 @@ public class LoginController {
                     ), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
-        User user = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
-        if (user == null) {
+        AccountResponse response = userService.createUser(loginInformation.getUsername(), loginInformation.getPassword());
+        if (response == null) {
             return new ResponseEntity<>(
                     new ErrorResponse("The username already exist"),
                     HttpStatus.CONFLICT);
         }
 
-        return new ResponseEntity<>(
-                new AccountResponse(user.getId(), user.getUsername(), user.getRole().toString()),
-                HttpStatus.CREATED);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

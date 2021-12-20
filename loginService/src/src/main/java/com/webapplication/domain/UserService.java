@@ -2,6 +2,8 @@ package com.webapplication.domain;
 
 import com.webapplication.infra.UserDAO;
 import com.webapplication.infra.UserRepository;
+import com.webapplication.ui.DTO.AccountResponse;
+import com.webapplication.ui.DTO.LoginResponse;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -59,17 +61,17 @@ public class UserService {
         return password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#&()–\\[{}\\]_:;',?/*~$^+=<>]).*$");
     }
 
-    public User createUser(String userName, String password) {
+    public AccountResponse createUser(String userName, String password) {
         UserDAO u = new UserDAO(0L, userName, password);
         try {
             u = userRepository.save(u);
-            return new User(u.getId(), u.getUsername(), Role.User);
+            return new AccountResponse(u.getId(), u.getUsername(), Role.User.toString());
         } catch (org.springframework.dao.DataIntegrityViolationException ex) {
             return null;
         }
     }
 
-    public User login(String userName, String password) {
+    public LoginResponse login(String userName, String password) {
         UserDAO u = userRepository.findFirstByUsername(userName);
 
         if (u == null) {
@@ -80,10 +82,12 @@ public class UserService {
             return null;
         }
 
-        return new User(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? Role.Admin : Role.User);
+        Role r = Objects.equals(u.getUsername(), adminUsername) ? Role.Admin : Role.User;
+
+        return new LoginResponse(new AccountResponse(u.getId(), u.getUsername(), r.toString()), createJWT(r));
     }
 
-    public String createJWT(String role) {
+    private String createJWT(Role role) {
         // signature algorithm
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
@@ -99,7 +103,7 @@ public class UserService {
                 .setIssuedAt(now)
                 .setSubject("crossport")
                 .setIssuer("crossport")
-                .claim("role", role)
+                .claim("role", role.toString())
                 .signWith(signatureAlgorithm, signingKey)
                 .setHeaderParam("typ", "JWT");
 

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
 
 /**
  *
@@ -65,12 +64,19 @@ public class CategoryService {
         return category;
     }
 
-    public void deleteCategory(Integer id) {
+    public void deleteCategory(Integer id, boolean confirm) {
         Category category = getCategoryById(id);
+
+        if (!category.getArticles().isEmpty() && !confirm) {
+            throw new RuntimeException("You cannot delete this category as it has articles bound.");
+        }
+
+        // Remove category from all articles bound
         for (Article article : category.getArticles()) {
             article.getCategories().remove(category);
         }
         category.getArticles().clear();
+
         categoryRepository.delete(category);
     }
 

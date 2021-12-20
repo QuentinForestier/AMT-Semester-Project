@@ -26,6 +26,9 @@ public class ArticleService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private CategoryService categoryService;
+
     private final FileService fileService = new FileService();
 
     public List<Article> getAllArticles() {
@@ -70,17 +73,23 @@ public class ArticleService {
         }
     }
 
-    public void removeCategory(Integer idArticle, Category category) {
+    public void removeCategory(Integer idArticle, Integer idCategory) {
+        Category category = categoryService.getCategoryById(idCategory);
         Article article = getArticleById(idArticle);
+
         article.removeCategory(category);
+
         // Important to update BD
         articleRepository.saveAndFlush(article);
         categoryRepository.saveAndFlush(category);
     }
 
-    public void addCategory(Integer idArticle, Category category) {
+    public void addCategory(Integer idArticle, Integer idCategory) {
+        Category category = categoryService.getCategoryById(idCategory);
         Article article = getArticleById(idArticle);
+
         article.addCategory(category);
+
         // Important to update BD
         articleRepository.saveAndFlush(article);
         categoryRepository.saveAndFlush(category);

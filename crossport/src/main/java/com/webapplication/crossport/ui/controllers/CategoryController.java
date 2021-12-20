@@ -57,7 +57,14 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public String getById(@PathVariable(value = "id") Integer id, Model model) {
-        Category category = categoryService.getCategoryById(id);
+        Category category;
+
+        try {
+            category = categoryService.getCategoryById(id);
+        } catch (RuntimeException e) {
+            return "categories";
+        }
+
         List<Article> articlesNotInCategory = articleService.getArticlesNotInCategory(category);
 
         model.addAttribute("category", category);
@@ -69,24 +76,13 @@ public class CategoryController {
     public String delete(@PathVariable(value = "id") Integer id,
                          @RequestParam(value = "confirm", defaultValue = "false") boolean confirm,
                          RedirectAttributes redir) {
-        Category category;
         try {
-            category = categoryService.getCategoryById(id);
+            categoryService.deleteCategory(id, confirm);
         } catch (RuntimeException e) {
-            return "redirect:/categories";
-        }
-
-        if (category.getArticles().isEmpty() || confirm) {
-            try {
-                categoryService.deleteCategory(id);
-            } catch (RuntimeException e) {
-                return "redirect:/categories";
-            }
-        } else {
-            String delError = "You cannot delete this category as it has articles bound.";
-            redir.addFlashAttribute("delError", delError);
+            redir.addFlashAttribute("delError", e.getMessage());
             return "redirect:/categories/" + id;
         }
+
         redir.addFlashAttribute("listCategories", categoryService.getAllCategories());
         redir.addFlashAttribute("categoryDTO", new CategoryDTO());
         return "redirect:/categories";
@@ -96,21 +92,12 @@ public class CategoryController {
     public String removeArticle(@PathVariable(value = "idCategory") Integer idCategory,
                                 @PathVariable(value = "idArticle") Integer idArticle,
                                 RedirectAttributes redir) {
-        Category category;
         try {
-            category = categoryService.getCategoryById(idCategory);
+            articleService.removeCategory(idArticle, idCategory);
         } catch (RuntimeException e) {
-            String delError = "An error occured when we tried to find the category selected";
-            redir.addFlashAttribute("delError", delError);
-            return "redirect:/categories/" + idCategory;
-        }
-
-        try {
-            articleService.removeCategory(idArticle, category);
-        } catch (RuntimeException e) {
-            String delError = "An error occured when we tried to delete the category from the article selected";
-            redir.addFlashAttribute("delError", delError);
-            return "redirect:/categories/" + idCategory;
+            redir.addFlashAttribute("delError",
+                    "An error occured when we tried to " +
+                            "delete the category from the article selected");
         }
 
         return "redirect:/categories/" + idCategory;
@@ -120,21 +107,12 @@ public class CategoryController {
     public String addArticle(@PathVariable(value = "idCategory") Integer idCategory,
                              @PathVariable(value = "idArticle") Integer idArticle,
                              RedirectAttributes redir) {
-        Category category;
         try {
-            category = categoryService.getCategoryById(idCategory);
+            articleService.addCategory(idArticle, idCategory);
         } catch (RuntimeException e) {
-            String delError = "An error occured when we tried to find the category selected";
-            redir.addFlashAttribute("delError", delError);
-            return "redirect:/categories/" + idCategory;
-        }
-
-        try {
-            articleService.addCategory(idArticle, category);
-        } catch (RuntimeException e) {
-            String delError = "An error occured when we tried to add the category from the article selected";
-            redir.addFlashAttribute("delError", delError);
-            return "redirect:/categories/" + idCategory;
+            redir.addFlashAttribute("delError",
+                    "An error occured when we tried to " +
+                            "add the category from the article selected");
         }
 
         return "redirect:/categories/" + idCategory;

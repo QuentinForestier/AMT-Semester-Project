@@ -37,7 +37,7 @@ public class LoginController {
                                 user.getId(),
                                 user.getUsername(),
                                 user.getRole().toString()),
-                        userService.CreateJWT(user.getRole().toString())),
+                        userService.createJWT(user.getRole().toString())),
                 HttpStatus.OK);
     }
 

@@ -83,7 +83,7 @@ public class UserService {
         return new User(u.getId(), u.getUsername(), Objects.equals(u.getUsername(), adminUsername) ? Role.Admin : Role.User);
     }
 
-    public String CreateJWT(String role) {
+    public String createJWT(String role) {
         // signature algorithm
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 

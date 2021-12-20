@@ -44,8 +44,7 @@ public class ShopController {
 				articles = articleService.getCategoryArticles(selectedCategory);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "shop?error";
+			return "shop";
 		}
 
 		List<Category> categories = categoryService.getAllCategories();
@@ -66,8 +65,7 @@ public class ShopController {
 		try {
 			article = articleService.getArticleById(id);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return "article?error";
+			return "shop";
 		}
 		model.addAttribute("article", article);
 		return "article";

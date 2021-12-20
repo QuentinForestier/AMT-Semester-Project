@@ -95,6 +95,7 @@ public class ShopControllerTest {
 
 		Mockito.when(articleService.getAllArticles()).thenReturn(mockArticles);
 		Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
+		Mockito.when(categoryService.getShopCategories(null)).thenReturn(mockCategories);
 
 
 		mvc.perform(MockMvcRequestBuilders.get("/shop"))
@@ -177,7 +178,9 @@ public class ShopControllerTest {
 		Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
 		Mockito.when(categoryService.getCategoryById(1)).thenReturn(skis);
 		Mockito.when(categoryService.getCategoryById(2)).thenReturn(snowboards);
+		Mockito.when(categoryService.getShopCategories(skis)).thenReturn(mockCategories);
 		Mockito.when(articleService.getCategoryArticles(skis)).thenReturn(new ArrayList<>(skis.getArticles()));
+		Mockito.when(categoryService.getShopCategories(snowboards)).thenReturn(mockCategories);
 		Mockito.when(articleService.getCategoryArticles(snowboards)).thenReturn(new ArrayList<>(snowboards.getArticles()));
 
 		mvc.perform(MockMvcRequestBuilders.get("/shop").param("idCategory", "1"))

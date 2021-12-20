@@ -34,6 +34,8 @@ public class ShopController {
 
 	@GetMapping("")
 	public String getShop(@RequestParam(value = "idCategory", required = false) Integer idCategory, Model model) {
+		// idCategory == null = All Articles / No Category
+
 		List<Article> articles;
 		Category selectedCategory = null;
 		try {

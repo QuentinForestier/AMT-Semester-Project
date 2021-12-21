@@ -1,6 +1,5 @@
 package com.webapplication.crossport.controller;
 
-import com.webapplication.crossport.config.images.ImageConfiguration;
 import com.webapplication.crossport.domain.services.ArticleService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
@@ -365,24 +364,6 @@ public class ArticleControllerTest {
 
 		String newName = "new article name";
 
-		File directory = new File(ImageConfiguration.uploadDir);
-		if (!directory.exists()) {
-			directory.mkdir();
-		}
-		File fileSrc = new File("src/main/resources/static/images/1.jpg");
-		File fileDst = new File(ImageConfiguration.uploadDir + "/1.jpg");
-		InputStream in = new BufferedInputStream(new FileInputStream(fileSrc));
-		OutputStream out = new BufferedOutputStream(new FileOutputStream(fileDst));
-
-		byte[] buffer = new byte[1024];
-		int lengthRead;
-		while ((lengthRead = in.read(buffer)) > 0) {
-			out.write(buffer, 0, lengthRead);
-			out.flush();
-		}
-		in.close();
-		out.close();
-
 		mvc.perform(MockMvcRequestBuilders.put("/articles")
 						.param("id", article.getId().toString())
 						.param("DeleteImage", "DeleteImage")
@@ -397,8 +378,6 @@ public class ArticleControllerTest {
 						hasProperty("articleName", is(newName))
 					)
 				));
-
-		directory.delete();
 
 		Article articleModified = articleService.getArticleById(1);
 		assertNull(articleModified.getImgExtension());

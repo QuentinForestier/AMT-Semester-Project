@@ -49,7 +49,6 @@ public class JWTUtility {
 		return getClaimFromToken(token, secret, Claims::getExpiration);
 	}
 
-
 	/**
 	 * Getting claims
 	 * @param token Token

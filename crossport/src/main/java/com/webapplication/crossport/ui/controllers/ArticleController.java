@@ -5,6 +5,8 @@ import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.domain.services.ArticleService;
 import com.webapplication.crossport.ui.dto.ArticleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,6 +14,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
+import java.io.IOException;
 
 /**
  *  Controller charged to manage articles form admin view
@@ -29,12 +32,25 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    private final FileService fileService = new FileService();
+    @Autowired
+    private FileService fileService;
 
     @GetMapping("")
     public String getAll(Model model) {
         model.addAttribute("listArticles", articleService.getAllArticles());
         return "manageArticles";
+    }
+
+    @GetMapping("/images/{img}")
+    public ResponseEntity<byte[]> getImage(@PathVariable(value = "img") String img) {
+        ResponseEntity<byte[]> response;
+        try {
+            response = fileService.getImage(img);
+        } catch (Exception e) {
+            response = ResponseEntity.status(HttpStatus.NOT_FOUND).body("bad image".getBytes());
+        }
+
+        return response;
     }
 
     @GetMapping("/new")
@@ -44,8 +60,7 @@ public class ArticleController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editPage(Model model,
-                           @PathVariable(value = "id") Integer id) {
+    public String editPage(Model model, @PathVariable(value = "id") Integer id) {
         ArticleDTO articleDTO = new ArticleDTO();
         Article article;
         try {

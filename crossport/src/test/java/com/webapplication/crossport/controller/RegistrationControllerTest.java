@@ -3,7 +3,7 @@ package com.webapplication.crossport.controller;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.io.entity.EntityUtils;
 import com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http.message.BasicNameValuePair;
-import com.webapplication.crossport.service.AuthService;
+import com.webapplication.crossport.config.security.AuthService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Test to get registration page
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc

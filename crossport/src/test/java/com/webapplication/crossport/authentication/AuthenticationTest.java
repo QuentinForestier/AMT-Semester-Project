@@ -1,10 +1,10 @@
 package com.webapplication.crossport.authentication;
 
-import com.webapplication.crossport.config.CustomAuthenticationProvider;
-import com.webapplication.crossport.service.AuthService;
-import com.webapplication.crossport.models.services.DefaultMemberService;
-import com.webapplication.crossport.service.MemberRegistrationData;
-import com.webapplication.crossport.service.exception.RegistrationException;
+import com.webapplication.crossport.config.security.CustomAuthenticationProvider;
+import com.webapplication.crossport.config.security.AuthService;
+import com.webapplication.crossport.domain.services.DefaultMemberService;
+import com.webapplication.crossport.ui.dto.MemberRegistrationDTO;
+import com.webapplication.crossport.config.security.exception.RegistrationException;
 import org.junit.jupiter.api.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for authentication. This test class checks multiple users inputs for registration and login.
  * For registration: checks if DefaultMemberService behave correctly depending on authentication server response.
  * For login: checks if authenticate method of customAuthenticationProvider works
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 public class AuthenticationTest extends DefaultMemberService{
 
@@ -153,7 +157,7 @@ public class AuthenticationTest extends DefaultMemberService{
      * @return True if authentication is a success else false
      */
     private boolean tryRegister(String username, String password, String passwordConfirmation) {
-        MemberRegistrationData member = new MemberRegistrationData();
+        MemberRegistrationDTO member = new MemberRegistrationDTO();
         member.setUsername(username);
         member.setPassword(password);
         member.setPasswordConfirmation(passwordConfirmation);

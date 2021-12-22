@@ -14,7 +14,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * Test class that check access to home page
+ * @author Berney Alec
+ * @author Forestier Quentin
+ * @author Gazetta Florian
  * @author Herzig Melvyn
+ * @author Lamrani Soulaymane
  */
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -34,7 +38,7 @@ public class WebControllerTest {
 
 	@Test
 	@WithMockUser(roles = {"USER"})
-	public void getHomePage_Registered_Fail() throws Exception {
+	public void getHomePage_Registered_Success() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"));
@@ -42,7 +46,7 @@ public class WebControllerTest {
 
 	@Test
 	@WithMockUser(roles = {"ADMIN"})
-	public void getHomePage_Admin_Fail() throws Exception {
+	public void getHomePage_Admin_Success() throws Exception {
 		mvc.perform(MockMvcRequestBuilders.get("/"))
 				.andExpect(status().isOk())
 				.andExpect(view().name("index"));

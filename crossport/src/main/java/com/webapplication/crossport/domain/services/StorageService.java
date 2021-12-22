@@ -33,7 +33,7 @@ public class StorageService {
 	@Autowired
 	private AmazonS3 s3Client;
 
-	final String dir = System.getProperty("user.dir");
+	final String dir = System.getProperty("java.io.tmpdir");
 
 	/**
 	 * Upload a file to AWS S3
@@ -69,6 +69,7 @@ public class StorageService {
 	 */
 	private File convertMultipartfileToFile(MultipartFile file) {
 		File convertedFile = new File(dir + "/" +file.getOriginalFilename());
+		System.out.println(dir + "/" +file.getOriginalFilename());
 		try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
 			fos.write(file.getBytes());
 		} catch (IOException e) {

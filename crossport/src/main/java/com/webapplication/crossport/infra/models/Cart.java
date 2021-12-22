@@ -3,7 +3,6 @@ package com.webapplication.crossport.infra.models;
 import lombok.Getter;
 import lombok.Setter;
 import javax.persistence.*;
-import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.*;
@@ -38,36 +37,6 @@ public class Cart
             FetchType.EAGER)
     @JoinColumn(name = "fk_cart_id")
     private Set<CartArticle> cartArticles = new HashSet<>();
-
-    /* -------------------------- GETTERS AND SETTERS -------------------------------*/
-
-    /* -------------------------- GETTERS AND SETTERS
-    -------------------------------*/
-
-    /**
-     * Gets cart id
-     *
-     * @return Cart id
-     */
-    public Integer getId()
-    {
-        return id;
-    }
-
-    /**
-     * Sets new cart id
-     *
-     * @param id New cart
-     */
-    public void setId(Integer id)
-    {
-        this.id = id;
-    }
-
-    public Set<CartArticle> getCartArticles()
-    {
-        return cartArticles;
-    }
 
     public void addArticle(CartArticle ca){
         this.cartArticles.add(ca);

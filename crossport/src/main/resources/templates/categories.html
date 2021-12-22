@@ -54,19 +54,19 @@ Modification date: 08/11/2021
                     <h2>Save category</h2>
                     <div id="loginbox" class="loginbox" style="width: 100%">
                         <form th:action="@{/categories}" th:object="${categoryDTO}" method="post">
-                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
-                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
-                            </div>
                             <fieldset class="input">
                                 <p id="login-form-password">
                                     <label for="catName">Category name</label>
                                     <input  id="catName" type="text" th:field="*{categoryName}" th:errorclass="is-invalid" class="form-control col-md-4">
                                 </p>
                                 <div class="remember" >
-                                    <button type="submit" name="Submit" class="button">Save category</button>
+                                    <button type="submit" name="Submit" class="btn btn-success">Save category</button>
                                     <div class="clear"></div>
                                 </div>
                             </fieldset>
+                            <div class="alert alert-danger" th:if="${#fields.hasErrors('*')}">
+                                <p th:each="err : ${#fields.errors('*')}" th:text="${err}"></p>
+                            </div>
                         </form>
                     </div>
                 </div>

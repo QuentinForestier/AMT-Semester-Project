@@ -1,6 +1,7 @@
 package com.webapplication.crossport.services;
 
 import com.webapplication.crossport.domain.services.ArticleService;
+import com.webapplication.crossport.domain.services.CategoryService;
 import com.webapplication.crossport.domain.services.FileService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
@@ -38,22 +39,25 @@ public class ArticleServiceTest {
 
 
 	@InjectMocks
-	private ArticleService as;
+	private ArticleService articleService;
 
 	@Mock
-	private ArticleRepository ar;
+	private ArticleRepository articleRepository;
 
 	@Mock
-	private CategoryRepository cr;
+	private CategoryService categoryService;
+
+	@Mock
+	private CategoryRepository categoryRepository;
 
 	@Mock
 	private FileService fs;
 
 	@Test
 	public void getAllArticles_NoArticle() {
-		Mockito.when(ar.findAll()).thenThrow(RuntimeException.class);
+		Mockito.when(articleRepository.findAll()).thenThrow(RuntimeException.class);
 
-		List<Article> list = as.getAllArticles();
+		List<Article> list = articleService.getAllArticles();
 
 		assertTrue(list.isEmpty());
 	}
@@ -65,9 +69,9 @@ public class ArticleServiceTest {
 		returnedArticles.add(new Article());
 		returnedArticles.add(new Article());
 
-		Mockito.when(ar.findAll()).thenReturn(returnedArticles);
+		Mockito.when(articleRepository.findAll()).thenReturn(returnedArticles);
 
-		List<Article> list = as.getAllArticles();
+		List<Article> list = articleService.getAllArticles();
 
 		assertEquals(list.size(), 2);
 	}
@@ -77,9 +81,9 @@ public class ArticleServiceTest {
 
 		Category cat = new Category();
 
-		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenThrow(RuntimeException.class);
+		Mockito.when(articleRepository.findArticlesByCategoriesContaining(cat)).thenThrow(RuntimeException.class);
 
-		List<Article> list = as.getCategoryArticles(cat);
+		List<Article> list = articleService.getCategoryArticles(cat);
 
 		assertTrue(list.isEmpty());
 	}
@@ -93,9 +97,9 @@ public class ArticleServiceTest {
 		returnedArticles.add(new Article());
 		returnedArticles.add(new Article());
 
-		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenReturn(returnedArticles);
+		Mockito.when(articleRepository.findArticlesByCategoriesContaining(cat)).thenReturn(returnedArticles);
 
-		List<Article> list = as.getCategoryArticles(cat);
+		List<Article> list = articleService.getCategoryArticles(cat);
 
 		assertEquals(list.size(), 2);
 	}
@@ -105,9 +109,9 @@ public class ArticleServiceTest {
 
 		Category cat = new Category();
 
-		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenThrow(RuntimeException.class);
+		Mockito.when(articleRepository.findArticlesByCategoriesContaining(cat)).thenThrow(RuntimeException.class);
 
-		List<Article> list = as.getCategoryArticles(cat);
+		List<Article> list = articleService.getCategoryArticles(cat);
 
 		assertTrue(list.isEmpty());
 	}
@@ -121,9 +125,9 @@ public class ArticleServiceTest {
 		returnedArticles.add(new Article());
 		returnedArticles.add(new Article());
 
-		Mockito.when(ar.findArticlesByCategoriesContaining(cat)).thenReturn(returnedArticles);
+		Mockito.when(articleRepository.findArticlesByCategoriesContaining(cat)).thenReturn(returnedArticles);
 
-		List<Article> list = as.getCategoryArticles(cat);
+		List<Article> list = articleService.getCategoryArticles(cat);
 
 		assertEquals(list.size(), 2);
 	}
@@ -133,12 +137,12 @@ public class ArticleServiceTest {
 
 		Optional<Article> optional = Optional.empty();
 
-		Mockito.when(ar.findById(1)).thenReturn(optional);
+		Mockito.when(articleRepository.findById(1)).thenReturn(optional);
 
 		boolean success = false;
 
 		try {
-			Article article = as.getArticleById(1);
+			Article article = articleService.getArticleById(1);
 		} catch (Exception e) {
 			if (e.getMessage().equals("Article not found for id :: 1")){
 				success = true;
@@ -153,12 +157,12 @@ public class ArticleServiceTest {
 
 		Optional<Article> optional = Optional.of(new Article());
 
-		Mockito.when(ar.findById(1)).thenReturn(optional);
+		Mockito.when(articleRepository.findById(1)).thenReturn(optional);
 
 		boolean success = true;
 
 		try {
-			as.getArticleById(1);
+			articleService.getArticleById(1);
 		} catch (Exception e) {
 			success = false;
 		}
@@ -169,12 +173,12 @@ public class ArticleServiceTest {
 	@Test
 	public void findFirstByName_badName() {
 
-		Mockito.when(ar.findFirstByName("a name")).thenReturn(null);
+		Mockito.when(articleRepository.findFirstByName("a name")).thenReturn(null);
 
 		boolean success = false;
 
 		try {
-			as.findFirstByName("a name");
+			articleService.findFirstByName("a name");
 		} catch (Exception e) {
 			if (e.getMessage().equals("Article not found for name :: a name")){
 				success = true;
@@ -187,12 +191,12 @@ public class ArticleServiceTest {
 	@Test
 	public void findFirstByName_goodName() {
 
-		Mockito.when(ar.findFirstByName("a name")).thenReturn(new Article());
+		Mockito.when(articleRepository.findFirstByName("a name")).thenReturn(new Article());
 
 		boolean success = true;
 
 		try {
-			as.findFirstByName("a name");
+			articleService.findFirstByName("a name");
 		} catch (Exception e) {
 			success = false;
 		}
@@ -201,39 +205,41 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void removeCategory() {
-		Category cat = new Category();
+	public void removeCategory_Success() {
+		Category category = new Category();
 		Article article = new Article();
 
 		Optional<Article> optional = Optional.of(article);
-		Mockito.when(ar.findById(1)).thenReturn(optional);
+		Mockito.when(articleRepository.findById(1)).thenReturn(optional);
+		Mockito.when(categoryService.getCategoryById(1)).thenReturn(category);
 
-		article.addCategory(cat);
+		article.addCategory(category);
 
-		assertTrue(!cat.getArticles().isEmpty());
+		assertTrue(!category.getArticles().isEmpty());
 
-		as.removeCategory(1, cat);
+		articleService.removeCategory(1, 1);
 
 		assertTrue(article.getCategories().isEmpty());
-		assertTrue(cat.getArticles().isEmpty());
+		assertTrue(category.getArticles().isEmpty());
 	}
 
 	@Test
-	public void addCategory() {
-		Category cat = new Category();
+	public void AsAdmin_addCategory_Success() {
+		Category category = new Category();
 		Article article = new Article();
 
 		Optional<Article> optional = Optional.of(article);
-		Mockito.when(ar.findById(1)).thenReturn(optional);
+		Mockito.when(articleRepository.findById(1)).thenReturn(optional);
+		Mockito.when(categoryService.getCategoryById(1)).thenReturn(category);
 
-		as.addCategory(1, cat);
+		articleService.addCategory(1, 1);
 
 		assertTrue(!article.getCategories().isEmpty());
-		assertTrue(!cat.getArticles().isEmpty());
+		assertTrue(!category.getArticles().isEmpty());
 	}
 
 	@Test
-	public void  modifyArticle_BadPrice_Fail() {
+	public void AsAdmin_modifyArticle_BadPrice_Fail() {
 		ArticleDTO articleDTO = new ArticleDTO();
 		articleDTO.setArticleName("test name");
 		articleDTO.setArticleDesc("test desc");
@@ -244,7 +250,7 @@ public class ArticleServiceTest {
 		boolean threw = false;
 
 		try {
-			as.modifyArticleImage(null, articleDTO, null, 1);
+			articleService.modifyArticleImage(null, articleDTO, null, 1);
 		} catch(RuntimeException e) {
 			threw = true;
 		}
@@ -252,7 +258,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void  modifyArticle_ExistingName_Fail() {
+	public void AsAdmin_modifyArticle_ExistingName_Fail() {
 		ArticleDTO articleDTO = new ArticleDTO();
 		articleDTO.setArticleName("test name");
 		articleDTO.setArticleDesc("test desc");
@@ -260,12 +266,12 @@ public class ArticleServiceTest {
 		articleDTO.setArticlePrice(-1.);
 		articleDTO.setImgPath(null);
 
-		Mockito.when(ar.findFirstByName(articleDTO.getArticleName())).thenReturn(new Article());
+		Mockito.when(articleRepository.findFirstByName(articleDTO.getArticleName())).thenReturn(new Article());
 
 		boolean threw = false;
 
 		try {
-			as.modifyArticleImage(null, articleDTO, null, 1);
+			articleService.modifyArticleImage(null, articleDTO, null, 1);
 		} catch(RuntimeException e) {
 			threw = true;
 		}
@@ -273,7 +279,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void  modifyArticle_badFile_Fail() {
+	public void AsAdmin_modifyArticle_badFile_Fail() {
 		ArticleDTO articleDTO = new ArticleDTO();
 		articleDTO.setArticleName("test name");
 		articleDTO.setArticleDesc("test desc");
@@ -281,7 +287,7 @@ public class ArticleServiceTest {
 		articleDTO.setArticlePrice(-1.);
 		articleDTO.setImgPath(null);
 
-		Mockito.when(ar.findFirstByName(articleDTO.getArticleName())).thenReturn(null);
+		Mockito.when(articleRepository.findFirstByName(articleDTO.getArticleName())).thenReturn(null);
 
 		MockMultipartFile text
 				= new MockMultipartFile("image", "hello.txt",  MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
@@ -289,7 +295,7 @@ public class ArticleServiceTest {
 		boolean threw = false;
 
 		try {
-			as.modifyArticleImage(null, articleDTO, text, 1);
+			articleService.modifyArticleImage(null, articleDTO, text, 1);
 		} catch(RuntimeException e) {
 			threw = true;
 		}
@@ -297,7 +303,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void  modifyArticle_Success() {
+	public void AsAdmin_modifyArticle_Success() {
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
@@ -317,7 +323,7 @@ public class ArticleServiceTest {
 		articleDTO.setArticleStock(newStock);
 		articleDTO.setArticlePrice(newPrice);
 
-		Mockito.when(ar.findFirstByName(articleDTO.getArticleName())).thenReturn(null);
+		Mockito.when(articleRepository.findFirstByName(articleDTO.getArticleName())).thenReturn(null);
 
 		MockMultipartFile image
 				= new MockMultipartFile("image", "hello.png",  MediaType.IMAGE_PNG_VALUE, "Hello, World!".getBytes());
@@ -325,7 +331,7 @@ public class ArticleServiceTest {
 		Mockito.when(fs.isAnAuthorizedExtension(ArgumentMatchers.any())).thenReturn(true);
 		Mockito.when(fs.getExtension(ArgumentMatchers.any())).thenReturn(".png");
 
-		as.modifyArticle(article, articleDTO, image, article.getId());
+		articleService.modifyArticle(article, articleDTO, image, article.getId());
 
 		assertEquals(article.getName(), newName);
 		assertEquals(article.getDescription(), newDesc);
@@ -335,7 +341,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void modifyArticleImage_badFile_Fail(){
+	public void AsAdmin_modifyArticleImage_badFile_Fail(){
 
 		Article article = new Article();
 		article.setId(1);
@@ -351,7 +357,7 @@ public class ArticleServiceTest {
 				= new MockMultipartFile("image", "hello.txt",  MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
 
 		try {
-			as.modifyArticleImage(article, null, text, 0);
+			articleService.modifyArticleImage(article, null, text, 0);
 		} catch(RuntimeException e) {
 			threw = true;
 		}
@@ -359,7 +365,7 @@ public class ArticleServiceTest {
 	}
 
 	@Test
-	public void modifyArticleImage_Success(){
+	public void AsAdmin_modifyArticleImage_Success(){
 
 		Article article = new Article();
 		article.setId(1);
@@ -377,7 +383,7 @@ public class ArticleServiceTest {
 		Mockito.when(fs.isAnAuthorizedExtension(ArgumentMatchers.any())).thenReturn(true);
 		Mockito.when(fs.getExtension(ArgumentMatchers.any())).thenReturn(".png");
 
-		as.modifyArticleImage(article, adto, text, article.getId());
+		articleService.modifyArticleImage(article, adto, text, article.getId());
 
 		assertEquals(article.getImgExtension(), ".png");
 	}

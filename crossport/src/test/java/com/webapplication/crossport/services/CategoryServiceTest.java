@@ -87,7 +87,7 @@ public class CategoryServiceTest {
 		assertEquals(a1.getCategories().size(), 1);
 		assertEquals(a1.getCategories().size(), 1);
 
-		cs.deleteCategory(1);
+		cs.deleteCategory(1, true);
 
 		assertTrue(cat.getArticles().isEmpty());
 		assertTrue(a1.getCategories().isEmpty());

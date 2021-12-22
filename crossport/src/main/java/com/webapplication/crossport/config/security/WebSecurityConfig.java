@@ -72,7 +72,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/cart/**",
 
                         // Images
-                        "/articles/images**",
+                        "/articles/images/**",
 
                         // Ressources Statiques
                         "/css/**",
@@ -86,7 +86,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/categories/**",
 
                         //ArticleController
-                        "/articles/**")
+                        "/articles",
+                        "/articles/new/**",
+                        "/articles/edit/**")
                 .hasRole("ADMIN")
                 .antMatchers(
                         // LoginController

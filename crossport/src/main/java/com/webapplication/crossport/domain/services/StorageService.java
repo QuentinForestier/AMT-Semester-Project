@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  * Service file to interract with aws
@@ -30,6 +32,8 @@ public class StorageService {
 
 	@Autowired
 	private AmazonS3 s3Client;
+
+	final String dir = System.getProperty("user.dir");
 
 	/**
 	 * Upload a file to AWS S3
@@ -64,7 +68,7 @@ public class StorageService {
 	 * @return Returns the file from multipart file
 	 */
 	private File convertMultipartfileToFile(MultipartFile file) {
-		File convertedFile = new File(file.getOriginalFilename());
+		File convertedFile = new File(dir + "/" +file.getOriginalFilename());
 		try (FileOutputStream fos = new FileOutputStream(convertedFile)) {
 			fos.write(file.getBytes());
 		} catch (IOException e) {

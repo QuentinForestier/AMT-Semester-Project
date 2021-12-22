@@ -63,7 +63,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
                 <div class="col-md-9 single_left">
                     <div class="single_image">
                         <img th:if="${article.getImgPath() == null }" th:src="@{~/images/pic6.jpg}" class="img-responsive" alt=""/>
-                        <img th:if="${article.getImgPath() != null }" th:src="@{${article.getImgPath()}}" class="img-responsive" alt=""/>
+                        <img th:if="${article.getImgPath() != null }" th:src="@{'/articles/images/' + ${article.getImgPath()}}" class="img-responsive" alt=""/>
                     </div>
                     <!-- end product_slider -->
                     <div class="single_right">

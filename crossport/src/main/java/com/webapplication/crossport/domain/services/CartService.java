@@ -7,12 +7,12 @@ import com.webapplication.crossport.infra.models.Member;
 import com.webapplication.crossport.infra.repository.CartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 import java.util.Optional;
 
 /**
- *
  * @author Berney Alec
  * @author Forestier Quentin
  * @author Gazetta Florian
@@ -177,6 +177,11 @@ public class CartService
 
             save(cart);
         }
+        else
+        {
+            addToCart(cart, quantity, article);
+        }
+
         return cart;
     }
 

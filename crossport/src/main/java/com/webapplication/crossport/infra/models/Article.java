@@ -102,6 +102,6 @@ public class Article {
         if (imgExtension == null)
             return null;
 
-        return "/articles_images/" + id.toString() + imgExtension;
+        return id.toString() + imgExtension;
     }
 }

@@ -11,7 +11,6 @@ import java.io.IOException;
 
 /**
  * Class to handle logout
- *
  * @author Berney Alec
  * @author Forestier Quentin
  * @author Gazetta Florian

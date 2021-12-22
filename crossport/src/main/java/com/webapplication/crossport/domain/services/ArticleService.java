@@ -29,6 +29,7 @@ public class ArticleService {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
     private FileService fileService;
 
     public List<Article> getAllArticles() {

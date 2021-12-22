@@ -71,6 +71,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         // CartController
                         "/cart/**",
 
+                        // Images
+                        "/articles/images**",
+
                         // Ressources Statiques
                         "/css/**",
                         "/images/**",

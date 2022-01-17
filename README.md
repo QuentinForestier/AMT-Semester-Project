@@ -72,6 +72,8 @@ localhost:8080
 
 Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir du mocking du service d'authentification.
 
+De plus, il est nécessaire que votre service Postgres, avec la base de données, tourne localement. Nous n'utilisons pas la base de données pour les tests mais le context de l'application doit quand de même de s'y connecter.
+
 ## Support
 
 En cas de problème contacter nous grâce à l'adresse email suivante:

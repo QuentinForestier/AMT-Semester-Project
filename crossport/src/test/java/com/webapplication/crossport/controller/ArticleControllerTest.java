@@ -59,22 +59,18 @@ public class ArticleControllerTest {
 		mvc.perform(MockMvcRequestBuilders.get("/articles/manage"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("http://localhost/login"));
-
 	}
 
 	@Test
 	@WithMockUser(roles = {"USER"})
 	public void AsUser_getArticles_Fail() throws Exception {
-
 		mvc.perform(MockMvcRequestBuilders.get("/articles/manage"))
 				.andExpect(status().is4xxClientError());
-
 	}
 
 	@Test
 	@WithMockUser(roles = {"ADMIN"})
 	public void AsAdmin_getArticles_success() throws Exception {
-
 		List<Article> mockArticles = new ArrayList<>();
 		Category skis = new Category();
 		skis.setName("skis");
@@ -149,14 +145,12 @@ public class ArticleControllerTest {
 
 		mvc.perform(MockMvcRequestBuilders.post("/articles/edit"))
 				.andExpect(status().is4xxClientError());
-
 	}
 
 
 	@Test
 	@WithMockUser(roles={"ADMIN"})
 	public void AsAdmin_getEditForm_Success() throws Exception {
-
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
@@ -183,7 +177,6 @@ public class ArticleControllerTest {
 	@Test
 	@WithMockUser(roles={"ADMIN"})
 	public void AsAdmin_submitEditFormWithSameName_Fail() throws Exception {
-
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
@@ -238,9 +231,7 @@ public class ArticleControllerTest {
 
 	@Test
 	@WithMockUser(roles={"ADMIN"})
-
 	public void AsAdmin_submitEditFormWithError_Fail() throws Exception {
-
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");
@@ -350,7 +341,6 @@ public class ArticleControllerTest {
 	@Test
 	@WithMockUser(roles={"ADMIN"})
 	public void AsAdmin_removeArticleImage_Success() throws Exception {
-
 		Article article = new Article();
 		article.setId(1);
 		article.setName("test name");

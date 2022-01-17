@@ -52,13 +52,14 @@ public class CategoryControllerTest {
     @MockBean
     private CategoryService categoryService;
 
+    //region GetAllCategories
+
     @Test
     @WithAnonymousUser
     public void AsVisitor_getCategories_Fail() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/categories"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
-
     }
 
     @Test
@@ -111,9 +112,13 @@ public class CategoryControllerTest {
                 )));
     }
 
+    //endregion
+
+    //region GetACategory
+
     @Test
     @WithAnonymousUser
-    public void AsVisitor_getCategory_Fail() throws Exception {
+    public void AsVisitor_getACategory_Fail() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/categories/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
@@ -121,14 +126,14 @@ public class CategoryControllerTest {
 
     @Test
     @WithMockUser(roles = {"USER"})
-    public void AsUser_getCategory_Fail() throws Exception {
+    public void AsUser_getACategory_Fail() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/categories/1"))
                 .andExpect(status().is4xxClientError());
     }
 
     @Test
     @WithMockUser(roles = {"ADMIN"})
-    public void AsAdmin_getCategory_Success() throws Exception {
+    public void AsAdmin_getACategory_Success() throws Exception {
         Category snowboards = new Category();
         snowboards.setId(1);
         snowboards.setName("snowboards");
@@ -178,10 +183,40 @@ public class CategoryControllerTest {
                 )));
     }
 
+    //endregion
+
+    //region SubmitCategory
+
+    @Test
+    @WithAnonymousUser
+    public void AsVisitor_submitCategory_Fail() throws Exception {
+        Category skis = new Category();
+        skis.setId(1);
+        skis.setName("skis");
+
+        mvc.perform(MockMvcRequestBuilders.post("/categories")
+                .param("categoryName", skis.getName()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER"})
+    public void AsUser_submitCategory_Fail() throws Exception {
+        Category skis = new Category();
+        skis.setId(1);
+        skis.setName("skis");
+
+        mvc.perform(MockMvcRequestBuilders.post("/categories")
+                .param("categoryName", skis.getName()))
+                .andExpect(status().is4xxClientError());
+    }
+
     @Test
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_submitCategory_Success() throws Exception {
         List<Category> mockCategories = new ArrayList<>();
+
         Category snowboards = new Category();
         snowboards.setId(1);
         snowboards.setName("snowboards");
@@ -234,6 +269,33 @@ public class CategoryControllerTest {
         assertTrue(br.getAllErrors().stream().anyMatch(o -> o.getObjectName().equals("Error")));
     }
 
+    //endregion
+
+    //region DeleteCategory
+
+    @Test
+    @WithAnonymousUser
+    public void AsVisitor_deleteCategory_Fail() throws Exception {
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", snowboards.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER"})
+    public void AsUser_deleteCategory_Fail() throws Exception {
+        Category snowboards = new Category();
+        snowboards.setId(1);
+        snowboards.setName("snowboards");
+
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", snowboards.getId()))
+                .andExpect(status().is4xxClientError());
+    }
+
     @Test
     @WithMockUser(roles={"ADMIN"})
     public void AsAdmin_deleteCategoryWithoutArticle_Success() throws Exception {
@@ -282,4 +344,80 @@ public class CategoryControllerTest {
                 .andExpect(redirectedUrl("/categories/" + snowboards.getId()))
                 .andExpect(flash().attribute("delError", delError));
     }
+
+    // TODO: à refaire
+    @Test
+    @WithMockUser(roles={"ADMIN"})
+    public void AsAdmin_deleteCategoryWithArticleConfirm_Success() throws Exception {
+        /*List<Category> mockCategories = new ArrayList<>();
+        mockCategories.remove(mockCategories.get(0));
+        Mockito.when(categoryService.getAllCategories()).thenReturn(mockCategories);
+        doAnswer((i)-> {
+            mockCategories.remove(0);
+            return null;
+        }).when(categoryService.deleteCategory(1, true));
+        mvc.perform(MockMvcRequestBuilders.delete("/categories/{id}", snowboards.getId()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/categories/" + snowboards.getId()));*/
+    }
+
+    //endregion
+
+    //region AddArticleToCategory
+
+    @Test
+    @WithAnonymousUser
+    public void AsVisitor_addArticleCategory_Fail() throws Exception {
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+
+        mvc.perform(MockMvcRequestBuilders.post("/categories")
+                        .param("categoryName", skis.getName()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER"})
+    public void AsUser_addArticleCategory_Fail() throws Exception {
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+
+        mvc.perform(MockMvcRequestBuilders.post("/categories")
+                        .param("categoryName", skis.getName()))
+                .andExpect(status().is4xxClientError());
+    }
+
+    //endregion
+
+    //region RemoveArticleToCategory
+
+    @Test
+    @WithAnonymousUser
+    public void AsVisitor_removeArticleCategory_Fail() throws Exception {
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+
+        mvc.perform(MockMvcRequestBuilders.post("/categories")
+                        .param("categoryName", skis.getName()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("http://localhost/login"));
+    }
+
+    @Test
+    @WithMockUser(roles = {"USER"})
+    public void AsUser_removeArticleCategory_Fail() throws Exception {
+        Category skis = new Category();
+        skis.setId(2);
+        skis.setName("skis");
+
+        mvc.perform(MockMvcRequestBuilders.post("/categories")
+                        .param("categoryName", skis.getName()))
+                .andExpect(status().is4xxClientError());
+    }
+
+    //endregion
 }

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import java.util.ArrayList;
@@ -32,9 +31,6 @@ public class CategoryServiceTest {
 
     @InjectMocks
     private CategoryService categoryService;
-
-    @Autowired
-    private CategoryService categoryServiceDB;
 
     @Mock
     private CategoryRepository categoryRepository;
@@ -200,15 +196,6 @@ public class CategoryServiceTest {
     //endregion
 
     //region AddCategory
-
-    @Test
-    public void addCategory_Success() {
-        Category category = new Category();
-        category.setName("skis");
-        categoryServiceDB.saveCategory(category);
-
-        Assertions.assertNotNull(categoryServiceDB.getFirstCategoryByName("skis"));
-    }
 
     @Test
     public void addEmptyCategory_Fail() {

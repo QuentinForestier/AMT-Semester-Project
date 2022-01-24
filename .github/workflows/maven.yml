@@ -36,9 +36,5 @@ jobs:
       run: touch /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/application.properties
     - name: Set application.properties for production
       run: echo "${{secrets.APP_PROP}}" >> /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/main/resources/application.properties  
-    - name: Create application.properties tests
-      run: touch /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/test/resources/application.properties
-    - name: Set application.properties for production tests
-      run: echo "${{secrets.APP_PROP_TEST}}" >> /home/runner/work/AMT-Semester-Project/AMT-Semester-Project/crossport/src/test/resources/application.properties     
     - name: Build with Maven
       run: mvn -B package --file crossport/pom.xml

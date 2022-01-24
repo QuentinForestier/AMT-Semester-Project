@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Testing category service. Only methode that add more logic than just call category repository are tested
+ * Testing category service
  *
  * @author Berney Alec
  * @author Forestier Quentin
@@ -253,47 +253,28 @@ public class CategoryServiceTest {
     //region DeleteCategory
 
     @Test
-    public void deleteCategory_Success() {
+    public void deleteCategoryWithoutArticles_Success() {
         Category cat = new Category();
-        Article a1 = new Article();
-        Article a2 = new Article();
-        a1.addCategory(cat);
-        a2.addCategory(cat);
 
-        Optional<Category> optional = Optional.of(cat);
+        Optional<Category> optional = Optional.empty();
         Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
 
-        Assertions.assertEquals(cat.getArticles().size(), 2);
-        Assertions.assertEquals(a1.getCategories().size(), 1);
-        Assertions.assertEquals(a1.getCategories().size(), 1);
+        Assertions.assertEquals(cat.getArticles().size(), 0);
 
-        categoryService.deleteCategory(1, true);
+        categoryService.deleteCategory(1, false);
 
         Assertions.assertTrue(cat.getArticles().isEmpty());
-        Assertions.assertTrue(a1.getCategories().isEmpty());
-        Assertions.assertTrue(a1.getCategories().isEmpty());
     }
 
     @Test
-    public void deleteCategoryWithBadId_Fail() {
-        Category cat = new Category();
-        Article a1 = new Article();
-        Article a2 = new Article();
-        a1.addCategory(cat);
-        a2.addCategory(cat);
+    public void deleteCategoryWithoutArticles_Fail() {
+        Mockito.when(categoryRepository.findById(1)).thenThrow(new RuntimeException("Category not found for id :: 1"));
 
-        Optional<Category> optional = Optional.of(cat);
-        Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.deleteCategory(1, false);
+        });
 
-        Assertions.assertEquals(cat.getArticles().size(), 2);
-        Assertions.assertEquals(a1.getCategories().size(), 1);
-        Assertions.assertEquals(a1.getCategories().size(), 1);
-
-        categoryService.deleteCategory(1, true);
-
-        Assertions.assertTrue(cat.getArticles().isEmpty());
-        Assertions.assertTrue(a1.getCategories().isEmpty());
-        Assertions.assertTrue(a1.getCategories().isEmpty());
+        Assertions.assertEquals("Category not found for id :: 1", thrown.getMessage());
     }
 
     @Test
@@ -311,11 +292,15 @@ public class CategoryServiceTest {
         Assertions.assertEquals(a1.getCategories().size(), 1);
         Assertions.assertEquals(a1.getCategories().size(), 1);
 
-        categoryService.deleteCategory(1, true);
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.deleteCategory(1, false);
+        });
 
-        Assertions.assertTrue(cat.getArticles().isEmpty());
-        Assertions.assertTrue(a1.getCategories().isEmpty());
-        Assertions.assertTrue(a1.getCategories().isEmpty());
+        Assertions.assertEquals("You cannot delete this category as it has articles bound.", thrown.getMessage());
+
+        Assertions.assertFalse(cat.getArticles().isEmpty());
+        Assertions.assertFalse(a1.getCategories().isEmpty());
+        Assertions.assertFalse(a1.getCategories().isEmpty());
     }
 
     @Test

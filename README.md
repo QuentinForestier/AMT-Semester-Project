@@ -28,7 +28,7 @@ Le projet est guidé via le gitbook de notre professeur Nicolas Glassey:
 
 * Lancez pgAdmin.
 
-* Créez deux nouveaux utilisateurs (un pour la DB de l'application et un pour la DB du service de login/authentification): 
+* Créez un nouvel utilisateurs: 
 
 > Ceci est un exemple. il faudra s'en souvenir pour les fichiers de configuration du projet.
 
@@ -40,11 +40,11 @@ Le projet est guidé via le gitbook de notre professeur Nicolas Glassey:
 
 > Les permissions peuvent être affinées, mais par simplification nous avons autorisé le maximum.
 
-* Créez deux nouvelles base de données: avec le nom "crossport" et avec le nom "crossportLogin".
+* Créez une nouvelle base de données avec le nom "crossport".
 
 ![image](https://user-images.githubusercontent.com/61196626/136580523-6dc9aebd-26fa-4706-9b22-603eda280234.png)
 
-Résultat partiel avec un utilisateur et une base de données:
+Résultat:
 
 ![Résultat final](https://user-images.githubusercontent.com/34660483/150751903-19af7b9d-dfb2-4b6c-9e33-4259dc407b3b.png)
 
@@ -113,14 +113,14 @@ com.webapplication.crossport.config.aws.bucket=<AWS S3 bucket name>
 ```
 spring.jpa.hibernate.ddl-auto=update
 spring.datasource.url=jdbc:postgresql://db:5432/crossportLogin
-spring.datasource.username=<Nom de l'utilisateur de base de données du service de login/auth (dans notre cas crossportLogin)>
-spring.datasource.password=<Mot de passe de l'utilisateur de base de données du service de login/auth>
+spring.datasource.username=crossportLogin
+spring.datasource.password=CrossportDatabase
 
 com.webapplication.loginCrossport.config.jwt.secret=<Secret de génération des tokens JWT (le même que du côté applicatif)>
 com.webapplication.loginCrossport.config.admin.username=<Nom du compte admin pour le site web>
 com.webapplication.loginCrossport.config.admin.password=<Mot de passe du compte admin pour le site web>
 
-server.port=8081
+server.port=8080
 ``` 
 
 ## Utilisation
@@ -128,11 +128,11 @@ server.port=8081
 <b> Prérequis 1: Avoir effectué la partie "Installation".</b>
 <b> Prérequis 2: Avoir votre instance de postegreSQL démarrée.</b>
 
-#### Service de login et authentification
+#### [Service de login et authentification](https://github.com/QuentinForestier/AMT-Semester-Project/wiki/Service-de-login)
 
-* Lancer le logiciel IntellJ, ouvrir le dossier "loginService".
+* Démarrez Docker.
 
-* Lancer le projet grâce à l'icône start (triangle vert).
+* Exécutez `docker compose up` dans le dossier loginService.
 
 #### Application 
 
@@ -145,7 +145,7 @@ localhost:8080
 
 ### Tests
 
-Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir du mocking du service d'authentification.
+Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir d'un mocking du service d'authentification.
 
 De plus, il est nécessaire que votre service Postgres, avec la base de données, tourne localement. Nous n'utilisons pas la base de données pour les tests mais le context de l'application doit quand de même de s'y connecter.
 

@@ -14,63 +14,144 @@ Le projet est guidé via le gitbook de notre professeur Nicolas Glassey:
 
 ## Installation
 
-Installez Java 11:
-<https://openjdk.java.net/install/>
+* Installez [Java 11](https://openjdk.java.net/install/).
 
-Installez IntellJ IDEA 2021.2.2 avec les paramètres par défaut:
-<https://www.jetbrains.com/idea/>
+* Installez [IntellJ IDEA 2021.2.2](https://www.jetbrains.com/idea/) avec les paramètres par défaut.
 
-Installez PostgreSQL 14.1 avec les paramètres par défaut:
-<https://www.postgresql.org/>
+* Installez [PostgreSQL 14.1](https://www.postgresql.org/) avec les paramètres par défaut.
 
-Installer Docker (sous windows 4.2.0) avec les paramètres par défaut:
-<https://docs.docker.com/engine/install/>
+> Si votre installation de postgreSQL n'installe pas [pgAdmin 4 (interface graphique de postgreSQL)](https://www.pgadmin.org/download/), installez le manuellement
 
-Clonez le repository.
+* Installez [Docker](https://docs.docker.com/engine/install/) (sous windows 4.2.0) avec les paramètres par défaut.
 
-Lancez pgAdmin (interface graphique de PostgreSQL).
+* Clonez le [repository](https://github.com/QuentinForestier/AMT-Semester-Project/tree/main).
 
-Créez une nouvelle Base de données avec le nom "crossport".
+* Lancez pgAdmin.
+
+* Créez un nouvel utilisateurs: 
+
+> Ceci est un exemple. il faudra s'en souvenir pour les fichiers de configuration du projet.
+
+![utilisateur nom](https://user-images.githubusercontent.com/34660483/150751710-8a095bdf-5e78-4c36-9714-7f253408e01d.png)
+
+![utilisateur password](https://user-images.githubusercontent.com/34660483/150751233-ed2e4096-9d4a-4cc4-b7b9-d8e5bf312e2e.png)
+
+![utilisateur autorisations](https://user-images.githubusercontent.com/34660483/150751398-458e05bd-0ca0-4515-898a-b659e612327c.png)
+
+> Les permissions peuvent être affinées, mais par simplification nous avons autorisé le maximum.
+
+* Créez une nouvelle base de données avec le nom "crossport".
 
 ![image](https://user-images.githubusercontent.com/61196626/136580523-6dc9aebd-26fa-4706-9b22-603eda280234.png)
 
-Voici le résultat:
+Résultat:
 
-![image](https://user-images.githubusercontent.com/61196626/136581154-1049602a-261b-496f-b4e7-4b10c45b0130.png)
+![Résultat final](https://user-images.githubusercontent.com/34660483/150751903-19af7b9d-dfb2-4b6c-9e33-4259dc407b3b.png)
 
-Lancez IntellJ, ouvrez le dossier "crossport" du projet fraichement clone et allez sous le fichier application.properties.
+* Lancez IntellJ et ouvrez le dossier "crossport" du projet cloné.
+
+* Créez le fichier crossport/src/main/resources/application.properties et insérez le contenu suivant:
+
+> les parties entre '<' '>' doivent être complétées avec vos valeurs
+
+```
+spring.jpa.hibernate.ddl-auto=create
+spring.datasource.url=jdbc:postgresql://localhost:5432/crossport
+spring.datasource.username=<Nom de l'utilisateur de base de données de l'app (dans notre cas crossport)>
+spring.datasource.password=<Mot de passe de l'utilisateur de base de données de l'app>
+
+server.port=8080
+
+# Pour pouvoir faire des requetes DELETE, PUT
+spring.mvc.hiddenmethod.filter.enabled=true
+
+com.webapplication.crossport.config.jwt.secret=<Secret de génération des tokens JWT>
+
+# S3 for AWS
+com.webapplication.crossport.config.aws.access=<AWS S3 access key ID>
+com.webapplication.crossport.config.aws.secret=<AWS S3 access key secret>
+com.webapplication.crossport.config.aws.region=<AWS S3 bucket region>
+com.webapplication.crossport.config.aws.bucket=<AWS S3 bucket name>
+``` 
+
+> Pour la première fois, afin de générer les tables, spring.jpa.hibernate.ddl-auto doit valoir <b>create</b> plus tard la valeur peut-être <b>update</b>.
+
+> L'application utilise un [bucket AWS S3](https://aws.amazon.com/fr/s3/) pour le stockage des images.
 
 ![image](https://user-images.githubusercontent.com/61196626/136580863-9972b7d7-c1f6-42b4-af5d-eee507b1d311.png)
 
-Remplissez le champ password avec le mot de passe que vous avez défini pour l'utilisateur postgre (lors de l'installation de postgre).
+* Créez le fichier crossport/src/test/resources/application.properties et insérez le contenu suivant:
 
-![image](https://user-images.githubusercontent.com/61196626/136581346-32020bd2-91b6-45fb-ad2b-3d1444851dcc.png)
+> les parties entre '<' '>' doivent être complétées avec vos valeurs
 
-Exécuter le projet.
+```
+spring.datasource.url = jdbc:h2:mem:test
+spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.H2Dialect
 
-Les tables de la base de données devraient être créées grâce au framework Hibernate.
+server.port=8080
 
-Le projet est maintenant mis en place.
+# Pour pouvoir faire des requetes DELETE, PUT
+spring.mvc.hiddenmethod.filter.enabled=true
+
+com.webapplication.crossport.config.jwt.secret=<Secret de génération des tokens JWT>
+
+# S3 for AWS
+com.webapplication.crossport.config.aws.access=<AWS S3 access key ID>
+com.webapplication.crossport.config.aws.secret=<AWS S3 access key secret>
+com.webapplication.crossport.config.aws.region=<AWS S3 bucket region>
+com.webapplication.crossport.config.aws.bucket=<AWS S3 bucket name>
+``` 
+
+> Les fichiers applications.properties sont créés dynamiquement par les git actions.
+
+* Lancez IntellJ et ouvrez le dossier "loginService" du projet cloné.
+
+* Créez le fichier loginService/src/src/main/resources/application.properties et insérez le contenu suivant:
+
+> les parties entre '<' '>' doivent être complétées avec vos valeurs
+
+```
+spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:postgresql://db:5432/crossportLogin
+spring.datasource.username=crossportLogin
+spring.datasource.password=CrossportDatabase
+
+com.webapplication.loginCrossport.config.jwt.secret=<Secret de génération des tokens JWT (le même que du côté applicatif)>
+com.webapplication.loginCrossport.config.admin.username=<Nom du compte admin pour le site web>
+com.webapplication.loginCrossport.config.admin.password=<Mot de passe du compte admin pour le site web>
+
+server.port=8080
+``` 
 
 ## Utilisation
 
-Une fois la partie "Installation" réalisée, il vous suffit de lancer le logiciel IntellJ, puis d'ouvrir le dossier "crossport" contenu dans le projet que vous venez de clone ou fork:
+<b> Prérequis 1: Avoir effectué la partie "Installation".</b>
+<b> Prérequis 2: Avoir votre instance de postegreSQL démarrée.</b>
 
-![image](https://user-images.githubusercontent.com/61196626/137506386-579bbb42-76b1-4c77-b055-9d4a11b860fa.png)
+#### [Service de login et authentification](https://github.com/QuentinForestier/AMT-Semester-Project/wiki/Service-de-login)
 
-Lancer le projet grâce à l'icône start (triangle vert).
-> Le projet utilise un micro service comme service d'authentification.
-> Pour l'utiliser il faut lancer la commande
-> `docker compose up`
-> dans le dossier loginService.
-> Le service de login sera alors disponible sur le port 8081.
+* Démarrez Docker.
 
-Finalement, il vous suffit de lancer votre navigateur préféré et accéder à l'application grâce à l'adresse suivante:
+* Exécutez `docker compose up` dans le dossier loginService.
+
+#### Application 
+
+* Lancer le logiciel IntellJ, ouvrir le dossier "crossport".
+
+* Lancer le projet grâce à l'icône start (triangle vert).
+
+* Lancer un navigateur et accéder à l'application grâce à l'adresse suivante:
 localhost:8080
 
 ### Tests
 
-Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir du mocking du service d'authentification.
+Pour les tests, vous devez avoir une instance docker en cours d'exécution. Les tests lancent automatiquement un container à partir d'un mocking du service d'authentification.
+
+De plus, il est nécessaire que votre service Postgres, avec la base de données, tourne localement. Nous n'utilisons pas la base de données pour les tests mais le context de l'application doit quand de même de s'y connecter.
+
+pour lancer les tests, exécutez la commande  "mvn -B package --file crossport/pom.xml" ou directement depuis intelliJ:
+
+![tests](https://user-images.githubusercontent.com/34660483/150760822-9b36b44a-4e30-4cb1-91d8-bfed409bdad1.png)
 
 ## Support
 
@@ -81,8 +162,6 @@ Si votre demande fait allusion à une nouvelle fonctionnalité, une erreur dans 
 
 ## Contribuer
 
-[En cours d'élaboration]
-
 Avant de contribuer au projet, veuillez prendre connaissance des points suivants:
 
 - [GitFlow](https://github.com/Quillasp/AMT-Semester-Project/wiki/Workflow-git)
@@ -91,10 +170,10 @@ Avant de contribuer au projet, veuillez prendre connaissance des points suivants
 Veuillez ensuite installer l'environement de développement complet comme indiqué plus haut dans le document.
 Une fois l'environnement installé, vous pouvez contribuer au projet en:
 
-1. Réalisant un fork du projet au niveau de la branche main.
-2. Ouvrant une issue sur votre repository fraîchement cloné.
-3. Développant votre ajout / fonctionnalité.
-4. Réalisant une pull request une fois que tous les tests fonctionnent.
+1. Réalisant un fork du projet.
+2. Développant votre ajout / fonctionnalité.
+3. Ouvrant une issue..
+4. Réalisant une pull request une fois que tous les tests fonctionnent (relativement à l'issue créée).
 
 ## Auteurs
 

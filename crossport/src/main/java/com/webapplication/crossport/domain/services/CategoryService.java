@@ -37,27 +37,6 @@ public class CategoryService {
         return categories;
     }
 
-    public void saveCategory(Category category) {
-        this.categoryRepository.save(category);
-    }
-
-    public void addCategory(CategoryDTO categoryDTO) {
-        if (categoryDTO == null || Objects.equals(categoryDTO.getCategoryName(), "")) {
-            throw new RuntimeException("Category name cannot be empty");
-        }
-
-        Category sameCategory = getFirstByName(categoryDTO.getCategoryName());
-
-        if (sameCategory != null) {
-            throw new RuntimeException("Same category already exists.");
-        }
-
-        Category category = new Category();
-        category.setName(categoryDTO.getCategoryName());
-
-        saveCategory(category);
-    }
-
     public Category getCategoryById(Integer id) {
         Optional<Category> optional = categoryRepository.findById(id);
         Category category;
@@ -67,6 +46,27 @@ public class CategoryService {
             throw new RuntimeException("Category not found for id :: " + id);
         }
         return category;
+    }
+
+    public Category getFirstCategoryByName(String name) {
+        return categoryRepository.findFirstByName(name);
+    }
+
+    public void addCategory(CategoryDTO categoryDTO) {
+        if (categoryDTO == null || Objects.equals(categoryDTO.getCategoryName(), "")) {
+            throw new RuntimeException("Category name cannot be empty");
+        }
+
+        Category sameCategory = getFirstCategoryByName(categoryDTO.getCategoryName());
+
+        if (sameCategory != null) {
+            throw new RuntimeException("Same category already exists.");
+        }
+
+        Category category = new Category();
+        category.setName(categoryDTO.getCategoryName());
+
+        saveCategory(category);
     }
 
     public void deleteCategory(Integer id, boolean confirm) {
@@ -85,7 +85,7 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
-    public Category getFirstByName(String name) {
-        return categoryRepository.findFirstByName(name);
+    public void saveCategory(Category category) {
+        this.categoryRepository.save(category);
     }
 }

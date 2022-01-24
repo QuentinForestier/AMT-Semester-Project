@@ -4,19 +4,21 @@ import com.webapplication.crossport.domain.services.CategoryService;
 import com.webapplication.crossport.infra.models.Article;
 import com.webapplication.crossport.infra.models.Category;
 import com.webapplication.crossport.infra.repository.CategoryRepository;
+import com.webapplication.crossport.ui.dto.CategoryDTO;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 /**
- * Testing category service. Only methode that add more logic than just call category repository are tested
+ * Testing category service
+ *
  * @author Berney Alec
  * @author Forestier Quentin
  * @author Gazetta Florian
@@ -27,71 +29,274 @@ import static org.junit.Assert.assertTrue;
 @AutoConfigureMockMvc
 public class CategoryServiceTest {
 
-	@InjectMocks
-	private CategoryService cs;
+    @InjectMocks
+    private CategoryService categoryService;
 
-	@Mock
-	private CategoryRepository cr;
+    @Mock
+    private CategoryRepository categoryRepository;
 
-	@Test
-	public void getCategoryById_badId() {
+    //region GetAllCategories
 
-		Optional<Category> optional = Optional.empty();
+    @Test
+    public void getCategories_Success() {
+        List<Category> categories = new ArrayList<>();
 
-		Mockito.when(cr.findById(1)).thenReturn(optional);
+        Category category1 = new Category();
+        category1.setId(1);
+        category1.setName("ski");
 
-		boolean success = false;
+        Category category2 = new Category();
+        category2.setId(2);
+        category2.setName("chaussure");
 
-		try {
-			cs.getCategoryById(1);
-		} catch (Exception e) {
-			if (e.getMessage().equals("Category not found for id :: 1")){
-				success = true;
-			}
-		}
+        categories.add(category2);
+        categories.add(category1);
 
-		assertTrue(success);
-	}
+        Mockito.when(categoryRepository.findByOrderByNameAsc()).thenReturn(categories);
 
-	@Test
-	public void getCategoryById_goodId() {
+        List<Category> categoriesResult = categoryService.getAllCategories();
 
-		Optional<Category> optional = Optional.of(new Category());
+        Assertions.assertEquals(categories, categoriesResult);
+    }
 
-		Mockito.when(cr.findById(1)).thenReturn(optional);
+    @Test
+    public void getCategories_Fail() {
+        List<Category> categories = new ArrayList<>();
 
-		boolean success = true;
+        Mockito.when(categoryRepository.findByOrderByNameAsc()).thenReturn(categories);
 
-		try {
-			cs.getCategoryById(1);
-		} catch (Exception e) {
-			success = false;
-		}
+        List<Category> categoriesResult = categoryService.getAllCategories();
 
-		assertTrue(success);
-	}
+        Assertions.assertEquals(categories, categoriesResult);
+    }
 
-	@Test
-	public void deleteCategory() {
+    //endregion
 
-		Category cat = new Category();
-		Article a1 = new Article();
-		Article a2 = new Article();
-		a1.addCategory(cat);
-		a2.addCategory(cat);
+    //region GetShopCategories
 
-		Optional<Category> optional = Optional.of(cat);
-		Mockito.when(cr.findById(1)).thenReturn(optional);
+    @Test
+    public void getShopCategoriesNoCategorySelected_Success() {
+        List<Category> categories = new ArrayList<>();
 
-		assertEquals(cat.getArticles().size(), 2);
-		assertEquals(a1.getCategories().size(), 1);
-		assertEquals(a1.getCategories().size(), 1);
+        Category category1 = new Category();
+        category1.setId(1);
+        category1.setName("ski");
 
-		cs.deleteCategory(1, true);
+        Category category2 = new Category();
+        category2.setId(2);
+        category2.setName("chaussure");
 
-		assertTrue(cat.getArticles().isEmpty());
-		assertTrue(a1.getCategories().isEmpty());
-		assertTrue(a1.getCategories().isEmpty());
+        categories.add(category2);
+        categories.add(category1);
 
-	}
+        Mockito.when(categoryRepository.findByOrderByNameAsc()).thenReturn(categories);
+
+        List<Category> categoriesResult = categoryService.getShopCategories(null);
+
+        Assertions.assertEquals(categories, categoriesResult);
+    }
+
+    @Test
+    public void getShopCategoriesCategorySelected_Success() {
+        List<Category> categories = new ArrayList<>();
+        List<Category> categoriesWithSelection = new ArrayList<>();
+
+        Category category1 = new Category();
+        category1.setId(1);
+        category1.setName("ski");
+
+        Category category2 = new Category();
+        category2.setId(2);
+        category2.setName("chaussure");
+
+        categories.add(category2);
+        categories.add(category1);
+        categoriesWithSelection.add(category1);
+        categoriesWithSelection.add(category2);
+
+        Mockito.when(categoryRepository.findByOrderByNameAsc()).thenReturn(categories);
+
+        List<Category> categoriesResult = categoryService.getShopCategories(category1);
+
+        Assertions.assertEquals(categoriesWithSelection, categoriesResult);
+    }
+
+    @Test
+    public void getShopCategoriesNoCategorySelected_Fail() {
+        List<Category> categories = new ArrayList<>();
+
+        Mockito.when(categoryRepository.findByOrderByNameAsc()).thenReturn(categories);
+
+        List<Category> categoriesResult = categoryService.getShopCategories(null);
+
+        Assertions.assertEquals(categories, categoriesResult);
+    }
+
+    //endregion
+
+    //region GetCategory
+
+    @Test
+    public void getCategoryById_Success() {
+        Optional<Category> optional = Optional.of(new Category());
+
+        Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
+
+        boolean success = true;
+
+        try {
+            categoryService.getCategoryById(1);
+        } catch (Exception e) {
+            success = false;
+        }
+
+        Assertions.assertTrue(success);
+    }
+
+    @Test
+    public void getCategoryById_Fail() {
+        Optional<Category> optional = Optional.empty();
+        Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
+
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.getCategoryById(1);
+        });
+
+        Assertions.assertEquals("Category not found for id :: 1", thrown.getMessage());
+    }
+
+    @Test
+    public void getCategoryByName_Success() {
+        Category category = new Category();
+        category.setId(1);
+        category.setName("skis");
+
+        Mockito.when(categoryRepository.findFirstByName("skis")).thenReturn(category);
+
+        boolean success = true;
+
+        try {
+            categoryService.getFirstCategoryByName("skis");
+        } catch (Exception e) {
+            success = false;
+        }
+
+        Assertions.assertTrue(success);
+    }
+
+    @Test
+    public void getCategoryByName_Fail() {
+        Mockito.when(categoryRepository.findFirstByName("skis")).thenThrow(new RuntimeException());
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.getFirstCategoryByName("skis");
+        });
+    }
+
+    //endregion
+
+    //region AddCategory
+
+    @Test
+    public void addEmptyCategory_Fail() {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryName("");
+
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.addCategory(categoryDTO);
+        });
+
+        Assertions.assertEquals("Category name cannot be empty", thrown.getMessage());
+    }
+
+    @Test
+    public void addNullCategory_Fail() {
+         RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.addCategory(null);
+        });
+
+        Assertions.assertEquals("Category name cannot be empty", thrown.getMessage());
+    }
+
+    @Test
+    public void addExistantCategory_Fail() {
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setCategoryName("skis");
+
+        Category category = new Category();
+        category.setName(categoryDTO.getCategoryName());
+
+        Mockito.when(categoryService.getFirstCategoryByName("skis")).thenReturn(category);
+
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.addCategory(categoryDTO);
+        });
+
+        Assertions.assertEquals("Same category already exists.", thrown.getMessage());
+    }
+
+    //endregion
+
+    //region DeleteCategory
+
+    @Test
+    public void deleteCategoryWithoutArticles_Fail() {
+        Mockito.when(categoryRepository.findById(1)).thenThrow(new RuntimeException("Category not found for id :: 1"));
+
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.deleteCategory(1, false);
+        });
+
+        Assertions.assertEquals("Category not found for id :: 1", thrown.getMessage());
+    }
+
+    @Test
+    public void deleteCategoryWithArticles_Fail() {
+        Category cat = new Category();
+        Article a1 = new Article();
+        Article a2 = new Article();
+        a1.addCategory(cat);
+        a2.addCategory(cat);
+
+        Optional<Category> optional = Optional.of(cat);
+        Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
+
+        Assertions.assertEquals(cat.getArticles().size(), 2);
+        Assertions.assertEquals(a1.getCategories().size(), 1);
+        Assertions.assertEquals(a1.getCategories().size(), 1);
+
+        RuntimeException thrown = Assertions.assertThrows(RuntimeException.class, () -> {
+            categoryService.deleteCategory(1, false);
+        });
+
+        Assertions.assertEquals("You cannot delete this category as it has articles bound.", thrown.getMessage());
+
+        Assertions.assertFalse(cat.getArticles().isEmpty());
+        Assertions.assertFalse(a1.getCategories().isEmpty());
+        Assertions.assertFalse(a1.getCategories().isEmpty());
+    }
+
+    @Test
+    public void deleteCategoryWithArticles_Success() {
+        Category cat = new Category();
+        Article a1 = new Article();
+        Article a2 = new Article();
+        a1.addCategory(cat);
+        a2.addCategory(cat);
+
+        Optional<Category> optional = Optional.of(cat);
+        Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
+
+        Assertions.assertEquals(cat.getArticles().size(), 2);
+        Assertions.assertEquals(a1.getCategories().size(), 1);
+        Assertions.assertEquals(a1.getCategories().size(), 1);
+
+        categoryService.deleteCategory(1, true);
+
+        Assertions.assertTrue(cat.getArticles().isEmpty());
+        Assertions.assertTrue(a1.getCategories().isEmpty());
+        Assertions.assertTrue(a1.getCategories().isEmpty());
+    }
+
+    //endregion
 }

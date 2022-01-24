@@ -41,23 +41,6 @@ public class CategoryController {
         return "categories";
     }
 
-    @PostMapping("")
-    public String add(final @Valid CategoryDTO categoryDTO,
-                      final BindingResult bindingResult,
-                      final Model model) {
-        try {
-            categoryService.addCategory(categoryDTO);
-        } catch (RuntimeException e) {
-            if (!bindingResult.hasErrors()) {
-                bindingResult.addError(new ObjectError("Error", e.getMessage()));
-            }
-        }
-
-        model.addAttribute("listCategories", categoryService.getAllCategories());
-        model.addAttribute("categoryDTO", categoryDTO);
-        return "categories";
-    }
-
     @GetMapping("/{id}")
     public String getById(@PathVariable(value = "id") Integer id, Model model) {
         Category category;
@@ -73,6 +56,23 @@ public class CategoryController {
         model.addAttribute("category", category);
         model.addAttribute("articlesNotInCategory", articlesNotInCategory);
         return "category";
+    }
+
+    @PostMapping("")
+    public String add(final @Valid CategoryDTO categoryDTO,
+                      final BindingResult bindingResult,
+                      final Model model) {
+        try {
+            categoryService.addCategory(categoryDTO);
+        } catch (RuntimeException e) {
+            if (!bindingResult.hasErrors()) {
+                bindingResult.addError(new ObjectError("Error", e.getMessage()));
+            }
+        }
+
+        model.addAttribute("listCategories", categoryService.getAllCategories());
+        model.addAttribute("categoryDTO", categoryDTO);
+        return "categories";
     }
 
     @DeleteMapping("/{id}")

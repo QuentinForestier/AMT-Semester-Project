@@ -26,9 +26,6 @@ public class CartService
     private CartRepository cartRepository;
 
     @Autowired
-    private CartArticleService cartArticleService;
-
-    @Autowired
     private HttpSession session;
 
     /**
@@ -167,7 +164,6 @@ public class CartService
         {
             if (quantity == 0)
             {
-                cartArticleService.delete(ca);
                 cart.removeArticle(ca);
             }
             else

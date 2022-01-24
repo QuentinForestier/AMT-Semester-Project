@@ -80,29 +80,7 @@ com.webapplication.crossport.config.aws.bucket=<AWS S3 bucket name>
 
 ![image](https://user-images.githubusercontent.com/61196626/136580863-9972b7d7-c1f6-42b4-af5d-eee507b1d311.png)
 
-* Créez le fichier crossport/src/test/resources/application.properties et insérez le contenu suivant:
-
-> les parties entre '<' '>' doivent être complétées avec vos valeurs
-
-```
-spring.datasource.url = jdbc:h2:mem:test
-spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.H2Dialect
-
-server.port=8080
-
-# Pour pouvoir faire des requetes DELETE, PUT
-spring.mvc.hiddenmethod.filter.enabled=true
-
-com.webapplication.crossport.config.jwt.secret=<Secret de génération des tokens JWT>
-
-# S3 for AWS
-com.webapplication.crossport.config.aws.access=<AWS S3 access key ID>
-com.webapplication.crossport.config.aws.secret=<AWS S3 access key secret>
-com.webapplication.crossport.config.aws.region=<AWS S3 bucket region>
-com.webapplication.crossport.config.aws.bucket=<AWS S3 bucket name>
-``` 
-
-> Les fichiers applications.properties sont créés dynamiquement par les git actions.
+> Le fichier applications.properties est créé dynamiquement par les git actions.
 
 * Lancez IntellJ et ouvrez le dossier "loginService" du projet cloné.
 

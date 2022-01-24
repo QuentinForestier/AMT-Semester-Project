@@ -31,10 +31,6 @@ public class CartController
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    CartArticleService cartArticleService;
-
-
     @GetMapping("")
     public String viewCart(Model model)
     {

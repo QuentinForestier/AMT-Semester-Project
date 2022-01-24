@@ -240,20 +240,6 @@ public class CategoryServiceTest {
     //region DeleteCategory
 
     @Test
-    public void deleteCategoryWithoutArticles_Success() {
-        Category cat = new Category();
-
-        Optional<Category> optional = Optional.empty();
-        Mockito.when(categoryRepository.findById(1)).thenReturn(optional);
-
-        Assertions.assertEquals(cat.getArticles().size(), 0);
-
-        categoryService.deleteCategory(1, false);
-
-        Assertions.assertTrue(cat.getArticles().isEmpty());
-    }
-
-    @Test
     public void deleteCategoryWithoutArticles_Fail() {
         Mockito.when(categoryRepository.findById(1)).thenThrow(new RuntimeException("Category not found for id :: 1"));
 
